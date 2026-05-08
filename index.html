@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackathon Planner - Haftalık Takvim</title>
+  <meta name="description" content="Hackathon Planner - Haftalık takvim ve görev yönetimi uygulaması">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="modules.css">
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-btn home-btn active" id="homeBtn" title="Ana Sayfa">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <div class="sidebar-sep"></div>
+      <button class="sidebar-btn" id="medicineBtn" title="İlaç">
+        <svg viewBox="0 0 24 24"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+      </button>
+      <button class="sidebar-btn" id="waterBtn" title="Su">
+        <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+      </button>
+      <button class="sidebar-btn" id="gymBtn" title="Gym">
+        <svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11"/><rect x="2" y="8.5" width="4" height="7" rx="1"/><rect x="18" y="8.5" width="4" height="7" rx="1"/><line x1="6.5" y1="12" x2="17.5" y2="12"/></svg>
+      </button>
+      <button class="sidebar-btn bday-btn" id="birthdayBtn" title="Doğum Günleri">🎂</button>
+      <button class="sidebar-btn" id="budgetBtn" title="Bütçe">💰</button>
+      <button class="sidebar-btn" id="sleepBtn" title="Uyku">😴</button>
+      <button class="sidebar-btn" id="goalsBtn" title="Hedefler">🎯</button>
+    </div>
+    <div class="sidebar-bottom">
+      <button class="sidebar-btn add-btn" id="addEventBtn" title="Etkinlik Ekle">+</button>
+      <button class="sidebar-btn remove-btn" id="removeEventBtn" title="Etkinlik Sil">−</button>
+      <div class="sidebar-sep"></div>
+      <button class="sidebar-btn" id="profileBtn" title="Profil">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="app-title">Hackathon Planner</h1>
+      <p class="week-info" id="weekInfo"></p>
+      <div class="week-nav">
+        <button id="tourBtn" title="Rehber" class="tour-trigger">ℹ️</button>
+        <button id="prevWeek" title="Önceki Hafta">‹</button>
+        <button id="nextWeek" title="Sonraki Hafta">›</button>
+      </div>
+    </header>
+
+    <!-- GUIDED TOUR OVERLAY -->
+    <div class="tour-overlay" id="tourOverlay">
+      <div class="tour-backdrop" id="tourBackdrop"></div>
+      <div class="tour-popup" id="tourPopup">
+        <div class="tour-arrow" id="tourArrow"></div>
+        <div class="tour-step-indicator" id="tourStepIndicator"></div>
+        <h3 id="tourTitle"></h3>
+        <p id="tourDesc"></p>
+        <div class="tour-btns">
+          <button class="tour-btn-skip" onclick="endTour()">Kapat</button>
+          <div style="display:flex;gap:6px">
+            <button class="tour-btn-prev" id="tourPrevBtn" onclick="prevTourStep()">← Geri</button>
+            <button class="tour-btn-next" id="tourNextBtn" onclick="nextTourStep()">İleri →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inbox Bar -->
+    <div class="inbox-bar" id="inboxBar"></div>
+
+    <!-- Calendar -->
+    <section class="calendar-section" id="calendarSection"></section>
+
+    <!-- Bottom Panels -->
+    <section class="bottom-panels">
+      <div class="panel left-panel" id="leftPanel">
+        <h3>AI Asistan</h3>
+        <p class="placeholder-text">Bu alan yakında aktif olacak...</p>
+      </div>
+      <div class="panel right-panel" id="rightPanel">
+        <h3>Yaklaşanlar</h3>
+        <div id="upcomingList"></div>
+      </div>
+    </section>
+
+    <!-- Completion Chart -->
+    <section class="completion-section" id="completionSection">
+      <h2>📊 Haftalık Tamamlanma</h2>
+      <div class="chart-container" id="chartContainer"></div>
+      <div class="uncompleted-section" id="uncompletedSection">
+        <h3>⚠️ Tamamlanmayan Görevler</h3>
+        <div id="uncompletedList"></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faqSection">
+      <h2>❓ Sıkça Sorulan Sorular</h2>
+      <div class="faq-item">
+        <div class="faq-question"><span>Hackathon Planner nedir?</span><span class="arrow">▼</span></div>
+        <div class="faq-answer">Hackathon Planner, hackathon etkinlikleri için tasarlanmış bir haftalık planlama ve görev yönetim aracıdır. Etkinliklerinizi kolayca planlayabilir, takip edebilir ve tamamlanma durumlarını kontrol edebilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>Etkinlik nasıl eklenir?</span><span class="arrow">▼</span></div>
+        <div class="faq-answer">Sol kenar çubuğundaki yeşil "+" butonuna tıklayarak etkinlik ekleme formunu açabilirsiniz. Etkinlik adı, tarih, saat ve önem seviyesini belirleyerek yeni etkinlik oluşturabilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>Önem seviyeleri ne anlama geliyor?</span><span class="arrow">▼</span></div>
+        <div class="faq-answer">Kırmızı: En yüksek öncelikli görevler (kritik). Turuncu: Orta öncelikli görevler. Mavi: Düşük öncelikli görevler. Renk kodları sayesinde görevlerinizi hızlıca önceliklendirebilirsiniz.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>Tamamlanan görevleri nasıl işaretlerim?</span><span class="arrow">▼</span></div>
+        <div class="faq-answer">Takvimde bir etkinliğe tıklayarak onu tamamlandı olarak işaretleyebilirsiniz. Tamamlanan görevler yeşil renk alır ve üzeri çizili gösterilir.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>Verilerim güvende mi?</span><span class="arrow">▼</span></div>
+        <div class="faq-answer">Tüm verileriniz tarayıcınızın yerel depolama alanında (localStorage) saklanır. Verileriniz sunuculara gönderilmez ve tamamen cihazınızda kalır.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>Etkinlik nasıl silinir?</span><span class="arrow">▼</span></div>
+        <div class="faq-answer">Sol kenar çubuğundaki kırmızı "−" butonuna tıklayarak silme modunu aktif edin. Ardından silmek istediğiniz etkinlikteki "×" işaretine tıklayın. Onay verdikten sonra etkinlik silinecektir.</div>
+      </div>
+    </section>
+
+    <!-- Privacy & Security -->
+    <section class="privacy-section" id="privacySection">
+      <h2>🔒 Gizlilik & Güvenlik</h2>
+      <div class="privacy-grid">
+        <div class="privacy-card">
+          <div class="icon">🛡️</div>
+          <h4>Veri Güvenliği</h4>
+          <p>Tüm verileriniz AES-256 şifreleme standardıyla korunur. Yerel depolama üzerinde güvenli bir şekilde saklanır.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="icon">🔐</div>
+          <h4>Gizlilik Politikası</h4>
+          <p>Kişisel bilgileriniz üçüncü taraflarla paylaşılmaz. KVKK ve GDPR uyumlu veri işleme politikalarımız mevcuttur.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="icon">📋</div>
+          <h4>Kullanım Koşulları</h4>
+          <p>Uygulamayı kullanarak hizmet şartlarımızı kabul etmiş olursunuz. Detaylı bilgi için kullanım koşulları sayfamızı ziyaret edin.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="icon">🍪</div>
+          <h4>Çerez Politikası</h4>
+          <p>Uygulama deneyiminizi iyileştirmek için temel çerezler kullanılmaktadır. Üçüncü taraf çerezleri kullanılmamaktadır.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="icon">📧</div>
+          <h4>İletişim</h4>
+          <p>Gizlilik ve güvenlik ile ilgili sorularınız için destek ekibimize support@hackplanner.com adresinden ulaşabilirsiniz.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="icon">⚖️</div>
+          <h4>Yasal Haklar</h4>
+          <p>Tüm hakları saklıdır. © 2026 Hackathon Planner. Bu uygulama Türkiye Cumhuriyeti yasalarına tabidir.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal" style="position:relative">
+      <button class="modal-close" onclick="hideModal('loginModal')">✕</button>
+      <h2>👤 Profil Girişi</h2>
+      <div id="loginForm">
+        <p class="login-info">Planlarınıza erişmek için giriş yapın</p>
+        <div class="form-group">
+          <label>Kullanıcı Adı</label>
+          <input type="text" id="loginUsername" placeholder="Kullanıcı adınız">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="loginPassword" placeholder="Şifreniz">
+        </div>
+        <button class="modal-btn primary" onclick="login()">Giriş Yap</button>
+      </div>
+      <div id="loggedInView" style="display:none">
+        <div class="user-badge">
+          <div class="avatar" id="userAvatar">A</div>
+          <span class="username" id="displayName">Kullanıcı</span>
+        </div>
+        <button class="modal-btn secondary" onclick="logout()">Çıkış Yap</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD EVENT MODAL -->
+  <div class="modal-overlay" id="addEventModal">
+    <div class="modal" style="position:relative">
+      <button class="modal-close" onclick="hideModal('addEventModal')">✕</button>
+      <h2>📅 Etkinlik Ekle</h2>
+      <div class="form-group">
+        <label>Etkinlik Adı</label>
+        <input type="text" id="eventName" placeholder="Etkinlik adını girin">
+      </div>
+      <div class="form-group">
+        <label>Tarih</label>
+        <input type="date" id="eventDate">
+      </div>
+      <div class="form-group">
+        <label>Başlangıç Saati</label>
+        <input type="time" id="eventStartTime" value="09:00">
+      </div>
+      <div class="form-group">
+        <label>Bitiş Saati</label>
+        <input type="time" id="eventEndTime" value="10:00">
+      </div>
+      <div class="form-group">
+        <label>Önem Seviyesi</label>
+        <div class="importance-selector">
+          <div class="imp-option high selected" data-imp="high" onclick="selectImportance('high')">🔴 Yüksek</div>
+          <div class="imp-option med" data-imp="medium" onclick="selectImportance('medium')">🟠 Orta</div>
+          <div class="imp-option low" data-imp="low" onclick="selectImportance('low')">🔵 Düşük</div>
+        </div>
+      </div>
+      <button class="modal-btn primary" onclick="addEvent()">Etkinlik Ekle</button>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal" style="position:relative">
+      <h2>⚠️ Etkinliği Sil</h2>
+      <p class="confirm-text">Bu etkinliği silmek istediğinize emin misiniz?<br><strong id="deleteEventName"></strong></p>
+      <div class="confirm-btns">
+        <button class="modal-btn danger" onclick="confirmDelete()">Evet, Sil</button>
+        <button class="modal-btn secondary" onclick="cancelDelete()">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RE-ADD CONFIRM MODAL -->
+  <div class="modal-overlay" id="readdModal">
+    <div class="modal" style="position:relative">
+      <h2>🔄 Tekrar Ekle</h2>
+      <p class="confirm-text">Bu görevi tekrar listeye almak ister misiniz?<br><strong id="readdEventName"></strong></p>
+      <div class="confirm-btns">
+        <button class="modal-btn primary" onclick="confirmReadd()">Evet, Ekle</button>
+        <button class="modal-btn secondary" onclick="hideModal('readdModal')">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDICINE OVERLAY -->
+  <div class="module-overlay" id="medicineOverlay">
+    <div class="module-header">
+      <h2>💊 İlaç Takibi</h2>
+      <button class="close-module" onclick="closeModule('medicineOverlay')">✕</button>
+    </div>
+    <div class="module-body">
+      <div class="module-grid">
+        <div class="module-card med-accent">
+          <h3>İlaçlarım</h3>
+          <div class="med-list" id="medList"></div>
+        </div>
+        <div class="module-card med-accent">
+          <h3>Yeni İlaç Ekle</h3>
+          <div class="m-form-group"><label>İlaç Adı</label><input type="text" id="medName" placeholder="ör: Parol"></div>
+          <div class="m-form-group"><label>Dozaj</label><input type="text" id="medDosage" placeholder="ör: 500mg"></div>
+          <div class="m-form-group"><label>Başlangıç Tarihi</label><input type="date" id="medStartDate"></div>
+          <div class="m-form-group"><label>Kaç Gün</label><input type="number" id="medDuration" placeholder="ör: 14"></div>
+          <div class="m-form-group"><label>Kutu Boyutu (adet)</label><input type="number" id="medBoxSize" placeholder="ör: 30"></div>
+          <div class="m-form-group"><label>Kalan İlaç</label><input type="number" id="medRemaining" placeholder="ör: 25"></div>
+          <div class="m-form-group">
+            <label>Ne Zaman Alınacak</label>
+            <div class="freq-checks" id="medFreqChecks">
+              <span class="freq-check" data-val="Sabah" onclick="toggleFreqCheck(this)">☀️ Sabah</span>
+              <span class="freq-check" data-val="Öğle" onclick="toggleFreqCheck(this)">🌤️ Öğle</span>
+              <span class="freq-check" data-val="Akşam" onclick="toggleFreqCheck(this)">🌙 Akşam</span>
+            </div>
+          </div>
+          <div class="m-form-group">
+            <label>Hangi Günler</label>
+            <div class="day-checks" id="medDayChecks">
+              <span class="day-check" data-val="Pzt" onclick="toggleDayCheck(this)">Pzt</span>
+              <span class="day-check" data-val="Sal" onclick="toggleDayCheck(this)">Sal</span>
+              <span class="day-check" data-val="Çar" onclick="toggleDayCheck(this)">Çar</span>
+              <span class="day-check" data-val="Per" onclick="toggleDayCheck(this)">Per</span>
+              <span class="day-check" data-val="Cum" onclick="toggleDayCheck(this)">Cum</span>
+              <span class="day-check" data-val="Cmt" onclick="toggleDayCheck(this)">Cmt</span>
+              <span class="day-check" data-val="Paz" onclick="toggleDayCheck(this)">Paz</span>
+            </div>
+          </div>
+          <button class="m-btn success" onclick="addMedicine()" style="width:100%">💊 İlaç Ekle</button>
+        </div>
+      </div>
+      <div class="module-card med-accent" style="margin-top:20px">
+        <h3>Bu Haftaki İlaç Takvimi</h3>
+        <div class="med-schedule-grid" id="medScheduleGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATER OVERLAY -->
+  <div class="module-overlay" id="waterOverlay">
+    <div class="module-header">
+      <h2>💧 Su Takibi</h2>
+      <button class="close-module" onclick="closeModule('waterOverlay')">✕</button>
+    </div>
+    <div class="module-body">
+      <div class="module-grid">
+        <div class="module-card water-accent">
+          <h3>Günlük Su Durumu</h3>
+          <div class="water-visual">
+            <div style="position:relative">
+              <div class="water-bottle">
+                <div class="water-bottle-neck"></div>
+                <div class="water-fill" id="waterFill" style="height:0%"></div>
+              </div>
+            </div>
+            <div class="water-stats">
+              <div class="current" id="waterCurrent">0.0L</div>
+              <div class="goal" id="waterGoal">/ 2.5L</div>
+              <div class="percent" id="waterPercent">0%</div>
+            </div>
+          </div>
+          <div class="water-quick-btns">
+            <button class="water-add-btn" onclick="addWater(200)">+200ml</button>
+            <button class="water-add-btn" onclick="addWater(250)">+250ml</button>
+            <button class="water-add-btn" onclick="addWater(500)">+500ml</button>
+            <button class="water-add-btn" onclick="addWater(1000)">+1L</button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <input type="number" id="customWaterAmount" placeholder="Özel miktar (ml)" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:#e2e8f0;font-family:'Inter',sans-serif;font-size:0.85rem">
+            <button class="m-btn primary" onclick="addCustomWater()">Ekle</button>
+          </div>
+          <div class="water-history" id="waterHistoryList" style="margin-top:14px"></div>
+        </div>
+        <div class="module-card water-accent">
+          <h3>Vücut Bilgileri</h3>
+          <div class="m-form-group"><label>Boy (cm)</label><input type="number" id="waterHeight" placeholder="ör: 175"></div>
+          <div class="m-form-group"><label>Kilo (kg)</label><input type="number" id="waterWeight" placeholder="ör: 75"></div>
+          <div class="m-form-group"><label>Yaş</label><input type="number" id="waterAge" placeholder="ör: 25"></div>
+          <div class="m-form-group">
+            <label>Cinsiyet</label>
+            <select id="waterGender">
+              <option value="male">Erkek</option>
+              <option value="female">Kadın</option>
+            </select>
+          </div>
+          <button class="m-btn primary" onclick="saveWaterProfile()" style="width:100%">Hesapla & Kaydet</button>
+          <div class="bmi-result" id="bmiResult" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM OVERLAY -->
+  <div class="module-overlay" id="gymOverlay">
+    <div class="module-header">
+      <h2>🏋️ Gym Takibi</h2>
+      <button class="close-module" onclick="closeModule('gymOverlay')">✕</button>
+    </div>
+    <div class="module-body">
+      <div class="module-grid">
+        <div class="module-card gym-accent">
+          <h3>Programlarım</h3>
+          <div id="gymProgramCards" class="program-cards"></div>
+        </div>
+        <div class="module-card gym-accent">
+          <h3>Hareket Ekle</h3>
+          <div class="m-form-group"><label>Hareket Adı</label><input type="text" id="gymExName" placeholder="ör: Bench Press"></div>
+          <div class="m-form-group"><label>Kas Grubu</label><input type="text" id="gymExMuscle" placeholder="ör: Göğüs"></div>
+          <div class="gym-form-row">
+            <div class="m-form-group"><label>Set</label><input type="number" id="gymExSets" value="3"></div>
+            <div class="m-form-group"><label>Tekrar</label><input type="number" id="gymExReps" value="10"></div>
+          </div>
+          <div class="m-form-group">
+            <label>Gün</label>
+            <select id="gymExDay">
+              <option value="Pzt">Pazartesi</option>
+              <option value="Sal">Salı</option>
+              <option value="Çar">Çarşamba</option>
+              <option value="Per">Perşembe</option>
+              <option value="Cum">Cuma</option>
+              <option value="Cmt">Cumartesi</option>
+              <option value="Paz">Pazar</option>
+            </select>
+          </div>
+          <button class="m-btn success" onclick="addCustomExercise()" style="width:100%">➕ Hareket Ekle</button>
+        </div>
+      </div>
+      <div class="module-card gym-accent" style="margin-top:20px">
+        <h3>Bugünkü Antrenman</h3>
+        <div class="exercise-list" id="gymExerciseList"></div>
+      </div>
+      <div class="module-card" style="margin-top:20px">
+        <h3>📋 Hazır Program Şablonları</h3>
+        <div class="template-cards">
+          <div class="template-card" onclick="useGymTemplate(0)">
+            <div class="tmpl-name">💪 Push/Pull/Legs</div>
+            <div class="tmpl-desc">Klasik 3 günlük program. İtme, çekme ve bacak günleri ile kasları hedefleyin.</div>
+            <span class="tmpl-badge">3 Gün</span>
+          </div>
+          <div class="template-card" onclick="useGymTemplate(1)">
+            <div class="tmpl-name">🔄 Full Body</div>
+            <div class="tmpl-desc">Haftada 3 gün tüm vücudu çalıştıran başlangıç dostu program.</div>
+            <span class="tmpl-badge">3 Gün • Başlangıç</span>
+          </div>
+          <div class="template-card" onclick="useGymTemplate(2)">
+            <div class="tmpl-name">⬆️⬇️ Upper/Lower</div>
+            <div class="tmpl-desc">4 günlük üst/alt beden bölünmesi. Orta seviye için ideal.</div>
+            <span class="tmpl-badge">4 Gün • Orta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIRTHDAY OVERLAY -->
+  <div class="module-overlay" id="birthdayOverlay">
+    <div class="module-header">
+      <h2>🎂 Doğum Günü Takibi</h2>
+      <button class="close-module" onclick="closeModule('birthdayOverlay')">✕</button>
+    </div>
+    <div class="module-body">
+      <div class="module-grid">
+        <div class="module-card bday-accent">
+          <h3>Doğum Günleri</h3>
+          <div class="bday-list" id="bdayList"></div>
+        </div>
+        <div class="module-card bday-accent">
+          <h3>Yeni Doğum Günü Ekle</h3>
+          <div class="m-form-group"><label>İsim</label><input type="text" id="bdayName" placeholder="ör: Ahmet"></div>
+          <div class="m-form-group"><label>Doğum Tarihi</label><input type="date" id="bdayDate"></div>
+          <div class="m-form-group"><label>Hediye Alınacak mı?</label>
+            <select id="bdayGiftPlanned">
+              <option value="yes">Evet</option>
+              <option value="no">Hayır</option>
+            </select>
+          </div>
+          <div id="bdayGiftFields">
+            <div class="m-form-group"><label>Hediye Fikri</label><input type="text" id="bdayGiftIdea" placeholder="ör: Kulaklık"></div>
+            <div class="m-form-group"><label>Fiyat (₺)</label><input type="number" id="bdayGiftPrice" placeholder="ör: 500"></div>
+            <div class="m-form-group"><label>Ne Zaman Alınmalı</label><input type="date" id="bdayGiftBuyBy"></div>
+          </div>
+          <button class="m-btn primary" onclick="addBirthday()" style="width:100%">🎂 Doğum Günü Ekle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUDGET OVERLAY -->
+  <div class="module-overlay" id="budgetOverlay">
+    <div class="module-header"><h2>💰 Bütçe & Alışveriş</h2><button class="close-module" onclick="closeModule('budgetOverlay')">✕</button></div>
+    <div class="module-body">
+      <div class="module-grid">
+        <div class="module-card budget-accent">
+          <h3>Gelir & Harcamalar</h3>
+          <div id="budgetDash"></div>
+          <div class="m-form-group" style="margin-top:16px"><label>Aylık Gelir (₺)</label><input type="number" id="budgetIncome" placeholder="ör: 15000"></div>
+          <button class="m-btn primary" onclick="addIncome()" style="width:100%">💵 Gelir Güncelle</button>
+          <hr style="border-color:rgba(255,255,255,0.06);margin:16px 0">
+          <h4 style="font-size:0.85rem;margin-bottom:10px;color:#94a3b8">Harcama Ekle</h4>
+          <div class="m-form-group"><label>Harcama Adı</label><input type="text" id="expName" placeholder="ör: Elektrik faturası"></div>
+          <div class="m-form-group"><label>Tutar (₺)</label><input type="number" id="expAmount" placeholder="ör: 500"></div>
+          <div class="m-form-group"><label>Kategori</label>
+            <select id="expCategory"><option>🏠 Kira</option><option>🍽️ Yemek</option><option>🚗 Ulaşım</option><option>💡 Fatura</option><option>🛒 Market</option><option>👕 Giyim</option><option>🎉 Eğlence</option><option>📚 Eğitim</option><option>💊 Sağlık</option><option>📱 Teknoloji</option><option>🔧 Diğer</option></select>
+          </div>
+          <button class="m-btn success" onclick="addExpense()" style="width:100%">➕ Harcama Ekle</button>
+        </div>
+        <div class="module-card budget-accent">
+          <h3>🛒 Alışveriş Listeleri</h3>
+          <div id="shoppingListContainer"></div>
+          <hr style="border-color:rgba(255,255,255,0.06);margin:16px 0">
+          <h4 style="font-size:0.85rem;margin-bottom:10px;color:#94a3b8">Yeni Liste</h4>
+          <div class="m-form-group"><label>Liste Adı</label><input type="text" id="shopListName" placeholder="ör: Market Alışverişi"></div>
+          <div class="m-form-group"><label>Tarih (takvimde gösterilir)</label><input type="date" id="shopListDate"></div>
+          <div class="m-form-group"><label>Ürünler (her satıra bir ürün)</label><textarea id="shopListItems" rows="5" placeholder="Ekmek&#10;Su&#10;Süt&#10;Yumurta" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:#e2e8f0;font-family:'Inter',sans-serif;font-size:0.85rem;resize:vertical"></textarea></div>
+          <button class="m-btn primary" onclick="addShoppingList()" style="width:100%">🛒 Liste Oluştur</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLEEP OVERLAY -->
+  <div class="module-overlay" id="sleepOverlay">
+    <div class="module-header"><h2>😴 Uyku Takibi</h2><button class="close-module" onclick="closeModule('sleepOverlay')">✕</button></div>
+    <div class="module-body">
+      <div class="module-grid">
+        <div class="module-card sleep-accent">
+          <h3>Uyku Kayıtları</h3>
+          <div id="sleepLogList"></div>
+          <hr style="border-color:rgba(255,255,255,0.06);margin:16px 0">
+          <h4 style="font-size:0.85rem;margin-bottom:10px;color:#94a3b8">Yeni Kayıt</h4>
+          <div class="m-form-group"><label>Tarih</label><input type="date" id="sleepDate"></div>
+          <div class="m-form-group"><label>🌙 Uyuduğum Saat</label><input type="time" id="sleepTimeInput" value="23:00"></div>
+          <div class="m-form-group"><label>☀️ Kalktığım Saat</label><input type="time" id="wakeTimeInput" value="07:00"></div>
+          <button class="m-btn primary" onclick="addSleepLog()" style="width:100%">🛏️ Kaydet</button>
+        </div>
+        <div class="module-card sleep-accent">
+          <h3>📊 Uyku Raporu</h3>
+          <div id="sleepReport"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOALS OVERLAY -->
+  <div class="module-overlay" id="goalsOverlay">
+    <div class="module-header"><h2>🎯 Hedef Takibi</h2><button class="close-module" onclick="closeModule('goalsOverlay')">✕</button></div>
+    <div class="module-body">
+      <div class="module-card" style="margin-bottom:20px">
+        <h3>Hedeflerim</h3>
+        <div id="goalsList"></div>
+      </div>
+      <div class="module-card">
+        <h3>Yeni Hedef Ekle</h3>
+        <div class="module-grid" style="margin-bottom:0">
+          <div>
+            <div class="m-form-group"><label>Hedef Adı</label><input type="text" id="goalName" placeholder="ör: 100 sayfa kitap oku"></div>
+            <div class="m-form-group"><label>Hedef Miktar</label><input type="number" id="goalTarget" placeholder="ör: 100"></div>
+          </div>
+          <div>
+            <div class="m-form-group"><label>Birim</label><input type="text" id="goalUnit" placeholder="ör: sayfa, km, gün"></div>
+            <div class="m-form-group"><label>Artış Miktarı</label><input type="number" id="goalStep" value="1" placeholder="ör: 1"></div>
+            <div class="m-form-group"><label>İkon</label>
+              <select id="goalIcon"><option>🎯</option><option>📚</option><option>🏃</option><option>💪</option><option>🧘</option><option>✍️</option><option>💻</option><option>🎵</option><option>🌍</option><option>❤️</option></select>
+            </div>
+          </div>
+        </div>
+        <button class="m-btn success" onclick="addGoal()" style="width:100%;margin-top:12px">🎯 Hedef Ekle</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="modules.js"></script>
+</body>
+</html>
