@@ -150,6 +150,8 @@ function renderAll() {
   renderUncompleted();
   renderInbox();
   updateProfileBtn();
+  renderAIAssistant();
+  renderPostponeStats();
 }
 
 // ===== WEEK INFO =====
@@ -222,10 +224,14 @@ function renderCalendar() {
       const impCls = ev.importance === 'high' ? 'imp-high' : (ev.importance === 'medium' ? 'imp-med' : 'imp-low');
       const completedCls = ev.completed ? ' completed' : '';
 
-      bodyHTML += `<div class="event-card ${impCls}${completedCls}" 
+      const ppCount = ev.postponeCount || 0;
+      const ppBadge = ppCount > 0 ? `<div class="postpone-badge" title="${ppCount} kez ertelendi">🔄${ppCount}</div>` : '';
+      const ppClass = ppCount >= 3 ? ' chronic-postpone' : ppCount >= 1 ? ' postponed' : '';
+      bodyHTML += `<div class="event-card ${impCls}${completedCls}${ppClass}" 
         style="top:${top}px;height:${height}px" 
         data-id="${ev.id}"
         onclick="handleEventClick('${ev.id}')">
+        ${ppBadge}
         <span class="event-name">${ev.name}</span>
         <span class="event-time">${ev.startTime} - ${ev.endTime}</span>
         <div class="delete-badge" onclick="event.stopPropagation();triggerDelete('${ev.id}')">✕</div>
@@ -275,7 +281,12 @@ function addEvent() {
     id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
     name, date, startTime, endTime,
     importance: state.selectedImportance,
-    completed: false
+    completed: false,
+    postponeCount: 0,
+    postponeHistory: [],
+    originalDate: date,
+    subTasks: [],
+    parentId: null
   };
 
   state.events.push(ev);
@@ -403,25 +414,57 @@ function triggerReadd(id) {
   const ev = state.events.find(e => e.id === id);
   if (!ev) return;
   state.pendingReaddEvent = ev;
-  document.getElementById('readdEventName').textContent = ev.name;
-  showModal('readdModal');
+  const ppCount = (ev.postponeCount || 0) + 1;
+  document.getElementById('postponeEventName').textContent = ev.name;
+  const countEl = document.getElementById('postponeCountInfo');
+  if (countEl) {
+    countEl.style.display = ppCount > 1 ? '' : 'none';
+    countEl.querySelector('.pp-count').textContent = ppCount;
+  }
+  document.getElementById('postponeNewDate').value = formatDate(new Date());
+  document.querySelectorAll('.pp-reason-option').forEach(el => el.classList.remove('selected'));
+  showModal('postponeReasonModal');
 }
 
-function confirmReadd() {
-  if (state.pendingReaddEvent) {
-    // Remove old, open add modal pre-filled
-    state.events = state.events.filter(e => e.id !== state.pendingReaddEvent.id);
-    document.getElementById('eventName').value = state.pendingReaddEvent.name;
-    selectImportance(state.pendingReaddEvent.importance);
-    document.getElementById('eventStartTime').value = state.pendingReaddEvent.startTime;
-    document.getElementById('eventEndTime').value = state.pendingReaddEvent.endTime;
-    setDefaultDate();
-    state.pendingReaddEvent = null;
-    saveState();
-    hideModal('readdModal');
-    showModal('addEventModal');
+function selectPostponeReason(el) {
+  document.querySelectorAll('.pp-reason-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function confirmPostpone() {
+  const ev = state.pendingReaddEvent;
+  if (!ev) return;
+  const selectedEl = document.querySelector('.pp-reason-option.selected');
+  if (!selectedEl) { alert('Lütfen bir erteleme nedeni seçin'); return; }
+  const reason = selectedEl.dataset.reason;
+  const newDate = document.getElementById('postponeNewDate').value;
+  if (!newDate) { alert('Lütfen yeni tarih seçin'); return; }
+
+  if (!ev.postponeCount) ev.postponeCount = 0;
+  if (!ev.postponeHistory) ev.postponeHistory = [];
+  if (!ev.originalDate) ev.originalDate = ev.date;
+
+  ev.postponeCount++;
+  ev.postponeHistory.push({ from: ev.date, to: newDate, reason, timestamp: Date.now() });
+  ev.date = newDate;
+  ev.completed = false;
+
+  state.pendingReaddEvent = null;
+  hideModal('postponeReasonModal');
+  saveState();
+  renderAll();
+
+  if (typeof showNotification === 'function') {
+    if (ev.postponeCount >= 3) {
+      showNotification(`⚠️ "${ev.name}" ${ev.postponeCount}x ertelendi! AI Asistan'a bak.`, 'warning');
+    } else {
+      showNotification(`🔄 "${ev.name}" taşındı`, 'info');
+    }
   }
 }
+
+// Legacy support
+function confirmReadd() { confirmPostpone(); }
 
 // ===== AUTH =====
 function login() {
@@ -656,4 +699,226 @@ function endTour() {
   tourActive = false;
   document.getElementById('tourOverlay').classList.remove('active');
   document.querySelectorAll('.tour-highlight').forEach(e => e.classList.remove('tour-highlight'));
+}
+
+// ===== AI ASSISTANT (stub - takım arkadaşı yapacak) =====
+function renderAIAssistant() {
+  // TODO: AI Asistan paneli - takım arkadaşı implement edecek
+}
+
+// ===== POSTPONE STATS DASHBOARD =====
+function renderPostponeStats() {
+  const section = document.getElementById('postponeSection');
+  if (!section) return;
+
+  const allEvents = state.events;
+  const postponedEvents = allEvents.filter(e => (e.postponeCount || 0) > 0);
+  const totalPostpones = postponedEvents.reduce((s, e) => s + (e.postponeCount || 0), 0);
+  const chronicEvents = postponedEvents.filter(e => (e.postponeCount || 0) >= 3);
+  const completedAfterPostpone = postponedEvents.filter(e => e.completed).length;
+
+  // Reason breakdown
+  const reasonCounts = {};
+  const reasonLabels = {
+    'too_big': '😰 Çok büyük', 'no_time': '⏰ Zaman yok',
+    'dont_know': '🤷 Nereden başlasam', 'no_energy': '😴 Enerji yok',
+    'priorities': '🔄 Öncelik değişti', 'other': '📝 Diğer'
+  };
+  postponedEvents.forEach(ev => {
+    (ev.postponeHistory || []).forEach(h => {
+      reasonCounts[h.reason] = (reasonCounts[h.reason] || 0) + 1;
+    });
+  });
+
+  // Top postponed tasks
+  const topPostponed = [...postponedEvents]
+    .filter(e => !e.completed)
+    .sort((a, b) => (b.postponeCount || 0) - (a.postponeCount || 0))
+    .slice(0, 3);
+
+  // Streak calculation
+  const streak = calculateNoPostponeStreak();
+
+  // Build reason bars
+  const maxReasonCount = Math.max(...Object.values(reasonCounts), 1);
+  const reasonBarsHTML = Object.entries(reasonCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([key, count]) => {
+      const pct = Math.round((count / maxReasonCount) * 100);
+      return `<div class="pp-reason-bar-item">
+        <span class="pp-reason-label">${reasonLabels[key] || key}</span>
+        <div class="pp-reason-bar-bg"><div class="pp-reason-bar-fill" style="width:${pct}%"></div></div>
+        <span class="pp-reason-count">${count}</span>
+      </div>`;
+    }).join('');
+
+  // Top postponed list
+  const topHTML = topPostponed.length > 0
+    ? topPostponed.map(ev => `<div class="pp-top-item">
+        <span class="pp-top-badge">${ev.postponeCount}x</span>
+        <span class="pp-top-name">${ev.name}</span>
+        <button class="pp-split-btn" onclick="openSplitTaskModal('${ev.id}')" title="Parçalara böl">✂️</button>
+      </div>`).join('')
+    : '<p style="color:#64748b;font-size:0.8rem;text-align:center">Ertelenen görev yok 🎉</p>';
+
+  section.innerHTML = `
+    <h2>🔄 Erteleme Analizi</h2>
+    <div class="pp-stats-grid">
+      <div class="pp-stat-card">
+        <div class="pp-stat-icon">🔄</div>
+        <div class="pp-stat-val">${totalPostpones}</div>
+        <div class="pp-stat-label">Toplam Erteleme</div>
+      </div>
+      <div class="pp-stat-card">
+        <div class="pp-stat-icon">🚨</div>
+        <div class="pp-stat-val">${chronicEvents.length}</div>
+        <div class="pp-stat-label">Kronik (3+)</div>
+      </div>
+      <div class="pp-stat-card">
+        <div class="pp-stat-icon">✅</div>
+        <div class="pp-stat-val">${completedAfterPostpone}</div>
+        <div class="pp-stat-label">Sonunda Tamamlanan</div>
+      </div>
+      <div class="pp-stat-card">
+        <div class="pp-stat-icon">🔥</div>
+        <div class="pp-stat-val">${streak}</div>
+        <div class="pp-stat-label">Gün Streak</div>
+      </div>
+    </div>
+    ${totalPostpones > 0 ? `
+    <div class="pp-detail-grid">
+      <div class="pp-detail-card">
+        <h4>📊 Erteleme Nedenleri</h4>
+        <div class="pp-reason-bars">${reasonBarsHTML || '<p style="color:#64748b;font-size:0.8rem">Henüz veri yok</p>'}</div>
+      </div>
+      <div class="pp-detail-card">
+        <h4>🔝 En Çok Ertelenen</h4>
+        <div class="pp-top-list">${topHTML}</div>
+      </div>
+    </div>` : '<div class="pp-empty"><p>🎉 Henüz erteleme yok! Harika gidiyorsun.</p></div>'}
+  `;
+}
+
+function calculateNoPostponeStreak() {
+  const today = new Date();
+  let streak = 0;
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const dateStr = formatDate(d);
+    const dayEvents = state.events.filter(e => e.date === dateStr);
+    if (dayEvents.length === 0) continue;
+    const hasPostpone = dayEvents.some(e => {
+      return (e.postponeHistory || []).some(h => h.to === dateStr);
+    });
+    if (hasPostpone) break;
+    if (dayEvents.some(e => e.completed)) streak++;
+  }
+  return streak;
+}
+
+// ===== TASK SPLITTING =====
+function openSplitTaskModal(eventId) {
+  const ev = state.events.find(e => e.id === eventId);
+  if (!ev) return;
+  state.pendingSplitEvent = ev;
+  document.getElementById('splitTaskName').textContent = ev.name;
+  document.getElementById('splitTaskPostponeCount').textContent = ev.postponeCount || 0;
+
+  // Calculate suggested duration per sub-task
+  const startParts = ev.startTime.split(':');
+  const endParts = ev.endTime.split(':');
+  const totalMin = (parseInt(endParts[0]) * 60 + parseInt(endParts[1])) - (parseInt(startParts[0]) * 60 + parseInt(startParts[1]));
+  const suggestedParts = totalMin > 90 ? 4 : totalMin > 60 ? 3 : 2;
+
+  document.getElementById('splitTaskDuration').textContent = totalMin + ' dk';
+  document.getElementById('splitTaskSuggestion').textContent = `${suggestedParts} parçaya bölmeyi öneriyoruz (her biri ~${Math.round(totalMin / suggestedParts)} dk)`;
+
+  // Pre-fill sub-task inputs
+  const container = document.getElementById('splitSubtaskInputs');
+  container.innerHTML = '';
+  for (let i = 0; i < suggestedParts; i++) {
+    container.innerHTML += `<div class="split-input-row">
+      <span class="split-num">${i + 1}.</span>
+      <input type="text" class="split-subtask-input" placeholder="Alt görev adı (ör: ${getSubtaskHint(ev.name, i)})">
+    </div>`;
+  }
+  showModal('splitTaskModal');
+}
+
+function getSubtaskHint(name, idx) {
+  const hints = [
+    ['Araştırma yap', 'Taslak hazırla', 'İçerik yaz', 'Son kontrol'],
+    ['Başlıkları belirle', 'Ana kısmı yaz', 'Detayları ekle', 'Gözden geçir'],
+    ['Malzemeleri hazırla', 'İlk adım', 'Devam et', 'Bitir']
+  ];
+  const set = hints[Math.floor(Math.random() * hints.length)];
+  return set[idx] || `Adım ${idx + 1}`;
+}
+
+function addSplitSubtaskInput() {
+  const container = document.getElementById('splitSubtaskInputs');
+  const count = container.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'split-input-row';
+  div.innerHTML = `<span class="split-num">${count}.</span>
+    <input type="text" class="split-subtask-input" placeholder="Alt görev adı">
+    <button class="split-remove-btn" onclick="this.parentElement.remove()">✕</button>`;
+  container.appendChild(div);
+}
+
+function confirmSplitTask() {
+  const ev = state.pendingSplitEvent;
+  if (!ev) return;
+
+  const inputs = document.querySelectorAll('.split-subtask-input');
+  const subtaskNames = [];
+  inputs.forEach(input => {
+    const val = input.value.trim();
+    if (val) subtaskNames.push(val);
+  });
+
+  if (subtaskNames.length < 2) { alert('En az 2 alt görev girin'); return; }
+
+  // Calculate time blocks
+  const startParts = ev.startTime.split(':');
+  const endParts = ev.endTime.split(':');
+  const startMin = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
+  const endMin = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
+  const totalMin = endMin - startMin;
+  const blockMin = Math.floor(totalMin / subtaskNames.length);
+
+  // Remove original event
+  state.events = state.events.filter(e => e.id !== ev.id);
+
+  // Create sub-task events
+  subtaskNames.forEach((name, i) => {
+    const subStart = startMin + (i * blockMin);
+    const subEnd = i === subtaskNames.length - 1 ? endMin : subStart + blockMin;
+    const subEv = {
+      id: 'sub_' + Date.now() + '_' + i,
+      name: `${name}`,
+      date: ev.date,
+      startTime: `${String(Math.floor(subStart / 60)).padStart(2, '0')}:${String(subStart % 60).padStart(2, '0')}`,
+      endTime: `${String(Math.floor(subEnd / 60)).padStart(2, '0')}:${String(subEnd % 60).padStart(2, '0')}`,
+      importance: ev.importance,
+      completed: false,
+      postponeCount: 0,
+      postponeHistory: [],
+      originalDate: ev.originalDate || ev.date,
+      subTasks: [],
+      parentId: ev.id,
+      parentName: ev.name
+    };
+    state.events.push(subEv);
+  });
+
+  state.pendingSplitEvent = null;
+  hideModal('splitTaskModal');
+  saveState();
+  renderAll();
+
+  if (typeof showNotification === 'function') {
+    showNotification(`✂️ "${ev.name}" ${subtaskNames.length} parçaya bölündü!`, 'success');
+  }
 }

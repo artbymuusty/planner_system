@@ -100,6 +100,9 @@
       </div>
     </section>
 
+    <!-- Postpone Dashboard -->
+    <section class="postpone-section" id="postponeSection"></section>
+
     <!-- FAQ -->
     <section class="faq-section" id="faqSection">
       <h2>❓ Sıkça Sorulan Sorular</h2>
@@ -239,14 +242,62 @@
     </div>
   </div>
 
-  <!-- RE-ADD CONFIRM MODAL -->
-  <div class="modal-overlay" id="readdModal">
-    <div class="modal" style="position:relative">
-      <h2>🔄 Tekrar Ekle</h2>
-      <p class="confirm-text">Bu görevi tekrar listeye almak ister misiniz?<br><strong id="readdEventName"></strong></p>
+  <!-- POSTPONE REASON MODAL -->
+  <div class="modal-overlay" id="postponeReasonModal">
+    <div class="modal pp-modal" style="position:relative">
+      <button class="modal-close" onclick="hideModal('postponeReasonModal')">✕</button>
+      <h2>🔄 Görevi Ertele</h2>
+      <p class="pp-task-name"><strong id="postponeEventName"></strong></p>
+      <div class="pp-count-info" id="postponeCountInfo" style="display:none">
+        <span class="pp-warning-icon">⚠️</span> Bu görev <strong class="pp-count">0</strong>. kez erteleniyor!
+      </div>
+      <p class="pp-question">Neden erteliyorsun?</p>
+      <div class="pp-reason-options">
+        <div class="pp-reason-option" data-reason="too_big" onclick="selectPostponeReason(this)">
+          <span class="pp-reason-emoji">😰</span><span>Çok büyük/karmaşık</span>
+        </div>
+        <div class="pp-reason-option" data-reason="no_time" onclick="selectPostponeReason(this)">
+          <span class="pp-reason-emoji">⏰</span><span>Zamanım yetmedi</span>
+        </div>
+        <div class="pp-reason-option" data-reason="dont_know" onclick="selectPostponeReason(this)">
+          <span class="pp-reason-emoji">🤷</span><span>Nereden başlayacağımı bilmiyorum</span>
+        </div>
+        <div class="pp-reason-option" data-reason="no_energy" onclick="selectPostponeReason(this)">
+          <span class="pp-reason-emoji">😴</span><span>Enerjim yoktu</span>
+        </div>
+        <div class="pp-reason-option" data-reason="priorities" onclick="selectPostponeReason(this)">
+          <span class="pp-reason-emoji">🔄</span><span>Öncelikler değişti</span>
+        </div>
+        <div class="pp-reason-option" data-reason="other" onclick="selectPostponeReason(this)">
+          <span class="pp-reason-emoji">📝</span><span>Diğer</span>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label>Yeni Tarih</label>
+        <input type="date" id="postponeNewDate">
+      </div>
       <div class="confirm-btns">
-        <button class="modal-btn primary" onclick="confirmReadd()">Evet, Ekle</button>
-        <button class="modal-btn secondary" onclick="hideModal('readdModal')">İptal</button>
+        <button class="modal-btn primary" onclick="confirmPostpone()">🔄 Ertele & Taşı</button>
+        <button class="modal-btn secondary" onclick="hideModal('postponeReasonModal')">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPLIT TASK MODAL -->
+  <div class="modal-overlay" id="splitTaskModal">
+    <div class="modal pp-modal" style="position:relative">
+      <button class="modal-close" onclick="hideModal('splitTaskModal')">✕</button>
+      <h2>✂️ Görevi Parçalara Böl</h2>
+      <div class="split-task-info">
+        <p>Ana görev: <strong id="splitTaskName"></strong></p>
+        <p class="split-meta">⏱️ Süre: <span id="splitTaskDuration"></span> · 🔄 <span id="splitTaskPostponeCount"></span>x ertelendi</p>
+        <p class="split-suggestion" id="splitTaskSuggestion"></p>
+      </div>
+      <div class="split-subtask-list" id="splitSubtaskInputs"></div>
+      <button class="split-add-more" onclick="addSplitSubtaskInput()">+ Alt Görev Ekle</button>
+      <div class="confirm-btns" style="margin-top:16px">
+        <button class="modal-btn primary" onclick="confirmSplitTask()">✂️ Parçalara Böl</button>
+        <button class="modal-btn secondary" onclick="hideModal('splitTaskModal')">İptal</button>
       </div>
     </div>
   </div>
