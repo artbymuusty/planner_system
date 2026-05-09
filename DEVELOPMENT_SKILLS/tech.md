@@ -11,6 +11,11 @@
 - **Framer Motion** — sayfa geçişleri, modül animasyonları
 - **shadcn/ui** — temel component seti (Button, Dialog, Card, Tabs…)
 - **PWA** — offline destek, ana ekrana ekle, push notification
+- **Sonner** toast mesajlar icin
+- **lucide-react** ikonlar icin
+- **clsx** ve **tailwind-merge** — tailwind siniflarini birlestirmek icin
+
+
 
 ---
 
