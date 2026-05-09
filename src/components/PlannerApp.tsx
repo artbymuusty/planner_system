@@ -48,7 +48,7 @@ export default function PlannerApp() {
     }
   }, [planner]);
 
-  // Postpone flow: event click → if event is being re-added, set pendingReadd → open postpone modal
+  // Postpone flow: event click, set pendingReadd, open postpone modal.
   const handleReaddClick = useCallback((id: string) => {
     const ev = planner.state.events.find(e => e.id === id);
     if (!ev) return;
@@ -109,10 +109,10 @@ export default function PlannerApp() {
   }, [planner]);
 
   const getBirthdayBanners = useCallback((dateStr: string) => {
-    const [, , day] = dateStr.split('-').map(Number);
+    const [, month, day] = dateStr.split('-').map(Number);
     return modules.modState.birthdays.filter(b => {
-      const [, , bday] = b.date.split('-').map(Number);
-      return bday === day;
+      const [, bmonth, bday] = b.date.split('-').map(Number);
+      return bmonth === month && bday === day;
     });
   }, [modules.modState.birthdays]);
 

@@ -305,7 +305,6 @@ body {
 .pp-reason-option { display:flex; align-items:center; gap:8px; padding:12px 14px; border-radius:12px; background:var(--bg-secondary); border:2px solid var(--glass-border); cursor:pointer; transition:var(--transition); font-size:0.82rem; font-weight:500; color:var(--text-secondary); }
 .pp-reason-option:hover { background:var(--bg-tertiary); border-color:rgba(0,0,0,0.12); }
 .pp-reason-option.selected { background:rgba(99,102,241,0.08); border-color:var(--accent); color:var(--text-primary); }
-.pp-reason-emoji { font-size:1.2rem; }
 .split-task-info { background:var(--bg-secondary); border-radius:12px; padding:14px 16px; margin-bottom:16px; border:1px solid var(--glass-border); }
 .split-task-info p { font-size:0.88rem; color:var(--text-secondary); margin-bottom:4px; }
 .split-meta { font-size:0.8rem !important; color:var(--text-muted) !important; }
@@ -791,6 +790,28 @@ body {
 .month-event-card.imp-med { background: rgba(249,115,22,0.08); border-color: #f97316; color: #ea580c; }
 .month-event-card.imp-low { background: rgba(59,130,246,0.08); border-color: #3b82f6; color: #2563eb; }
 .month-event-card.completed { background: rgba(34,197,94,0.08); border-color: #22c55e; color: #16a34a; text-decoration: line-through; }
+.month-birthday-card {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border: 1px solid rgba(236,72,153,0.2);
+  border-left: 3px solid #db2777;
+  border-radius: 4px;
+  background: rgba(236,72,153,0.08);
+  color: #be185d;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+.month-birthday-card span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pp-reason-emoji { font-size:1.2rem; }
 .month-event-time { flex-shrink: 0; opacity: 0.75; }
 .month-event-name {
   min-width: 0;

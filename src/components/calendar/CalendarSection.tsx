@@ -152,6 +152,7 @@ function MonthView({
   deleteMode,
   onEventClick,
   onDeleteEvent,
+  getBirthdayBanners,
 }: Props) {
   const year = anchorDate.getFullYear();
   const month = anchorDate.getMonth();
@@ -179,7 +180,11 @@ function MonthView({
           const dateStr = formatDate(date);
           const today = isToday(date);
           const past = isPast(date) && !today;
+          const bdays = getBirthdayBanners ? getBirthdayBanners(dateStr) : [];
           const dayEvents = events.filter(e => e.date === dateStr && e.moduleType !== 'birthday');
+          const visibleBirthdayCount = Math.min(bdays.length, 2);
+          const visibleEventCount = Math.max(0, 3 - visibleBirthdayCount);
+          const hiddenCount = Math.max(0, bdays.length - visibleBirthdayCount) + Math.max(0, dayEvents.length - visibleEventCount);
 
           return (
             <div
@@ -194,12 +199,17 @@ function MonthView({
             >
               <div className="month-day-top">
                 <span className="month-day-number">{date.getDate()}</span>
-                {dayEvents.length > 3 && (
-                  <span className="month-more-count">+{dayEvents.length - 3}</span>
+                {hiddenCount > 0 && (
+                  <span className="month-more-count">+{hiddenCount}</span>
                 )}
               </div>
               <div className="month-event-list">
-                {dayEvents.slice(0, 3).map(ev => (
+                {bdays.slice(0, visibleBirthdayCount).map((b, bi) => (
+                  <div key={`${dateStr}-bday-${bi}`} className="month-birthday-card" title={`Doğum günü: ${b.name}`}>
+                    <span>🎂 {b.name}</span>
+                  </div>
+                ))}
+                {dayEvents.slice(0, visibleEventCount).map(ev => (
                   <button
                     key={ev.id}
                     onClick={e => {

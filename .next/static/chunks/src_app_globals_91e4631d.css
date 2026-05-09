@@ -1594,10 +1594,6 @@ body {
   background: rgba(99, 102, 241, .08);
 }
 
-.pp-reason-emoji {
-  font-size: 1.2rem;
-}
-
 .split-task-info {
   background: var(--bg-secondary);
   border: 1px solid var(--glass-border);
@@ -4034,6 +4030,33 @@ body {
   background: rgba(34, 197, 94, .08);
   border-color: #22c55e;
   text-decoration: line-through;
+}
+
+.month-birthday-card {
+  color: #be185d;
+  background: rgba(236, 72, 153, .08);
+  border: 1px solid rgba(236, 72, 153, .2);
+  border-left: 3px solid #db2777;
+  border-radius: 4px;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  padding: 3px 6px;
+  font-size: .66rem;
+  font-weight: 700;
+  display: flex;
+}
+
+.month-birthday-card span {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pp-reason-emoji {
+  font-size: 1.2rem;
 }
 
 .month-event-time {

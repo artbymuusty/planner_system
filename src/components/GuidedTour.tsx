@@ -10,7 +10,6 @@ interface TourStep {
 }
 
 const TOUR_STEPS: TourStep[] = [
-  { target: '#inboxBar', title: '📬 Bildirim Çubuğu', desc: 'Bugünkü etkinlik sayısı, su durumu, ilaç uyarıları ve yaklaşan doğum günleri burada görünür.', pos: 'bottom' },
   { target: '.calendar-section', title: '📅 Haftalık Takvim', desc: 'Tüm etkinlikleriniz burada saatlik olarak gösterilir. Bir etkinliğe tıklayarak tamamlandı olarak işaretleyebilirsiniz.', pos: 'bottom' },
   { target: '#homeBtn', title: '🏠 Ana Sayfa', desc: 'Ana takvim görünümüne dönmek için bu butona tıklayın.', pos: 'right' },
   { target: '#medicineBtn', title: '💊 İlaç Takibi', desc: 'İlaçlarınızı ekleyin, dozaj ve zamanlamalarını takip edin. İlaç azaldığında uyarı alırsınız.', pos: 'right' },
@@ -20,11 +19,7 @@ const TOUR_STEPS: TourStep[] = [
   { target: '#budgetBtn', title: '💰 Bütçe & Alışveriş', desc: 'Aylık gelir ve harcamalarınızı takip edin. Market alışveriş listeleri oluşturup takvimde gösterin.', pos: 'right' },
   { target: '#sleepBtn', title: '😴 Uyku Takibi', desc: 'Uyku saatlerinizi kaydedin, detaylı sağlık raporu alın. Yetersiz uykunun etkilerini görün.', pos: 'right' },
   { target: '#goalsBtn', title: '🎯 Hedef Takibi', desc: 'Kişisel hedefler belirleyin ve ilerlemenizi takip edin. Motivasyon mesajları ile hedefe ulaşın!', pos: 'right' },
-  { target: '#addEventBtn', title: '➕ Etkinlik Ekle', desc: 'Yeni etkinlik oluşturmak için bu yeşil butona tıklayın. Ad, tarih, saat ve önem seviyesi belirleyin.', pos: 'right' },
-  { target: '#removeEventBtn', title: '➖ Etkinlik Sil', desc: 'Silme modunu aktif edin, ardından takvimde silmek istediğiniz etkinliğin × işaretine tıklayın.', pos: 'right' },
-  { target: '#profileBtn', title: '👤 Profil', desc: 'Kullanıcı girişi yapın. Verileriniz tarayıcınızda güvenle saklanır.', pos: 'right' },
-  { target: '.bottom-panels', title: '📊 Alt Paneller', desc: 'Sol: AI Asistan (yakında). Sağ: Bu haftaki yaklaşan etkinlikleriniz listesi.', pos: 'top' },
-  { target: '.completion-section', title: '📈 Haftalık Tamamlanma', desc: 'Her günün görev tamamlanma yüzdesini grafik olarak görün. Tamamlanmayan görevleri tekrar ekleyebilirsiniz.', pos: 'top' },
+  { target: '#statisticsBtn', title: '📊 İstatistikler', desc: 'Tamamlanma ve erteleme analizlerini ayrı panelde görüntüleyebilirsiniz.', pos: 'right' },
 ];
 
 interface Props {

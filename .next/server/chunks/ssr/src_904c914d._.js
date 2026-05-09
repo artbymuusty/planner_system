@@ -789,7 +789,17 @@ __turbopack_context__.s([
     ()=>AppSidebar
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chart-column.js [app-ssr] (ecmascript) <export default as BarChart3>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$cake$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Cake$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/cake.js [app-ssr] (ecmascript) <export default as Cake>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$dumbbell$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Dumbbell$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/dumbbell.js [app-ssr] (ecmascript) <export default as Dumbbell>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$droplets$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Droplets$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/droplets.js [app-ssr] (ecmascript) <export default as Droplets>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/house.js [app-ssr] (ecmascript) <export default as Home>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/moon.js [app-ssr] (ecmascript) <export default as Moon>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pill$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Pill$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pill.js [app-ssr] (ecmascript) <export default as Pill>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/target.js [app-ssr] (ecmascript) <export default as Target>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$wallet$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Wallet$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/wallet.js [app-ssr] (ecmascript) <export default as Wallet>");
 'use client';
+;
 ;
 function AppSidebar({ activeModule, onHome, onModule }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -803,39 +813,21 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "homeBtn",
                     title: "Ana Sayfa",
                     onClick: onHome,
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                        viewBox: "0 0 24 24",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                d: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 23,
-                                columnNumber: 36
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
-                                points: "9 22 9 12 15 12 15 22"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 23,
-                                columnNumber: 92
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"], {}, void 0, false, {
                         fileName: "[project]/src/components/AppSidebar.tsx",
-                        lineNumber: 23,
+                        lineNumber: 24,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 17,
+                    lineNumber: 18,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "sidebar-sep"
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 25,
+                    lineNumber: 26,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -843,45 +835,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "medicineBtn",
                     title: "İlaç",
                     onClick: ()=>onModule('medicine'),
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                        viewBox: "0 0 24 24",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                d: "M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 27,
-                                columnNumber: 36
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "9",
-                                y1: "9",
-                                x2: "15",
-                                y2: "9"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 27,
-                                columnNumber: 205
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "9",
-                                y1: "13",
-                                x2: "15",
-                                y2: "13"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 27,
-                                columnNumber: 241
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pill$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Pill$3e$__["Pill"], {}, void 0, false, {
                         fileName: "[project]/src/components/AppSidebar.tsx",
-                        lineNumber: 27,
+                        lineNumber: 28,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 26,
+                    lineNumber: 27,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -889,23 +850,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "waterBtn",
                     title: "Su",
                     onClick: ()=>onModule('water'),
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                        viewBox: "0 0 24 24",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                            d: "M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/AppSidebar.tsx",
-                            lineNumber: 30,
-                            columnNumber: 36
-                        }, this)
-                    }, void 0, false, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$droplets$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Droplets$3e$__["Droplets"], {}, void 0, false, {
                         fileName: "[project]/src/components/AppSidebar.tsx",
-                        lineNumber: 30,
+                        lineNumber: 31,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 29,
+                    lineNumber: 30,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -913,57 +865,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "gymBtn",
                     title: "Gym",
                     onClick: ()=>onModule('gym'),
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                        viewBox: "0 0 24 24",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                d: "M6.5 6.5h11M6.5 17.5h11"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 33,
-                                columnNumber: 36
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
-                                x: "2",
-                                y: "8.5",
-                                width: "4",
-                                height: "7",
-                                rx: "1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 33,
-                                columnNumber: 71
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
-                                x: "18",
-                                y: "8.5",
-                                width: "4",
-                                height: "7",
-                                rx: "1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 33,
-                                columnNumber: 120
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "6.5",
-                                y1: "12",
-                                x2: "17.5",
-                                y2: "12"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 33,
-                                columnNumber: 170
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$dumbbell$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Dumbbell$3e$__["Dumbbell"], {}, void 0, false, {
                         fileName: "[project]/src/components/AppSidebar.tsx",
-                        lineNumber: 33,
+                        lineNumber: 34,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 32,
+                    lineNumber: 33,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -971,10 +880,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "birthdayBtn",
                     title: "Doğum Günleri",
                     onClick: ()=>onModule('birthday'),
-                    children: "🎂"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$cake$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Cake$3e$__["Cake"], {}, void 0, false, {
+                        fileName: "[project]/src/components/AppSidebar.tsx",
+                        lineNumber: 36,
+                        columnNumber: 175
+                    }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 35,
+                    lineNumber: 36,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -982,10 +895,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "budgetBtn",
                     title: "Bütçe",
                     onClick: ()=>onModule('budget'),
-                    children: "💰"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$wallet$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Wallet$3e$__["Wallet"], {}, void 0, false, {
+                        fileName: "[project]/src/components/AppSidebar.tsx",
+                        lineNumber: 37,
+                        columnNumber: 152
+                    }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 36,
+                    lineNumber: 37,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -993,10 +910,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "sleepBtn",
                     title: "Uyku",
                     onClick: ()=>onModule('sleep'),
-                    children: "😴"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__["Moon"], {}, void 0, false, {
+                        fileName: "[project]/src/components/AppSidebar.tsx",
+                        lineNumber: 38,
+                        columnNumber: 148
+                    }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 37,
+                    lineNumber: 38,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1004,10 +925,14 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "goalsBtn",
                     title: "Hedefler",
                     onClick: ()=>onModule('goals'),
-                    children: "🎯"
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__["Target"], {}, void 0, false, {
+                        fileName: "[project]/src/components/AppSidebar.tsx",
+                        lineNumber: 39,
+                        columnNumber: 152
+                    }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 38,
+                    lineNumber: 39,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1015,69 +940,25 @@ function AppSidebar({ activeModule, onHome, onModule }) {
                     id: "statisticsBtn",
                     title: "İstatistikler",
                     onClick: ()=>onModule('statistics'),
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                        viewBox: "0 0 24 24",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "18",
-                                y1: "20",
-                                x2: "18",
-                                y2: "10"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 40,
-                                columnNumber: 36
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "12",
-                                y1: "20",
-                                x2: "12",
-                                y2: "4"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 40,
-                                columnNumber: 75
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "6",
-                                y1: "20",
-                                x2: "6",
-                                y2: "14"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 40,
-                                columnNumber: 113
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                x1: "2",
-                                y1: "20",
-                                x2: "22",
-                                y2: "20"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/AppSidebar.tsx",
-                                lineNumber: 40,
-                                columnNumber: 150
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__["BarChart3"], {}, void 0, false, {
                         fileName: "[project]/src/components/AppSidebar.tsx",
-                        lineNumber: 40,
+                        lineNumber: 41,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/AppSidebar.tsx",
-                    lineNumber: 39,
+                    lineNumber: 40,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/AppSidebar.tsx",
-            lineNumber: 16,
+            lineNumber: 17,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/AppSidebar.tsx",
-        lineNumber: 15,
+        lineNumber: 16,
         columnNumber: 5
     }, this);
 }
@@ -2307,7 +2188,7 @@ function DayView({ anchorDate, events, deleteMode, onEventClick, onDeleteEvent, 
         columnNumber: 5
     }, this);
 }
-function MonthView({ anchorDate, events, deleteMode, onEventClick, onDeleteEvent }) {
+function MonthView({ anchorDate, events, deleteMode, onEventClick, onDeleteEvent, getBirthdayBanners }) {
     const year = anchorDate.getFullYear();
     const month = anchorDate.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -2332,12 +2213,12 @@ function MonthView({ anchorDate, events, deleteMode, onEventClick, onDeleteEvent
                         children: day
                     }, day, false, {
                         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                        lineNumber: 173,
+                        lineNumber: 174,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 171,
+                lineNumber: 172,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2346,7 +2227,11 @@ function MonthView({ anchorDate, events, deleteMode, onEventClick, onDeleteEvent
                     const dateStr = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dateUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatDate"])(date);
                     const today = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dateUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isToday"])(date);
                     const past = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$dateUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isPast"])(date) && !today;
+                    const bdays = getBirthdayBanners ? getBirthdayBanners(dateStr) : [];
                     const dayEvents = events.filter((e)=>e.date === dateStr && e.moduleType !== 'birthday');
+                    const visibleBirthdayCount = Math.min(bdays.length, 2);
+                    const visibleEventCount = Math.max(0, 3 - visibleBirthdayCount);
+                    const hiddenCount = Math.max(0, bdays.length - visibleBirthdayCount) + Math.max(0, dayEvents.length - visibleEventCount);
                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: 'month-day-cell' + (!inMonth ? ' other-month' : '') + (today ? ' today' : '') + (past && inMonth ? ' past' : '') + (i < 7 ? ' first-week' : ''),
                         children: [
@@ -2358,80 +2243,100 @@ function MonthView({ anchorDate, events, deleteMode, onEventClick, onDeleteEvent
                                         children: date.getDate()
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                        lineNumber: 196,
+                                        lineNumber: 201,
                                         columnNumber: 17
                                     }, this),
-                                    dayEvents.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    hiddenCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "month-more-count",
                                         children: [
                                             "+",
-                                            dayEvents.length - 3
+                                            hiddenCount
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                        lineNumber: 198,
+                                        lineNumber: 203,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                lineNumber: 195,
+                                lineNumber: 200,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "month-event-list",
-                                children: dayEvents.slice(0, 3).map((ev)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: (e)=>{
-                                            e.stopPropagation();
-                                            if (deleteMode) onDeleteEvent(ev.id);
-                                            else onEventClick(ev.id);
-                                        },
-                                        className: `month-event-card ${importanceClass(ev)}${ev.completed ? ' completed' : ''}`,
-                                        title: `${ev.startTime} ${ev.name}`,
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "month-event-time",
-                                                children: ev.startTime
-                                            }, void 0, false, {
+                                children: [
+                                    bdays.slice(0, visibleBirthdayCount).map((b, bi)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "month-birthday-card",
+                                            title: `Doğum günü: ${b.name}`,
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                children: [
+                                                    "🎂 ",
+                                                    b.name
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                                lineNumber: 213,
-                                                columnNumber: 21
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "month-event-name",
-                                                children: ev.name
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                                lineNumber: 214,
+                                                lineNumber: 209,
                                                 columnNumber: 21
                                             }, this)
-                                        ]
-                                    }, ev.id, true, {
-                                        fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                        lineNumber: 203,
-                                        columnNumber: 19
-                                    }, this))
-                            }, void 0, false, {
+                                        }, `${dateStr}-bday-${bi}`, false, {
+                                            fileName: "[project]/src/components/calendar/CalendarSection.tsx",
+                                            lineNumber: 208,
+                                            columnNumber: 19
+                                        }, this)),
+                                    dayEvents.slice(0, visibleEventCount).map((ev)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: (e)=>{
+                                                e.stopPropagation();
+                                                if (deleteMode) onDeleteEvent(ev.id);
+                                                else onEventClick(ev.id);
+                                            },
+                                            className: `month-event-card ${importanceClass(ev)}${ev.completed ? ' completed' : ''}`,
+                                            title: `${ev.startTime} ${ev.name}`,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "month-event-time",
+                                                    children: ev.startTime
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/calendar/CalendarSection.tsx",
+                                                    lineNumber: 223,
+                                                    columnNumber: 21
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "month-event-name",
+                                                    children: ev.name
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/calendar/CalendarSection.tsx",
+                                                    lineNumber: 224,
+                                                    columnNumber: 21
+                                                }, this)
+                                            ]
+                                        }, ev.id, true, {
+                                            fileName: "[project]/src/components/calendar/CalendarSection.tsx",
+                                            lineNumber: 213,
+                                            columnNumber: 19
+                                        }, this))
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                                lineNumber: 201,
+                                lineNumber: 206,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, dateStr, true, {
                         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                        lineNumber: 185,
+                        lineNumber: 190,
                         columnNumber: 13
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 177,
+                lineNumber: 178,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-        lineNumber: 170,
+        lineNumber: 171,
         columnNumber: 5
     }, this);
 }
@@ -2448,12 +2353,12 @@ function TimeLabels() {
                 ]
             }, i, true, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 230,
+                lineNumber: 240,
                 columnNumber: 9
             }, this))
     }, void 0, false, {
         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-        lineNumber: 228,
+        lineNumber: 238,
         columnNumber: 5
     }, this);
 }
@@ -2468,7 +2373,7 @@ function HourLines() {
                 }
             }, i, false, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 242,
+                lineNumber: 252,
                 columnNumber: 9
             }, this))
     }, void 0, false);
@@ -2501,7 +2406,7 @@ function EventCard({ ev, deleteMode, onClick, onDelete, wide }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 283,
+                lineNumber: 293,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2509,7 +2414,7 @@ function EventCard({ ev, deleteMode, onClick, onDelete, wide }) {
                 children: ev.name
             }, void 0, false, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 287,
+                lineNumber: 297,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2521,7 +2426,7 @@ function EventCard({ ev, deleteMode, onClick, onDelete, wide }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 288,
+                lineNumber: 298,
                 columnNumber: 7
             }, this),
             deleteMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2533,13 +2438,13 @@ function EventCard({ ev, deleteMode, onClick, onDelete, wide }) {
                 children: "✕"
             }, void 0, false, {
                 fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-                lineNumber: 290,
+                lineNumber: 300,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/calendar/CalendarSection.tsx",
-        lineNumber: 276,
+        lineNumber: 286,
         columnNumber: 5
     }, this);
 }
@@ -3113,12 +3018,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 const TOUR_STEPS = [
     {
-        target: '#inboxBar',
-        title: '📬 Bildirim Çubuğu',
-        desc: 'Bugünkü etkinlik sayısı, su durumu, ilaç uyarıları ve yaklaşan doğum günleri burada görünür.',
-        pos: 'bottom'
-    },
-    {
         target: '.calendar-section',
         title: '📅 Haftalık Takvim',
         desc: 'Tüm etkinlikleriniz burada saatlik olarak gösterilir. Bir etkinliğe tıklayarak tamamlandı olarak işaretleyebilirsiniz.',
@@ -3173,34 +3072,10 @@ const TOUR_STEPS = [
         pos: 'right'
     },
     {
-        target: '#addEventBtn',
-        title: '➕ Etkinlik Ekle',
-        desc: 'Yeni etkinlik oluşturmak için bu yeşil butona tıklayın. Ad, tarih, saat ve önem seviyesi belirleyin.',
+        target: '#statisticsBtn',
+        title: '📊 İstatistikler',
+        desc: 'Tamamlanma ve erteleme analizlerini ayrı panelde görüntüleyebilirsiniz.',
         pos: 'right'
-    },
-    {
-        target: '#removeEventBtn',
-        title: '➖ Etkinlik Sil',
-        desc: 'Silme modunu aktif edin, ardından takvimde silmek istediğiniz etkinliğin × işaretine tıklayın.',
-        pos: 'right'
-    },
-    {
-        target: '#profileBtn',
-        title: '👤 Profil',
-        desc: 'Kullanıcı girişi yapın. Verileriniz tarayıcınızda güvenle saklanır.',
-        pos: 'right'
-    },
-    {
-        target: '.bottom-panels',
-        title: '📊 Alt Paneller',
-        desc: 'Sol: AI Asistan (yakında). Sağ: Bu haftaki yaklaşan etkinlikleriniz listesi.',
-        pos: 'top'
-    },
-    {
-        target: '.completion-section',
-        title: '📈 Haftalık Tamamlanma',
-        desc: 'Her günün görev tamamlanma yüzdesini grafik olarak görün. Tamamlanmayan görevleri tekrar ekleyebilirsiniz.',
-        pos: 'top'
     }
 ];
 function GuidedTour({ active, onEnd }) {
@@ -3279,7 +3154,7 @@ function GuidedTour({ active, onEnd }) {
                 id: "tourBackdrop"
             }, void 0, false, {
                 fileName: "[project]/src/components/GuidedTour.tsx",
-                lineNumber: 92,
+                lineNumber: 87,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3292,7 +3167,7 @@ function GuidedTour({ active, onEnd }) {
                         id: "tourArrow"
                     }, void 0, false, {
                         fileName: "[project]/src/components/GuidedTour.tsx",
-                        lineNumber: 94,
+                        lineNumber: 89,
                         columnNumber: 24
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3304,21 +3179,21 @@ function GuidedTour({ active, onEnd }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GuidedTour.tsx",
-                        lineNumber: 95,
+                        lineNumber: 90,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                         children: current.title
                     }, void 0, false, {
                         fileName: "[project]/src/components/GuidedTour.tsx",
-                        lineNumber: 96,
+                        lineNumber: 91,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         children: current.desc
                     }, void 0, false, {
                         fileName: "[project]/src/components/GuidedTour.tsx",
-                        lineNumber: 97,
+                        lineNumber: 92,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3330,7 +3205,7 @@ function GuidedTour({ active, onEnd }) {
                                 children: "Kapat"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GuidedTour.tsx",
-                                lineNumber: 99,
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3345,7 +3220,7 @@ function GuidedTour({ active, onEnd }) {
                                         children: "← Geri"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GuidedTour.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 97,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3357,31 +3232,31 @@ function GuidedTour({ active, onEnd }) {
                                         children: step === TOUR_STEPS.length - 1 ? 'Bitir ✓' : 'İleri →'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GuidedTour.tsx",
-                                        lineNumber: 104,
+                                        lineNumber: 99,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/GuidedTour.tsx",
-                                lineNumber: 100,
+                                lineNumber: 95,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GuidedTour.tsx",
-                        lineNumber: 98,
+                        lineNumber: 93,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/GuidedTour.tsx",
-                lineNumber: 93,
+                lineNumber: 88,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/GuidedTour.tsx",
-        lineNumber: 91,
+        lineNumber: 86,
         columnNumber: 5
     }, this);
 }
@@ -8456,7 +8331,7 @@ function PlannerApp() {
     }, [
         planner
     ]);
-    // Postpone flow: event click → if event is being re-added, set pendingReadd → open postpone modal
+    // Postpone flow: event click, set pendingReadd, open postpone modal.
     const handleReaddClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((id)=>{
         const ev = planner.state.events.find((e)=>e.id === id);
         if (!ev) return;
@@ -8521,10 +8396,10 @@ function PlannerApp() {
         planner
     ]);
     const getBirthdayBanners = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((dateStr)=>{
-        const [, , day] = dateStr.split('-').map(Number);
+        const [, month, day] = dateStr.split('-').map(Number);
         return modules.modState.birthdays.filter((b)=>{
-            const [, , bday] = b.date.split('-').map(Number);
-            return bday === day;
+            const [, bmonth, bday] = b.date.split('-').map(Number);
+            return bmonth === month && bday === day;
         });
     }, [
         modules.modState.birthdays
