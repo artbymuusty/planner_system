@@ -2,7 +2,7 @@
 
 import type { PlannerEvent } from '@/types';
 import type { CalendarView } from '@/components/TopBar';
-import { DAYS_SHORT } from '@/lib/constants';
+import { DAYS_SHORT, EVENT_CATEGORY_COLORS, EVENT_CATEGORY_ICONS } from '@/lib/constants';
 import { START_HOUR, END_HOUR, HOUR_HEIGHT } from '@/lib/constants';
 import { isToday, isPast, formatDate, getWeekDates } from '@/lib/dateUtils';
 
@@ -13,7 +13,31 @@ interface Props {
   deleteMode: boolean;
   onEventClick: (id: string) => void;
   onDeleteEvent: (id: string) => void;
+  /** Hover'daki ✓ butonu — toggleComplete'i çağırır. */
+  onComplete?: (id: string) => void;
+  /** Hover'daki 🔄 butonu — postpone modal'ı açar. */
+  onPostpone?: (id: string) => void;
+  /** Hover'daki ✂️ butonu — split modal'ı açar. */
+  onSplit?: (id: string) => void;
+  /** Boş slot tıklaması — pre-filled add modal aç. */
+  onSlotClick?: (dateStr: string, hour: number, minute: number) => void;
   getBirthdayBanners?: (dateStr: string) => { name: string }[];
+}
+
+/**
+ * Calendar render filtresi:
+ *  - 'goal' türündekiler grid'de hiç gözükmez (Aşama 6'da sidebar'da)
+ *  - 'birthday' modülü banner olarak ayrı handle edilir
+ */
+function isCalendarRenderable(e: PlannerEvent): boolean {
+  if (e.kind === 'goal') return false;
+  if (e.moduleType === 'birthday') return false;
+  return true;
+}
+
+/** All-day mi? Saat alanı yokmuş gibi davranır. */
+function isAllDay(e: PlannerEvent): boolean {
+  return Boolean(e.allDay);
 }
 
 export default function CalendarSection(props: Props) {
@@ -22,12 +46,19 @@ export default function CalendarSection(props: Props) {
   return <WeekView {...props} />;
 }
 
+// ======================================================================
+// WEEK VIEW
+// ======================================================================
 function WeekView({
   anchorDate,
   events,
   deleteMode,
   onEventClick,
   onDeleteEvent,
+  onComplete,
+  onPostpone,
+  onSplit,
+  onSlotClick,
   getBirthdayBanners,
 }: Props) {
   const dates = getWeekDates(anchorDate);
@@ -39,7 +70,6 @@ function WeekView({
         {dates.map((d, i) => {
           const today = isToday(d);
           const past = isPast(d) && !today;
-
           return (
             <div
               key={formatDate(d)}
@@ -60,28 +90,50 @@ function WeekView({
           const today = isToday(d);
           const past = isPast(d) && !today;
           const bdays = getBirthdayBanners ? getBirthdayBanners(dateStr) : [];
-          const dayEvents = events.filter(e => e.date === dateStr && e.moduleType !== 'birthday');
+          const dayAll = events.filter(e => e.date === dateStr && isCalendarRenderable(e));
+          const allDayItems = dayAll.filter(isAllDay);
+          const timedItems = dayAll.filter(e => !isAllDay(e));
 
           return (
             <div
               key={dateStr}
               className={`day-column${today ? ' today-col' : ''}${past ? ' past-col' : ''}`}
-              style={{ minHeight: (END_HOUR - START_HOUR + 1) * HOUR_HEIGHT }}
               data-date={dateStr}
             >
-              {bdays.map((b, i) => (
-                <div key={`${b.name}-${i}`} className="bday-banner">🎂 {b.name}</div>
-              ))}
-              <HourLines />
-              {dayEvents.map(ev => (
-                <EventCard
-                  key={ev.id}
-                  ev={ev}
-                  deleteMode={deleteMode}
-                  onClick={() => onEventClick(ev.id)}
-                  onDelete={() => onDeleteEvent(ev.id)}
+              <AllDayShelf
+                bdays={bdays}
+                tasks={allDayItems}
+                onEventClick={onEventClick}
+                onComplete={onComplete}
+                onPostpone={onPostpone}
+                onSplit={onSplit}
+                deleteMode={deleteMode}
+                onDelete={onDeleteEvent}
+              />
+
+              <div
+                className="time-grid"
+                style={{ minHeight: (END_HOUR - START_HOUR + 1) * HOUR_HEIGHT }}
+              >
+                <SlotGrid
+                  dateStr={dateStr}
+                  onSlotClick={onSlotClick}
+                  disabled={deleteMode}
                 />
-              ))}
+
+                {timedItems.map(ev => (
+                  <EventCard
+                    key={ev.id}
+                    ev={ev}
+                    deleteMode={deleteMode}
+                    onClick={() => onEventClick(ev.id)}
+                    onDelete={() => onDeleteEvent(ev.id)}
+                    onComplete={onComplete ? () => onComplete(ev.id) : undefined}
+                    onPostpone={onPostpone ? () => onPostpone(ev.id) : undefined}
+                    onSplit={onSplit ? () => onSplit(ev.id) : undefined}
+                  />
+                ))}
+              </div>
             </div>
           );
         })}
@@ -90,18 +142,27 @@ function WeekView({
   );
 }
 
+// ======================================================================
+// DAY VIEW
+// ======================================================================
 function DayView({
   anchorDate,
   events,
   deleteMode,
   onEventClick,
   onDeleteEvent,
+  onComplete,
+  onPostpone,
+  onSplit,
+  onSlotClick,
   getBirthdayBanners,
 }: Props) {
   const dateStr = formatDate(anchorDate);
   const today = isToday(anchorDate);
   const dayIndex = anchorDate.getDay() === 0 ? 6 : anchorDate.getDay() - 1;
-  const dayEvents = events.filter(e => e.date === dateStr && e.moduleType !== 'birthday');
+  const dayAll = events.filter(e => e.date === dateStr && isCalendarRenderable(e));
+  const allDayItems = dayAll.filter(isAllDay);
+  const timedItems = dayAll.filter(e => !isAllDay(e));
   const bdays = getBirthdayBanners ? getBirthdayBanners(dateStr) : [];
 
   return (
@@ -119,33 +180,57 @@ function DayView({
 
         <div
           className={`day-column${today ? ' today-col' : ''}`}
-          style={{ minHeight: (END_HOUR - START_HOUR + 1) * HOUR_HEIGHT }}
           data-date={dateStr}
         >
-          {bdays.map((b, i) => (
-            <div key={`${b.name}-${i}`} className="bday-banner">🎂 {b.name}</div>
-          ))}
-          <HourLines />
-          {dayEvents.length === 0 ? (
-            <div className="calendar-empty-state">Bu gün için planlanmış etkinlik yok.</div>
-          ) : (
-            dayEvents.map(ev => (
-              <EventCard
-                key={ev.id}
-                ev={ev}
-                wide
-                deleteMode={deleteMode}
-                onClick={() => onEventClick(ev.id)}
-                onDelete={() => onDeleteEvent(ev.id)}
-              />
-            ))
-          )}
+          <AllDayShelf
+            bdays={bdays}
+            tasks={allDayItems}
+            onEventClick={onEventClick}
+            onComplete={onComplete}
+            onPostpone={onPostpone}
+            onSplit={onSplit}
+            deleteMode={deleteMode}
+            onDelete={onDeleteEvent}
+            wide
+          />
+
+          <div
+            className="time-grid"
+            style={{ minHeight: (END_HOUR - START_HOUR + 1) * HOUR_HEIGHT }}
+          >
+            <SlotGrid
+              dateStr={dateStr}
+              onSlotClick={onSlotClick}
+              disabled={deleteMode}
+            />
+
+            {timedItems.length === 0 && allDayItems.length === 0 && bdays.length === 0 ? (
+              <div className="calendar-empty-state">Bu gün için planlanmış etkinlik yok.</div>
+            ) : (
+              timedItems.map(ev => (
+                <EventCard
+                  key={ev.id}
+                  ev={ev}
+                  wide
+                  deleteMode={deleteMode}
+                  onClick={() => onEventClick(ev.id)}
+                  onDelete={() => onDeleteEvent(ev.id)}
+                  onComplete={onComplete ? () => onComplete(ev.id) : undefined}
+                  onPostpone={onPostpone ? () => onPostpone(ev.id) : undefined}
+                  onSplit={onSplit ? () => onSplit(ev.id) : undefined}
+                />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
+// ======================================================================
+// MONTH VIEW
+// ======================================================================
 function MonthView({
   anchorDate,
   events,
@@ -181,10 +266,12 @@ function MonthView({
           const today = isToday(date);
           const past = isPast(date) && !today;
           const bdays = getBirthdayBanners ? getBirthdayBanners(dateStr) : [];
-          const dayEvents = events.filter(e => e.date === dateStr && e.moduleType !== 'birthday');
+          const dayEvents = events.filter(e => e.date === dateStr && isCalendarRenderable(e));
           const visibleBirthdayCount = Math.min(bdays.length, 2);
           const visibleEventCount = Math.max(0, 3 - visibleBirthdayCount);
-          const hiddenCount = Math.max(0, bdays.length - visibleBirthdayCount) + Math.max(0, dayEvents.length - visibleEventCount);
+          const hiddenCount =
+            Math.max(0, bdays.length - visibleBirthdayCount) +
+            Math.max(0, dayEvents.length - visibleEventCount);
 
           return (
             <div
@@ -209,27 +296,169 @@ function MonthView({
                     <span>🎂 {b.name}</span>
                   </div>
                 ))}
-                {dayEvents.slice(0, visibleEventCount).map(ev => (
-                  <button
-                    key={ev.id}
-                    onClick={e => {
-                      e.stopPropagation();
-                      if (deleteMode) onDeleteEvent(ev.id);
-                      else onEventClick(ev.id);
-                    }}
-                    className={`month-event-card ${importanceClass(ev)}${ev.completed ? ' completed' : ''}`}
-                    title={`${ev.startTime} ${ev.name}`}
-                  >
-                    <span className="month-event-time">{ev.startTime}</span>
-                    <span className="month-event-name">{ev.name}</span>
-                  </button>
-                ))}
+                {dayEvents.slice(0, visibleEventCount).map(ev => {
+                  const isTask = ev.kind === 'task';
+                  const allDay = isAllDay(ev);
+                  return (
+                    <button
+                      key={ev.id}
+                      onClick={e => {
+                        e.stopPropagation();
+                        if (deleteMode) onDeleteEvent(ev.id);
+                        else onEventClick(ev.id);
+                      }}
+                      className={
+                        `month-event-card ${importanceClass(ev)}` +
+                        (ev.completed ? ' completed' : '') +
+                        (isTask ? ' is-task' : '') +
+                        (allDay ? ' is-allday' : '')
+                      }
+                      style={{
+                        borderLeftColor: EVENT_CATEGORY_COLORS[ev.category] ?? '#64748b',
+                      }}
+                      title={`${allDay ? '' : ev.startTime + ' '}${ev.name}`}
+                    >
+                      {!allDay && <span className="month-event-time">{ev.startTime}</span>}
+                      {allDay && <span className="month-event-time">{isTask ? '✓' : '•'}</span>}
+                      <span className="month-event-name">{ev.name}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           );
         })}
       </div>
     </section>
+  );
+}
+
+// ======================================================================
+// All-Day Shelf — Saatsiz görevler ve doğum günleri
+// ======================================================================
+function AllDayShelf({
+  bdays,
+  tasks,
+  onEventClick,
+  onComplete,
+  onPostpone,
+  onSplit,
+  deleteMode,
+  onDelete,
+  wide,
+}: {
+  bdays: { name: string }[];
+  tasks: PlannerEvent[];
+  onEventClick: (id: string) => void;
+  onComplete?: (id: string) => void;
+  onPostpone?: (id: string) => void;
+  onSplit?: (id: string) => void;
+  deleteMode: boolean;
+  onDelete: (id: string) => void;
+  wide?: boolean;
+}) {
+  if (bdays.length === 0 && tasks.length === 0) return null;
+
+  return (
+    <div className={`allday-shelf${wide ? ' wide' : ''}`}>
+      {bdays.map((b, i) => (
+        <div key={`bday-${i}`} className="allday-chip bday">
+          🎂 <span className="allday-chip-name">{b.name}</span>
+        </div>
+      ))}
+      {tasks.map(ev => {
+        const ppCount = ev.postponeCount || 0;
+        const ppClass = ppCount >= 3 ? ' chronic-postpone' : ppCount >= 1 ? ' postponed' : '';
+        const completedCls = ev.completed ? ' completed' : '';
+        const catColor = EVENT_CATEGORY_COLORS[ev.category] ?? '#64748b';
+
+        return (
+          <div
+            key={ev.id}
+            className={`allday-chip task${completedCls}${ppClass}`}
+            style={{ borderLeftColor: catColor }}
+            onClick={e => {
+              e.stopPropagation();
+              if (deleteMode) onDelete(ev.id);
+              else onEventClick(ev.id);
+            }}
+            title={ev.name}
+          >
+            <span className="allday-chip-icon">{EVENT_CATEGORY_ICONS[ev.category] ?? '✓'}</span>
+            <span className="allday-chip-name">{ev.name}</span>
+            {ppCount > 0 && (
+              <span className="allday-chip-pp" title={`${ppCount} kez ertelendi`}>🔄{ppCount}</span>
+            )}
+            {!deleteMode && (onComplete || onPostpone || onSplit) && (
+              <span className="allday-actions" onClick={e => e.stopPropagation()}>
+                {onComplete && (
+                  <button
+                    className="allday-act done"
+                    title="Tamamla"
+                    onClick={() => onComplete(ev.id)}
+                  >✓</button>
+                )}
+                {onPostpone && (
+                  <button
+                    className="allday-act postpone"
+                    title="Ertele"
+                    onClick={() => onPostpone(ev.id)}
+                  >🔄</button>
+                )}
+                {onSplit && (
+                  <button
+                    className="allday-act split"
+                    title="Parçala"
+                    onClick={() => onSplit(ev.id)}
+                  >✂️</button>
+                )}
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ======================================================================
+// Slot Grid — Görsel saat çizgileri + tam yükseklik tıklama overlay'i
+// ======================================================================
+function SlotGrid({
+  dateStr,
+  onSlotClick,
+  disabled,
+}: {
+  dateStr: string;
+  onSlotClick?: (dateStr: string, hour: number, minute: number) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <>
+      {Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => {
+        const hour = START_HOUR + i;
+        const top = i * HOUR_HEIGHT;
+        return (
+          <div key={`slot-${i}`}>
+            {/* Görsel saat çizgisi (1px) */}
+            <div className="hour-line" style={{ top }} />
+            {/* Tıklanabilir görünmez slot — sadece okunabilir mod'da */}
+            {!disabled && onSlotClick && (
+              <div
+                className="hour-slot"
+                style={{ top, height: HOUR_HEIGHT }}
+                onClick={e => {
+                  const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+                  const offsetY = e.clientY - rect.top;
+                  const minute = offsetY < HOUR_HEIGHT / 2 ? 0 : 30;
+                  onSlotClick(dateStr, hour, minute);
+                }}
+              />
+            )}
+          </div>
+        );
+      })}
+    </>
   );
 }
 
@@ -245,31 +474,26 @@ function TimeLabels() {
   );
 }
 
-function HourLines() {
-  return (
-    <>
-      {Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => (
-        <div
-          key={i}
-          className="hour-line"
-          style={{ top: i * HOUR_HEIGHT }}
-        />
-      ))}
-    </>
-  );
-}
-
+// ======================================================================
+// EventCard — Saatli event/task için
+// ======================================================================
 function EventCard({
   ev,
   deleteMode,
   onClick,
   onDelete,
+  onComplete,
+  onPostpone,
+  onSplit,
   wide,
 }: {
   ev: PlannerEvent;
   deleteMode: boolean;
   onClick: () => void;
   onDelete: () => void;
+  onComplete?: () => void;
+  onPostpone?: () => void;
+  onSplit?: () => void;
   wide?: boolean;
 }) {
   const [sh, sm] = ev.startTime.split(':').map(Number);
@@ -281,21 +505,45 @@ function EventCard({
   const completedCls = ev.completed ? ' completed' : '';
   const ppCount = ev.postponeCount || 0;
   const ppClass = ppCount >= 3 ? ' chronic-postpone' : ppCount >= 1 ? ' postponed' : '';
+  const kindClass = ev.kind === 'task' ? ' kind-task' : ' kind-event';
+  const catColor = EVENT_CATEGORY_COLORS[ev.category] ?? '#64748b';
 
   return (
     <div
-      className={`event-card ${importanceClass(ev)}${completedCls}${ppClass}${wide ? ' wide' : ''}`}
-      style={{ top, height }}
+      className={`event-card ${importanceClass(ev)}${completedCls}${ppClass}${kindClass}${wide ? ' wide' : ''}`}
+      style={{ top, height, borderLeftColor: catColor }}
       data-id={ev.id}
-      onClick={onClick}
+      onClick={e => { e.stopPropagation(); onClick(); }}
     >
       {ppCount > 0 && (
         <div className="postpone-badge" title={`${ppCount} kez ertelendi`}>
           🔄{ppCount}
         </div>
       )}
-      <span className="event-name">{ev.name}</span>
+      <span className="event-name">
+        {ev.kind === 'task' && <span className="kind-marker" title="Görev">✓</span>}
+        {ev.name}
+      </span>
       <span className="event-time">{ev.startTime} - {ev.endTime}</span>
+
+      {/* Hover aksiyon menüsü — delete mode'da gizlenir */}
+      {!deleteMode && (onComplete || onPostpone || onSplit) && (
+        <div className="card-actions" onClick={e => e.stopPropagation()}>
+          {onComplete && !ev.completed && (
+            <button className="card-act done" title="Tamamla" onClick={onComplete}>✓</button>
+          )}
+          {onComplete && ev.completed && (
+            <button className="card-act done active" title="Geri al" onClick={onComplete}>↺</button>
+          )}
+          {onPostpone && (
+            <button className="card-act postpone" title="Ertele" onClick={onPostpone}>🔄</button>
+          )}
+          {onSplit && (
+            <button className="card-act split" title="Parçala" onClick={onSplit}>✂️</button>
+          )}
+        </div>
+      )}
+
       {deleteMode && (
         <div
           className="delete-badge"

@@ -256,6 +256,28 @@ body {
 .confirm-text { text-align:center; font-size:0.95rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.5; }
 .confirm-btns { display:flex; gap:10px; }
 .confirm-btns .modal-btn { flex:1; }
+
+/* --- AddEventModal Aşama 2: Sekme + chip'ler --------------------- */
+.add-evt-modal { max-width:460px; max-height:90vh; overflow-y:auto; }
+.kind-tabs { display:flex; gap:6px; padding:4px; background:var(--bg-secondary); border:1px solid var(--glass-border); border-radius:12px; margin-bottom:8px; }
+.kind-tab { flex:1; padding:9px 10px; border-radius:9px; border:none; background:transparent; color:var(--text-secondary); font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; transition:var(--transition); }
+.kind-tab:hover { color:var(--text-primary); background:rgba(99,102,241,0.06); }
+.kind-tab.active { background:#fff; color:var(--accent); box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+.kind-hint { font-size:0.75rem; color:var(--text-muted, #94a3b8); margin:0 0 16px 4px; font-style:italic; }
+.toggle-row { margin-bottom:14px; }
+.toggle-label { display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text-secondary); cursor:pointer; user-select:none; }
+.toggle-label input[type="checkbox"] { width:16px; height:16px; accent-color:var(--accent); cursor:pointer; }
+.estimated-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.estimated-chip { padding:7px 12px; border-radius:999px; border:1px solid var(--glass-border); background:var(--bg-secondary); color:var(--text-secondary); font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; transition:var(--transition); }
+.estimated-chip:hover { border-color:rgba(99,102,241,0.4); color:var(--accent); }
+.estimated-chip.active { background:rgba(99,102,241,0.12); border-color:var(--accent); color:var(--accent); }
+.category-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.category-chip { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:999px; border:1px solid var(--glass-border); background:var(--bg-secondary); color:var(--text-secondary); font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; transition:var(--transition); }
+.category-chip:hover { border-color:rgba(99,102,241,0.4); color:var(--text-primary); }
+.category-chip .cat-icon { font-size:0.95rem; }
+.time-preview { margin:6px 0 0; font-size:0.74rem; color:var(--text-muted, #94a3b8); }
+.goal-desc-input { width:100%; padding:10px 14px; border-radius:10px; border:1px solid var(--glass-border); background:var(--bg-secondary); color:var(--text-primary); font-family:'Inter',sans-serif; font-size:0.85rem; resize:vertical; min-height:60px; }
+.goal-desc-input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
 .sidebar-sep { width:28px; height:1px; background:var(--glass-border); margin:4px 0; }
 .sidebar-btn.home-btn { background:rgba(99,102,241,0.08); color:var(--accent); }
 .sidebar-btn.home-btn:hover { background:rgba(99,102,241,0.15); }
@@ -822,3 +844,73 @@ body {
 
 /* ===== FAQ FRAMING ===== */
 .calendar-area .faq-section { background: #ffffff; border: 1px solid var(--glass-border); border-radius: 16px; padding: 28px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+
+/* ====================================================================
+   AŞAMA 3: All-Day Shelf, Kind stilleri, Hover aksiyonları, Slot click
+   ==================================================================== */
+
+/* --- All-Day Shelf: gün sütununun üstünde saatsiz görev şeridi --- */
+.allday-shelf { position:relative; z-index:6; padding:4px 3px; display:flex; flex-direction:column; gap:3px; border-bottom:1px dashed rgba(0,0,0,0.06); background:rgba(248,250,252,0.6); min-height:6px; }
+.allday-shelf.wide { padding:6px 6px; }
+
+.allday-chip { display:flex; align-items:center; gap:5px; padding:3px 7px; background:#ffffff; border:1px solid var(--glass-border); border-left:3px solid #6366f1; border-radius:6px; font-size:0.68rem; font-weight:600; color:var(--text-primary); cursor:pointer; transition:var(--transition); white-space:nowrap; overflow:hidden; }
+.allday-chip:hover { background:#f8fafc; transform:translateX(1px); }
+.allday-chip.bday { background:linear-gradient(135deg,rgba(236,72,153,0.10),rgba(168,85,247,0.08)); border:1px solid rgba(236,72,153,0.18); border-left:3px solid #ec4899; color:#db2777; cursor:default; }
+.allday-chip.bday:hover { transform:none; }
+.allday-chip.task.completed { opacity:0.6; }
+.allday-chip.task.completed .allday-chip-name { text-decoration:line-through; }
+.allday-chip.task.postponed { border-left-color:#fbbf24 !important; background:rgba(251,191,36,0.06); }
+.allday-chip.task.chronic-postpone { border-left-color:#ef4444 !important; background:rgba(239,68,68,0.06); animation:pulseChronic 2.4s ease-in-out infinite; }
+@keyframes pulseChronic { 0%,100% { box-shadow:0 0 0 0 rgba(239,68,68,0.0); } 50% { box-shadow:0 0 0 3px rgba(239,68,68,0.08); } }
+
+.allday-chip-icon { font-size:0.78rem; flex-shrink:0; }
+.allday-chip-name { flex:1; overflow:hidden; text-overflow:ellipsis; }
+.allday-chip-pp { font-size:0.62rem; color:#92400e; background:rgba(251,191,36,0.18); padding:1px 5px; border-radius:8px; flex-shrink:0; }
+
+.allday-actions { display:none; gap:2px; flex-shrink:0; }
+.allday-chip:hover .allday-actions { display:inline-flex; }
+.allday-act { width:18px; height:18px; border-radius:5px; border:1px solid var(--glass-border); background:#fff; font-size:10px; cursor:pointer; padding:0; display:inline-flex; align-items:center; justify-content:center; transition:var(--transition); }
+.allday-act:hover { transform:scale(1.1); }
+.allday-act.done:hover { border-color:#22c55e; color:#16a34a; background:rgba(34,197,94,0.08); }
+.allday-act.postpone:hover { border-color:#3b82f6; background:rgba(59,130,246,0.08); }
+.allday-act.split:hover { border-color:#f97316; background:rgba(249,115,22,0.08); }
+
+/* Eski .bday-banner artık AllDayShelf içinde renderlanmıyor (Aşama 3
+   filtresi). Ama MonthView veya başka yerlerde hala kullanılıyor olabilir,
+   bu yüzden mevcut stili koruyoruz. */
+
+/* --- EventCard: Kind farkı + kategori sol kenarı ---------------- */
+.event-card.kind-task { background-image:linear-gradient(135deg,rgba(255,255,255,0.0) 0%,rgba(255,255,255,0.0) 100%); }
+.event-card.kind-task::before {
+  content:''; position:absolute; top:0; right:0; bottom:0; width:3px;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,0.4) 0,rgba(255,255,255,0.4) 2px,transparent 2px,transparent 4px);
+  pointer-events:none;
+}
+.event-card .kind-marker { display:inline-block; margin-right:3px; opacity:0.7; font-size:0.65rem; }
+
+/* --- EventCard: Hover aksiyon menüsü ---------------------------- */
+.event-card .card-actions {
+  position:absolute; top:3px; right:3px;
+  display:none; gap:2px; z-index:6;
+  animation:fadeIn 0.15s ease;
+}
+.event-card:hover .card-actions { display:inline-flex; }
+.delete-mode .event-card .card-actions { display:none !important; }
+.card-act { width:20px; height:20px; border-radius:6px; border:1px solid rgba(0,0,0,0.08); background:rgba(255,255,255,0.95); font-size:11px; cursor:pointer; padding:0; display:inline-flex; align-items:center; justify-content:center; transition:var(--transition); }
+.card-act:hover { transform:scale(1.12); box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+.card-act.done:hover, .card-act.done.active { border-color:#22c55e; color:#16a34a; background:rgba(34,197,94,0.12); }
+.card-act.postpone:hover { border-color:#3b82f6; background:rgba(59,130,246,0.12); }
+.card-act.split:hover { border-color:#f97316; background:rgba(249,115,22,0.12); }
+
+/* --- time-grid: AllDayShelf'ten bağımsız absolute container ----- */
+.time-grid { position:relative; flex:1; }
+.calendar-body.delete-mode .hour-slot { display:none; }
+
+/* --- Slot tıklama overlay'i ------------------------------------- */
+.hour-slot { position:absolute; left:0; right:0; z-index:1; cursor:pointer; transition:background 0.12s ease; }
+.hour-slot:hover { background:rgba(99,102,241,0.06); box-shadow:inset 0 0 0 1px rgba(99,102,241,0.22); }
+.hour-slot:active { background:rgba(99,102,241,0.1); }
+
+/* --- MonthView: kind ipuçları ----------------------------------- */
+.month-event-card.is-task { font-style:italic; }
+.month-event-card.is-allday .month-event-time { font-weight:800; opacity:1; color:inherit; }

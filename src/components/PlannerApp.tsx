@@ -14,7 +14,7 @@ import StatisticsOverlay from '@/components/StatisticsOverlay';
 import GuidedTour from '@/components/GuidedTour';
 
 import LoginModal from '@/components/modals/LoginModal';
-import AddEventModal from '@/components/modals/AddEventModal';
+import AddEventModal, { type AddEventPreset } from '@/components/modals/AddEventModal';
 import DeleteModal from '@/components/modals/DeleteModal';
 import PostponeReasonModal from '@/components/modals/PostponeReasonModal';
 import SplitTaskModal from '@/components/modals/SplitTaskModal';
@@ -37,6 +37,7 @@ export default function PlannerApp() {
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
   const [showTour, setShowTour] = useState(false);
   const [view, setView] = useState<CalendarView>('week');
+  const [addPreset, setAddPreset] = useState<AddEventPreset | null>(null);
 
   // Event click handling: complete if not in delete mode, else confirm delete
   const handleEventClick = useCallback((id: string) => {
@@ -96,6 +97,11 @@ export default function PlannerApp() {
         subTasks: [],
         parentId: orig.id,
         parentName: orig.name,
+        // Alt görevler parent'ın kategorisini ve türünü miras alır.
+        // Parçalanmış görevler tipik olarak "task" kabul edilir.
+        kind: 'task',
+        category: orig.category,
+        estimatedMin: partMin,
       };
     });
     planner.splitEvent(orig.id, subEvents);
@@ -107,6 +113,22 @@ export default function PlannerApp() {
     planner.deleteEvent(planner.state.pendingDeleteId);
     setActiveModal(null);
   }, [planner]);
+
+  // Boş slot tıklaması → AddEventModal'ı pre-filled aç.
+  const handleSlotClick = useCallback((dateStr: string, hour: number, minute: number) => {
+    if (planner.state.deleteMode) return;
+    const start = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+    const endHour = Math.min(hour + 1, 23);
+    const end = `${String(endHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+    setAddPreset({ date: dateStr, startTime: start, endTime: end, kind: 'event' });
+    setActiveModal('addEvent');
+  }, [planner.state.deleteMode]);
+
+  // Manuel "+ Etkinlik Ekle" butonu — preset yok.
+  const handleOpenAddModal = useCallback(() => {
+    setAddPreset(null);
+    setActiveModal('addEvent');
+  }, []);
 
   const getBirthdayBanners = useCallback((dateStr: string) => {
     const [, month, day] = dateStr.split('-').map(Number);
@@ -157,7 +179,7 @@ export default function PlannerApp() {
           <CalSidebar
             currentWeekStart={planner.state.currentWeekStart}
             events={planner.state.events}
-            onAddEvent={() => setActiveModal('addEvent')}
+            onAddEvent={handleOpenAddModal}
             onPrev={() => handleNavigate(-1)}
             onNext={() => handleNavigate(1)}
             onSelectDate={planner.setCurrentDate}
@@ -168,7 +190,7 @@ export default function PlannerApp() {
               view={view}
               anchorDate={anchorDate}
               onToday={handleToday}
-              onAddEvent={() => setActiveModal('addEvent')}
+              onAddEvent={handleOpenAddModal}
             />
 
             <CalendarSection
@@ -178,6 +200,10 @@ export default function PlannerApp() {
               deleteMode={planner.state.deleteMode}
               onEventClick={handleEventClick}
               onDeleteEvent={id => { planner.setPendingDelete(id); setActiveModal('delete'); }}
+              onComplete={planner.toggleComplete}
+              onPostpone={handleReaddClick}
+              onSplit={handleSplitClick}
+              onSlotClick={handleSlotClick}
               getBirthdayBanners={getBirthdayBanners}
             />
           </div>
@@ -195,8 +221,9 @@ export default function PlannerApp() {
 
       <AddEventModal
         open={activeModal === 'addEvent'}
-        onClose={() => setActiveModal(null)}
-        onAdd={ev => { planner.addEvent(ev); setActiveModal(null); }}
+        preset={addPreset}
+        onClose={() => { setActiveModal(null); setAddPreset(null); }}
+        onAdd={ev => { planner.addEvent(ev); setActiveModal(null); setAddPreset(null); }}
       />
 
       <DeleteModal

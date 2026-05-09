@@ -15,6 +15,62 @@ export const POSTPONE_REASON_LABELS: Record<string, string> = {
   other: '📝 Diğer',
 };
 
+// --- Görev türü (kind) ---
+import type { EventKind, EventCategory } from '@/types';
+
+export const EVENT_KIND_LABELS: Record<EventKind, string> = {
+  event: '📅 Etkinlik',
+  task: '✓ Görev',
+  goal: '🎯 Hedef',
+};
+
+export const EVENT_KIND_HINTS: Record<EventKind, string> = {
+  event: 'Sabit saatli randevu / toplantı',
+  task: 'Yapılacak iş — saat opsiyonel',
+  goal: 'Büyük hedef — alt görevleri olur',
+};
+
+// --- Kategori ---
+export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
+  personal: 'Kişisel',
+  work: 'İş',
+  study: 'Okul',
+  health: 'Sağlık',
+  other: 'Diğer',
+};
+
+export const EVENT_CATEGORY_ICONS: Record<EventCategory, string> = {
+  personal: '👤',
+  work: '💼',
+  study: '📚',
+  health: '🩺',
+  other: '🏷️',
+};
+
+export const EVENT_CATEGORY_COLORS: Record<EventCategory, string> = {
+  personal: '#6366f1',
+  work: '#0ea5e9',
+  study: '#a855f7',
+  health: '#10b981',
+  other: '#64748b',
+};
+
+// --- Tahmini süre seçenekleri (Aşama 2 AddEventModal için) ---
+export const ESTIMATED_MIN_OPTIONS: { value: number; label: string }[] = [
+  { value: 15, label: '15 dk' },
+  { value: 30, label: '30 dk' },
+  { value: 60, label: '1 saat' },
+  { value: 120, label: '2 saat' },
+  { value: 240, label: '4 saat' },
+];
+
+// --- Tekrar paterni etiketleri ---
+export const RECURRENCE_LABELS = {
+  daily: 'Her gün',
+  weekdays: 'Hafta içi',
+  weekly: 'Haftalık',
+} as const;
+
 export const GYM_TEMPLATES = [
   {
     name: 'Push/Pull/Legs',

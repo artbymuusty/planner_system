@@ -5,9 +5,33 @@ export interface PostponeHistory {
   timestamp: number;
 }
 
+/**
+ * Bir öğenin türü.
+ * - event: Sabit saatli randevu/toplantı (eski "etkinlik" davranışı, default)
+ * - task : Yapılacak iş — saat opsiyonel; tahmini süresi olabilir
+ * - goal : Büyük hedef container'ı — alt görevleri (parentId ile) bağlanır
+ */
+export type EventKind = 'event' | 'task' | 'goal';
+
+/**
+ * Görev/etkinlik kategorisi.
+ * Sidebar'daki "Takvimlerim" filtreleri bu alana bağlanacak (Aşama 5).
+ */
+export type EventCategory = 'personal' | 'work' | 'study' | 'health' | 'other';
+
+export type RecurrencePattern = 'daily' | 'weekdays' | 'weekly';
+
+export interface Recurrence {
+  pattern: RecurrencePattern;
+  /** Opsiyonel bitiş tarihi (YYYY-MM-DD). Yoksa süresiz. */
+  until?: string;
+}
+
 export interface PlannerEvent {
   id: string;
   name: string;
+  /** Opsiyonel açıklama — özellikle hedeflerde detay vermek için. */
+  description?: string;
   date: string;
   startTime: string;
   endTime: string;
@@ -19,7 +43,22 @@ export interface PlannerEvent {
   subTasks: string[];
   parentId: string | null;
   parentName?: string;
+  /** Modül kaynaklı event'ler için işaret (ör: 'birthday', 'medicine'). */
   moduleType?: string;
+
+  // --- YENİ alanlar (Aşama 1) -------------------------------------------
+  /** Öğenin türü. Eski kayıtlarda yoksa migration 'event' atar. */
+  kind: EventKind;
+  /** Kategori. Eski kayıtlarda yoksa migration 'personal' atar. */
+  category: EventCategory;
+  /** Tahmini süre (dakika). Slot ile bağımsız — saatsiz görevlerde anlamlı. */
+  estimatedMin?: number;
+  /** Saat seçilmediyse true → saatsiz görev "all-day shelf"de gösterilir. */
+  allDay?: boolean;
+  /** Tekrar paterni — ayarlandıysa render zamanında çoğaltılır. */
+  recurrence?: Recurrence;
+  /** Tekrarlayan görevin hangi tarihlerde tamamlandığı (YYYY-MM-DD). */
+  completedDates?: string[];
 }
 
 export interface User {
