@@ -144,10 +144,16 @@ export default function BudgetOverlay({
                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
                   <div style={{ flex: 1 }}>
                      <label style={{ fontSize: '0.75rem', fontWeight: 900, color: '#166534', display: 'block', marginBottom: 6 }}>HEDEF SEÇ</label>
-                     <select value={savingsGoalId} onChange={e => setSavingsGoalId(e.target.value)} style={{ width: '100%', height: 44, borderRadius: 12, border: '1px solid #86efac', padding: '0 12px' }}>
-                        <option value="">Hedef seçin...</option>
-                        {modState.goals.map(g => <option key={g.id} value={g.id}>{g.icon} {g.name}</option>)}
-                     </select>
+                     {modState.goals.length > 0 ? (
+                       <select value={savingsGoalId} onChange={e => setSavingsGoalId(e.target.value)} style={{ width: '100%', height: 44, borderRadius: 12, border: '1px solid #86efac', padding: '0 12px' }}>
+                          <option value="">Hedef seçin...</option>
+                          {modState.goals.map(g => <option key={g.id} value={g.id}>{g.icon} {g.name}</option>)}
+                       </select>
+                     ) : (
+                       <button className="m-btn secondary" onClick={() => { onClose(); (window as unknown as { setActiveModule: (m: string) => void }).setActiveModule('goals'); }} style={{ width: '100%', height: 44, borderRadius: 12, fontSize: '0.75rem', background: '#fff' }}>
+                         Henüz hedef yok. Ekle?
+                       </button>
+                     )}
                   </div>
                   <div style={{ width: 140 }}>
                      <label style={{ fontSize: '0.75rem', fontWeight: 900, color: '#166534', display: 'block', marginBottom: 6 }}>MİKTAR (₺)</label>

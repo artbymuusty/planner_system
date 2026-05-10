@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import type { ActiveModule, PlannerEvent, EventCategory, Medicine, Expense } from '@/types';
 import { usePlannerState } from '@/hooks/usePlannerState';
 import { useModuleState } from '@/hooks/useModuleState';
@@ -39,6 +39,12 @@ import { OPENAI_KEY_STORAGE } from '@/lib/openaiClient';
 
 type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;
 
+declare global {
+  interface Window {
+    setActiveModule: (mod: ActiveModule) => void;
+  }
+}
+
 function isPlannerEvent(event: PlannerEvent | Pick<PlannerEvent, 'id' | 'name'>): event is PlannerEvent {
   return 'date' in event && 'startTime' in event && 'endTime' in event;
 }
@@ -64,6 +70,11 @@ export default function PlannerApp() {
       setProactiveMsgs(prev => [...prev, msg]);
     }, [])
   );
+
+  useEffect(() => {
+    window.setActiveModule = setActiveModule;
+    return () => { (window as any).setActiveModule = undefined; };
+  }, []);
 
   const toggleCategory = useCallback((cat: EventCategory) => {
     setHiddenCategories(prev => 
@@ -320,7 +331,7 @@ export default function PlannerApp() {
           onViewChange={setView}
           onTour={() => setShowTour(true)}
           onProfile={() => setActiveModal('login')}
-          userName="Test Kullanıcı"
+          userName="Asıl Koray Alma"
         />
 
         <div className="content-area">

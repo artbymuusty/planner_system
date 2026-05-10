@@ -504,7 +504,7 @@ export default function AssistantWidget({
     {
       id: 'welcome',
       role: 'assistant',
-      text: 'Selam 👋 Ben senin kişisel planlayıcı asistanınım. Bir şey sormak veya planlama konusunda yardım almak için yaz!',
+      text: 'Selam Asıl Koray! 👋 Ben Zenith asistanın. Bugün hayatını nasıl daha verimli hale getirebiliriz? Bir fotoğraf yükleyebilir veya bana herhangi bir şey sorabilirsin!',
       timestamp: Date.now(),
     },
   ]);

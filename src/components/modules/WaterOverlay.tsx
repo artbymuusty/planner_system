@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ModuleState } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
-import { Droplets, Info, AlertTriangle, CheckCircle, Flame, Heart } from 'lucide-react';
+import { Droplets, AlertTriangle, CheckCircle, Heart } from 'lucide-react';
 
 interface Props {
   active: boolean;
@@ -23,6 +23,25 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
     gender: modState.water.gender || 'male' as 'male' | 'female',
   });
   const [bmiResult, setBmiResult] = useState('');
+
+  // Sync profile state with modState when it changes (e.g. after load from storage)
+  useEffect(() => {
+    setProfile({
+      height: String(modState.water.height || ''),
+      weight: String(modState.water.weight || ''),
+      age: String(modState.water.age || ''),
+      gender: modState.water.gender || 'male',
+    });
+    
+    // Also update BMI if data exists
+    if (modState.water.height && modState.water.weight) {
+      const h = modState.water.height;
+      const w = modState.water.weight;
+      const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
+      const newGoal = Math.round((w * 35 + (modState.water.gender === 'male' ? 500 : 300)) / 100) * 100;
+      setBmiResult(`BMI: ${bmi} • Günlük Su Hedefi: ${newGoal} ml`);
+    }
+  }, [modState.water.height, modState.water.weight, modState.water.age, modState.water.gender]);
 
   const today = formatDate(new Date());
   const consumed = modState.water.log[today]?.total || 0;
@@ -102,9 +121,32 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <div className="module-card water-accent">
               <h3>📏 Vücut Bilgileri</h3>
-              <div className="m-form-group"><label>Boy (cm)</label><input type="number" placeholder="ör: 175" value={profile.height} onChange={e => setProfile(p => ({ ...p, height: e.target.value }))} /></div>
-              <div className="m-form-group"><label>Kilo (kg)</label><input type="number" placeholder="ör: 75" value={profile.weight} onChange={e => setProfile(p => ({ ...p, weight: e.target.value }))} /></div>
-              <button className="m-btn primary" onClick={handleSaveProfile} style={{ width: '100%', borderRadius: 12 }}>Hesapla & Kaydet</button>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <div className="m-form-group">
+                  <label>Boy (cm)</label>
+                  <input type="number" placeholder="175" value={profile.height} onChange={e => setProfile(p => ({ ...p, height: e.target.value }))} />
+                </div>
+                <div className="m-form-group">
+                  <label>Kilo (kg)</label>
+                  <input type="number" placeholder="75" value={profile.weight} onChange={e => setProfile(p => ({ ...p, weight: e.target.value }))} />
+                </div>
+                <div className="m-form-group">
+                  <label>Yaş</label>
+                  <input type="number" placeholder="25" value={profile.age} onChange={e => setProfile(p => ({ ...p, age: e.target.value }))} />
+                </div>
+                <div className="m-form-group">
+                  <label>Cinsiyet</label>
+                  <select 
+                    value={profile.gender} 
+                    onChange={e => setProfile(p => ({ ...p, gender: e.target.value as 'male' | 'female' }))}
+                    style={{ width: '100%', padding: '10px', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.08)', background: '#f8fafc', fontSize: '0.85rem' }}
+                  >
+                    <option value="male">Erkek</option>
+                    <option value="female">Kadın</option>
+                  </select>
+                </div>
+              </div>
+              <button className="m-btn primary" onClick={handleSaveProfile} style={{ width: '100%', borderRadius: 12, marginTop: 10 }}>Hesapla & Kaydet</button>
               {bmiResult && <div className="bmi-result" style={{ marginTop: 12, padding: 12, background: '#e0f2fe', color: '#0369a1', borderRadius: 10, fontSize: '0.8rem', fontWeight: 800 }}>{bmiResult}</div>}
             </div>
 

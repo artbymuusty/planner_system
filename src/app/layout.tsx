@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hackathon Planner - Haftalık Takvim",
-  description: "Hackathon Planner - Haftalık takvim ve görev yönetimi uygulaması",
+  title: "Zenith - The Life Tracker",
+  description: "Zenith - Profesyonel Hayat ve Verimlilik Takipçisi",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
