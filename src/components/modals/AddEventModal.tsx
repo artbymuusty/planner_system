@@ -25,6 +25,8 @@ export interface AddEventPreset {
   startTime?: string;
   endTime?: string;
   kind?: EventKind;
+  name?: string;
+  category?: EventCategory;
 }
 
 interface Props {
@@ -119,6 +121,8 @@ export default function AddEventModal({ open, onClose, onAdd, preset }: Props) {
       // Slot tıklaması saatli bir şey istiyor → kind verilmediyse Etkinlik
       if (!preset.kind) setKind('event');
     }
+    if (preset.name) setName(preset.name);
+    if (preset.category) setCategory(preset.category);
   }, [open, preset]);
 
   // --- Görev sekmesinde estimatedMin değiştiğinde endTime'ı otomatik ayarla

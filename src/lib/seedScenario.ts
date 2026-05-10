@@ -543,6 +543,17 @@ function buildModules(): ModuleState {
         icon: '💪',
       },
     ],
+    study: {
+      subjects: [
+        { id: 'sub_math', name: 'Matematik', color: '#6366f1', resources: [] },
+        { id: 'sub_phys', name: 'Fizik', color: '#f87171', resources: [] },
+      ],
+      sessions: [
+        { date: shiftDate(-1), duration: 120, subjectId: 'sub_math', topic: 'Türev', questions: 50 },
+        { date: shiftDate(-1), duration: 60, subjectId: 'sub_phys', topic: 'Vektörler', questions: 20 },
+        { date: shiftDate(0), duration: 45, subjectId: 'sub_math', topic: 'İntegral', questions: 15 },
+      ],
+    },
   };
 }
 
@@ -583,5 +594,6 @@ export function emptyModuleState(): ModuleState {
     budget: { income: 0, expenses: [], shoppingLists: [] },
     sleep: { logs: [], goalMin: 7, goalMax: 9 },
     goals: [],
+    study: { sessions: [], subjects: [] },
   };
 }

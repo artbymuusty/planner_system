@@ -86,6 +86,7 @@ export interface Medicine {
   duration: number;
   boxSize: number;
   remaining: number;
+  countPerDose?: number;
   startDate: string;
   takenLog: Record<string, string[]>;
 }
@@ -133,7 +134,7 @@ export interface Birthday {
   giftPlanned: boolean;
   giftIdea?: string;
   giftPrice?: number;
-  giftBuyBy?: string;
+  giftBought?: boolean;
 }
 
 export interface Expense {
@@ -189,6 +190,24 @@ export interface ModuleState {
   budget: BudgetState;
   sleep: SleepState;
   goals: Goal[];
+  study: { 
+    sessions: { date: string; duration: number; subjectId: string; topic?: string; questions?: number }[];
+    subjects: StudySubject[];
+  };
+}
+
+export interface StudyResource {
+  id: string;
+  type: 'pdf' | 'link';
+  name: string;
+  url: string;
+}
+
+export interface StudySubject {
+  id: string;
+  name: string;
+  color: string;
+  resources: StudyResource[];
 }
 
 // Weekly Tracker types
@@ -205,5 +224,5 @@ export interface WeeklyTodo {
   completed: boolean;
 }
 
-export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | 'settings' | null;
+export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | 'settings' | 'study' | null;
 export type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;

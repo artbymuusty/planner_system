@@ -52,6 +52,7 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
   const [savedTick, setSavedTick] = useState<boolean>(false);
   const [test, setTest] = useState<TestState>({ status: 'idle' });
   const [scenarioToast, setScenarioToast] = useState<Toast>(null);
+  const [pendingAction, setPendingAction] = useState<'load' | 'reset' | null>(null);
 
   // Mount'ta localStorage'dan oku
   useEffect(() => {
@@ -82,28 +83,17 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
 
   const handleLoadScenario = () => {
     if (!onLoadScenario) return;
-    const ok = window.confirm(
-      'Test senaryosunu yüklemek mevcut tüm görev ve modül verilerini DEĞİŞTİRECEK.\n\n' +
-      'Devam etmek istiyor musun?'
-    );
-    if (!ok) return;
     onLoadScenario();
+    setPendingAction(null);
     showScenarioToast({ kind: 'ok', text: 'Test senaryosu yüklendi — 26 görev + tüm modüller dolduruldu.' });
   };
 
   const handleResetAll = () => {
     if (!onResetAll) return;
-    const ok = window.confirm(
-      '⚠️ TÜM VERİLER SİLİNECEK!\n\n' +
-      '• Tüm görevler ve etkinlikler\n' +
-      '• Tüm modül verileri (ilaç, su, spor, doğum günü, bütçe, uyku, hedefler)\n' +
-      '• Kayıtlı OpenAI API key\n\n' +
-      'Bu işlem geri alınamaz. Devam edilsin mi?'
-    );
-    if (!ok) return;
     onResetAll();
     setStored('');
     setDraft('');
+    setPendingAction(null);
     showScenarioToast({ kind: 'ok', text: 'Tüm veriler sıfırlandı.' });
   };
 
@@ -181,7 +171,7 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
               <button
                 type="button"
                 className="m-btn primary settings-scenario-btn"
-                onClick={handleLoadScenario}
+                onClick={() => setPendingAction('load')}
                 disabled={!onLoadScenario}
               >
                 <Database size={14} />
@@ -202,7 +192,7 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
               <button
                 type="button"
                 className="settings-scenario-btn danger"
-                onClick={handleResetAll}
+                onClick={() => setPendingAction('reset')}
                 disabled={!onResetAll}
               >
                 <Trash2 size={14} />
@@ -217,6 +207,36 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
             </div>
           )}
         </div>
+
+        {/* Action Confirmation Modal */}
+        {pendingAction && (
+          <div className="modal-overlay active">
+            <div className="modal" style={{ maxWidth: 400 }}>
+              <h2>{pendingAction === 'load' ? 'Senaryo Yüklensin mi?' : '⚠️ Tümünü Sıfırla?'}</h2>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: 20 }}>
+                {pendingAction === 'load' 
+                  ? 'Mevcut tüm veriler örnek verilerle değiştirilecek. Devam edilsin mi?' 
+                  : 'Tüm görevler, modüller ve API anahtarı silinecek. Bu işlem geri alınamaz!'}
+              </p>
+              <div className="confirm-btns" style={{ display: 'flex', gap: 10 }}>
+                <button 
+                  className={`m-btn ${pendingAction === 'reset' ? 'danger' : 'primary'}`} 
+                  style={{ flex: 1 }}
+                  onClick={pendingAction === 'load' ? handleLoadScenario : handleResetAll}
+                >
+                  {pendingAction === 'load' ? 'Yükle' : 'Tümünü Sil'}
+                </button>
+                <button 
+                  className="m-btn secondary" 
+                  style={{ flex: 1 }}
+                  onClick={() => setPendingAction(null)}
+                >
+                  İptal
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

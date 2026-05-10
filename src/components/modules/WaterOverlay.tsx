@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { ModuleState } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
+import { Droplets, Info, AlertTriangle, CheckCircle, Flame, Heart } from 'lucide-react';
 
 interface Props {
   active: boolean;
@@ -43,13 +44,15 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
   return (
     <div className={`module-overlay${active ? ' active' : ''}`} id="waterOverlay">
       <div className="module-header">
-        <h2>💧 Su Takibi</h2>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Droplets className="text-blue-500" /> Su Takibi & Sağlık
+        </h2>
         <button className="close-module" onClick={onClose}>✕</button>
       </div>
       <div className="module-body">
         <div className="module-grid">
           <div className="module-card water-accent">
-            <h3>Günlük Su Durumu</h3>
+            <h3>💧 Günlük Su Durumu</h3>
             <div className="water-visual">
               <div style={{ position: 'relative' }}>
                 <div className="water-bottle">
@@ -65,11 +68,9 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
             </div>
             <div className="water-quick-btns">
               {[200, 250, 500, 1000].map(ml => (
-                <div key={ml} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <button className="water-add-btn" onClick={() => onAddWater(ml)}>
-                    +{ml >= 1000 ? '1L' : `${ml}ml`}
-                  </button>
-                </div>
+                <button key={ml} className="water-add-btn" onClick={() => onAddWater(ml)}>
+                  +{ml >= 1000 ? '1L' : `${ml}ml`}
+                </button>
               ))}
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
@@ -77,47 +78,53 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
                 type="number"
                 className="water-custom-input"
                 placeholder="Özel miktar (ml)"
-                style={{ flex: 1, padding: '9px 12px', borderRadius: 10, border: '1px solid rgba(0,0,0,0.08)', background: '#f8fafc', color: '#1e293b', fontFamily: 'Inter', fontSize: '0.85rem' }}
+                style={{ flex: 1, padding: '9px 12px', borderRadius: 10, border: '1px solid rgba(0,0,0,0.08)', background: '#f8fafc' }}
                 value={customAmount}
                 onChange={e => setCustomAmount(e.target.value)}
               />
               <button className="m-btn primary" onClick={() => { const v = parseInt(customAmount) || 0; if (v > 0) { onAddWater(v); setCustomAmount(''); } }}>Ekle</button>
             </div>
-            <div className="water-history" style={{ marginTop: 14 }}>
+
+            <div className="water-history" style={{ marginTop: 20 }}>
+               <h4 style={{ fontSize: '0.85rem', fontWeight: 900, color: '#64748b', marginBottom: 12 }}>Son Yudumlar</h4>
               {entries.length === 0
-                ? <p style={{ color: '#64748b', fontSize: '0.8rem', textAlign: 'center' }}>Bugün henüz su içilmedi</p>
+                ? <p style={{ color: '#cbd5e1', fontSize: '0.8rem', textAlign: 'center' }}>Henüz su içilmedi</p>
                 : entries.map((e, idx) => ({ ...e, originalIndex: idx })).reverse().map((e) => (
-                    <div key={e.originalIndex} className="water-history-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                        <span className="time">{e.time}</span>
-                        <span className="amount">+{e.amount}ml</span>
-                      </div>
-                      <button 
-                        onClick={() => onDeleteWaterEntry(e.originalIndex)}
-                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '2px 6px', borderRadius: 4 }}
-                        title="Sil"
-                      >
-                        ✕
-                      </button>
+                    <div key={e.originalIndex} className="water-history-item" style={{ background: '#f8fafc', padding: '8px 12px', borderRadius: 10, marginBottom: 6, display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 800 }}>+{e.amount}ml <span style={{ color: '#94a3b8', marginLeft: 4 }}>{e.time}</span></span>
+                      <button onClick={() => onDeleteWaterEntry(e.originalIndex)} style={{ background: 'none', border: 'none', color: '#fecaca', cursor: 'pointer' }}>✕</button>
                     </div>
                   ))
               }
             </div>
           </div>
-          <div className="module-card water-accent">
-            <h3>Vücut Bilgileri</h3>
-            <div className="m-form-group"><label>Boy (cm)</label><input type="number" placeholder="ör: 175" value={profile.height} onChange={e => setProfile(p => ({ ...p, height: e.target.value }))} /></div>
-            <div className="m-form-group"><label>Kilo (kg)</label><input type="number" placeholder="ör: 75" value={profile.weight} onChange={e => setProfile(p => ({ ...p, weight: e.target.value }))} /></div>
-            <div className="m-form-group"><label>Yaş</label><input type="number" placeholder="ör: 25" value={profile.age} onChange={e => setProfile(p => ({ ...p, age: e.target.value }))} /></div>
-            <div className="m-form-group">
-              <label>Cinsiyet</label>
-              <select value={profile.gender} onChange={e => setProfile(p => ({ ...p, gender: e.target.value as 'male' | 'female' }))}>
-                <option value="male">Erkek</option>
-                <option value="female">Kadın</option>
-              </select>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div className="module-card water-accent">
+              <h3>📏 Vücut Bilgileri</h3>
+              <div className="m-form-group"><label>Boy (cm)</label><input type="number" placeholder="ör: 175" value={profile.height} onChange={e => setProfile(p => ({ ...p, height: e.target.value }))} /></div>
+              <div className="m-form-group"><label>Kilo (kg)</label><input type="number" placeholder="ör: 75" value={profile.weight} onChange={e => setProfile(p => ({ ...p, weight: e.target.value }))} /></div>
+              <button className="m-btn primary" onClick={handleSaveProfile} style={{ width: '100%', borderRadius: 12 }}>Hesapla & Kaydet</button>
+              {bmiResult && <div className="bmi-result" style={{ marginTop: 12, padding: 12, background: '#e0f2fe', color: '#0369a1', borderRadius: 10, fontSize: '0.8rem', fontWeight: 800 }}>{bmiResult}</div>}
             </div>
-            <button className="m-btn primary" onClick={handleSaveProfile} style={{ width: '100%' }}>Hesapla & Kaydet</button>
-            {bmiResult && <div className="bmi-result" style={{ display: 'block' }}>{bmiResult}</div>}
+
+            <div className="module-card" style={{ background: '#f0f9ff', border: '1px solid #bae6fd' }}>
+               <h3 style={{ color: '#0369a1', fontSize: '1rem' }}>💡 Su İçmenin Önemi</h3>
+               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                     <CheckCircle size={16} className="text-blue-500" />
+                     <p style={{ fontSize: '0.75rem', color: '#0c4a6e', margin: 0 }}><strong>Yeterli Su:</strong> Enerji seviyesini artırır, cildi güzelleştirir ve odaklanmayı kolaylaştırır.</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                     <AlertTriangle size={16} className="text-amber-500" />
+                     <p style={{ fontSize: '0.75rem', color: '#0c4a6e', margin: 0 }}><strong>Az Su:</strong> Baş ağrısı, yorgunluk ve kas kramplarına neden olabilir.</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                     <Heart size={16} className="text-rose-500" />
+                     <p style={{ fontSize: '0.75rem', color: '#0c4a6e', margin: 0 }}><strong>Metabolizma:</strong> Su içmek sindirimi düzenler ve kilo kontrolüne yardımcı olur.</p>
+                  </div>
+               </div>
+            </div>
           </div>
         </div>
       </div>

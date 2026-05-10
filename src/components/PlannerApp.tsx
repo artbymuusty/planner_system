@@ -4,6 +4,8 @@ import { useState, useCallback, useMemo } from 'react';
 import type { ActiveModule, PlannerEvent, EventCategory } from '@/types';
 import { usePlannerState } from '@/hooks/usePlannerState';
 import { useModuleState } from '@/hooks/useModuleState';
+import { formatDate } from '@/lib/dateUtils';
+import { computeStreak } from '@/lib/statsUtils';
 
 import AppSidebar from '@/components/AppSidebar';
 import TopBar, { type CalendarView } from '@/components/TopBar';
@@ -12,6 +14,7 @@ import CalMainHeader from '@/components/calendar/CalMainHeader';
 import CalendarSection from '@/components/calendar/CalendarSection';
 import StatisticsOverlay from '@/components/StatisticsOverlay';
 import GuidedTour from '@/components/GuidedTour';
+import StudyOverlay from '@/components/modules/StudyOverlay';
 
 import LoginModal from '@/components/modals/LoginModal';
 import AddEventModal, { type AddEventPreset } from '@/components/modals/AddEventModal';
@@ -43,6 +46,7 @@ export default function PlannerApp() {
   const [view, setView] = useState<CalendarView>('week');
   const [addPreset, setAddPreset] = useState<AddEventPreset | null>(null);
   const [hiddenCategories, setHiddenCategories] = useState<EventCategory[]>([]);
+  const [focusMode, setFocusMode] = useState(false);
 
   const toggleCategory = useCallback((cat: EventCategory) => {
     setHiddenCategories(prev => 
@@ -181,8 +185,7 @@ export default function PlannerApp() {
     const newStartTime = `${pad(newStartH)}:${pad(newStartM)}`;
     const newEndTime = `${pad(newEndH)}:${pad(newEndM)}`;
 
-    // Çakışma kontrolü (aynı günde başka event var mı)
-    const hasConflict = planner.state.events.some(e => {
+    const conflict = planner.state.events.find(e => {
       if (e.id === id) return false;
       if (e.date !== newDate || e.allDay) return false;
       const [sh, sm] = e.startTime.split(':').map(Number);
@@ -191,16 +194,29 @@ export default function PlannerApp() {
       const eEnd = eh * 60 + em;
       const nStart = newStartH * 60 + newStartM;
       const nEnd = newEndH * 60 + newEndM;
-
       return (nStart < eEnd && nEnd > eStart);
     });
 
-    if (hasConflict) {
-      const el = document.createElement('div');
-      el.className = 'notification warning';
-      el.innerText = 'Bu saatte başka bir etkinlik var! Çakışma olduğu için taşıma iptal edildi.';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 4500);
+    if (conflict) {
+      // Çakışma durumunda otomatik olarak sonraya ötele (confirm sormadan, kullanıcıya bildirim vererek)
+      const [newEH, newEM] = newEndTime.split(':').map(Number);
+      const confDuration = (parseInt(conflict.endTime.split(':')[0])*60 + parseInt(conflict.endTime.split(':')[1])) - (parseInt(conflict.startTime.split(':')[0])*60 + parseInt(conflict.startTime.split(':')[1]));
+      const confNewEndH = Math.floor((newEH * 60 + newEM + confDuration) / 60);
+      const confNewEndM = (newEH * 60 + newEM + confDuration) % 60;
+      
+      const updatedConflict = {
+        ...conflict,
+        startTime: newEndTime,
+        endTime: `${pad(confNewEndH)}:${pad(confNewEndM)}`
+      };
+
+      planner.updateEvent({
+        ...event,
+        date: newDate,
+        startTime: newStartTime,
+        endTime: newEndTime
+      });
+      planner.updateEvent(updatedConflict);
       return;
     }
 
@@ -244,12 +260,22 @@ export default function PlannerApp() {
     }
   }, [planner, modules]);
 
+  const { streak } = useMemo(() => computeStreak(planner.state.events), [planner.state.events]);
+  const waterPercent = useMemo(() => {
+    const today = formatDate(new Date());
+    const consumed = modules.modState.water.log[today]?.total || 0;
+    const goal = modules.modState.water.dailyGoal || 2500;
+    return Math.min(Math.round((consumed / goal) * 100), 100);
+  }, [modules.modState.water]);
+
   return (
-    <div className="app-container">
+    <div className={`app-container${focusMode ? ' focus-mode' : ''}`}>
       <AppSidebar
         activeModule={activeModule}
         onHome={() => setActiveModule(null)}
         onModule={mod => setActiveModule(prev => prev === mod ? null : mod)}
+        focusMode={focusMode}
+        onToggleFocus={() => setFocusMode(p => !p)}
       />
 
       <main className="main-area">
@@ -374,6 +400,7 @@ export default function PlannerApp() {
         onClose={() => setActiveModule(null)}
         onAdd={modules.addBirthday}
         onDelete={modules.deleteBirthday}
+        onUpdate={modules.updateBirthday}
       />
 
       <BudgetOverlay
@@ -385,6 +412,7 @@ export default function PlannerApp() {
         onDeleteExpense={modules.deleteExpense}
         onAddShoppingList={modules.addShoppingList}
         onToggleShoppingItem={modules.toggleShoppingItem}
+        onUpdateGoalProgress={modules.updateGoalProgress}
       />
 
       <SleepOverlay
@@ -401,6 +429,31 @@ export default function PlannerApp() {
         onAdd={modules.addGoal}
         onUpdateProgress={modules.updateGoalProgress}
         onDelete={modules.deleteGoal}
+      />
+
+      <StudyOverlay
+        active={activeModule === 'study'}
+        modState={modules.modState}
+        onClose={() => setActiveModule(null)}
+        onAddSession={modules.addStudySession}
+        onAddSubject={modules.addStudySubject}
+        onDeleteSubject={modules.deleteStudySubject}
+        onAddEvent={(preset) => {
+          if (preset.id?.startsWith('study_preset_')) {
+            const now = new Date();
+            setAddPreset({ 
+              date: formatDate(now),
+              startTime: '10:00',
+              endTime: '11:00',
+              kind: 'task',
+              category: 'study',
+              name: preset.name
+            });
+            setActiveModal('addEvent');
+          } else {
+            planner.addEvent(preset);
+          }
+        }}
       />
 
       <StatisticsOverlay

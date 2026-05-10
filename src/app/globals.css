@@ -1398,3 +1398,54 @@ body {
 /* --- MonthView: kind ipuçları ----------------------------------- */
 .month-event-card.is-task { font-style:italic; }
 .month-event-card.is-allday .month-event-time { font-weight:800; opacity:1; color:inherit; }
+
+/* ===== ODAK MODU (Focus Mode) ===== */
+.focus-mode .sidebar button:not(#focusBtn) {
+  opacity: 0;
+  pointer-events: none;
+}
+.focus-mode .sidebar .sidebar-sep {
+  opacity: 0;
+}
+.focus-mode .cal-sidebar {
+  display: none !important;
+}
+.focus-mode .topbar-view-toggle,
+.focus-mode .topbar-search,
+.focus-mode .topbar-icon-btn,
+.focus-mode .topbar-profile {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.focus-mode .focus-toggle {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+.focus-mode .calendar-area {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Past Undone/Done Classes */
+.event-card.past-undone {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+.event-card.past-undone .event-name, .event-card.past-undone .event-time {
+  color: #ef4444 !important;
+}
+
+.event-card.past-done {
+  background: rgba(148, 163, 184, 0.1) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  opacity: 0.6;
+}
+.event-card.past-done .event-name, .event-card.past-done .event-time {
+  color: #64748b !important;
+}
+
+.allday-chip.postponed {
+  opacity: 0.6;
+  background: #f1f5f9;
+}

@@ -6,20 +6,21 @@ interface TourStep {
   target: string;
   title: string;
   desc: string;
-  pos: 'right' | 'bottom' | 'top';
+  pos: 'right' | 'bottom' | 'top' | 'left';
 }
 
 const TOUR_STEPS: TourStep[] = [
-  { target: '.calendar-section', title: '📅 Haftalık Takvim', desc: 'Tüm etkinlikleriniz burada saatlik olarak gösterilir. Bir etkinliğe tıklayarak tamamlandı olarak işaretleyebilirsiniz.', pos: 'bottom' },
-  { target: '#homeBtn', title: '🏠 Ana Sayfa', desc: 'Ana takvim görünümüne dönmek için bu butona tıklayın.', pos: 'right' },
-  { target: '#medicineBtn', title: '💊 İlaç Takibi', desc: 'İlaçlarınızı ekleyin, dozaj ve zamanlamalarını takip edin. İlaç azaldığında uyarı alırsınız.', pos: 'right' },
-  { target: '#waterBtn', title: '💧 Su Takibi', desc: 'Günlük su tüketiminizi takip edin. Boy/kilo bilgilerinize göre kişisel hedef hesaplanır.', pos: 'right' },
-  { target: '#gymBtn', title: '🏋️ Gym Takibi', desc: 'Antrenman programınızı oluşturun, hazır şablonları kullanın ve hareketlerinizi tamamlayın.', pos: 'right' },
-  { target: '#birthdayBtn', title: '🎂 Doğum Günleri', desc: 'Yakınlarınızın doğum günlerini ekleyin, hediye takibi yapın. Takvimde üst kısımda banner olarak görünür.', pos: 'right' },
-  { target: '#budgetBtn', title: '💰 Bütçe & Alışveriş', desc: 'Aylık gelir ve harcamalarınızı takip edin. Market alışveriş listeleri oluşturup takvimde gösterin.', pos: 'right' },
-  { target: '#sleepBtn', title: '😴 Uyku Takibi', desc: 'Uyku saatlerinizi kaydedin, detaylı sağlık raporu alın. Yetersiz uykunun etkilerini görün.', pos: 'right' },
-  { target: '#statisticsBtn', title: '📊 İstatistikler', desc: 'Tamamlanma ve erteleme analizlerini ayrı panelde görüntüleyebilirsiniz.', pos: 'right' },
-  { target: '#categoriesFilter', title: '🏷️ Kategoriler', desc: 'Takvimde hangi kategorilerin görüneceğini buradan seçebilirsiniz. İş, Kişisel veya Ders gibi kategorileri filtreleyerek odaklanmanızı sağlar.', pos: 'right' },
+  { target: '.cal-main-header', title: '📅 Ana Takvim', desc: 'Zamanını yönetmeye buradan başla! Günlük, haftalık ve aylık görünümler arasında geçiş yapabilirsin.', pos: 'bottom' },
+  { target: '#homeBtn', title: '🏠 Navigasyon', desc: 'Bu menü ile farklı modüllere hızlıca geçiş yapabilirsin. Her modül senin verimliliğini artırmak için tasarlandı.', pos: 'right' },
+  { target: '#medicineBtn', title: '💊 İlaç & Sağlık', desc: 'İlaçlarını ekle, dozajlarını (kaç adet) ve vakitlerini takip et. Sağlık her şeyden önce gelir!', pos: 'right' },
+  { target: '#waterBtn', title: '💧 Hidrasyon', desc: 'Boy ve kilona göre su hedefini belirle. Yeterli su içmek odaklanmanı %15 artırır.', pos: 'right' },
+  { target: '#gymBtn', title: '🏋️ Spor Takibi', desc: 'Antrenman programını oluştur veya hazır şablonlardan (Evde, Kardiyo vb.) seçim yap.', pos: 'right' },
+  { target: '#birthdayBtn', title: '🎂 Hatırlatıcı', desc: 'Sevdiklerinin doğum günlerini ve hediye planlarını buradan yönet. Unutma, küçük sürprizler bağları güçlendirir.', pos: 'right' },
+  { target: '#budgetBtn', title: '💰 Finans Yönetimi', desc: 'Gelir-gider dengeni koru. Alışveriş listeni tamamlayınca direkt harcama olarak kaydedebilirsin.', pos: 'right' },
+  { target: '#sleepBtn', title: '😴 Uyku Kalitesi', desc: 'Uyku düzenini takip et ve haftalık raporlarını incele. Kaliteli uyku, kaliteli bir gün demektir.', pos: 'right' },
+  { target: '#studyBtn', title: '📚 Kütüphane', desc: 'Derslerini raflara diz, Pomodoro sayacı ile odaklan ve çalışma günlüğünü tut.', pos: 'right' },
+  { target: '#statisticsBtn', title: '📊 Analizler', desc: 'Geriye dönük performansını, erteleme alışkanlıklarını ve başarı oranlarını buradan izle.', pos: 'right' },
+  { target: '.topbar-actions', title: '🔔 Bildirimler', desc: 'Buradaki zili takip et! Senin için hazırladığımız özel verimlilik ipuçları burada belirecek.', pos: 'bottom' },
 ];
 
 interface Props {
@@ -42,6 +43,10 @@ export default function GuidedTour({ active, onEnd }: Props) {
       top = rect.top + rect.height / 2 - ph / 2;
       left = rect.right + 16;
       aC = 'arrow-left';
+    } else if (pos === 'left') {
+      top = rect.top + rect.height / 2 - ph / 2;
+      left = rect.left - pw - 16;
+      aC = 'arrow-right';
     } else if (pos === 'bottom') {
       top = rect.bottom + 16;
       left = rect.left + rect.width / 2 - pw / 2;

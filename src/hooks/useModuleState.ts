@@ -13,6 +13,7 @@ const defaultModState: ModuleState = {
   budget: { income: 0, expenses: [], shoppingLists: [] },
   sleep: { logs: [], goalMin: 7, goalMax: 9 },
   goals: [],
+  study: { sessions: [], subjects: [] },
 };
 
 export function useModuleState() {
@@ -170,10 +171,26 @@ export function useModuleState() {
     });
   }, []);
 
+  const setActiveProgram = useCallback((id: string) => {
+    setModState(prev => {
+      const next = { ...prev, gym: { ...prev.gym, activeProgram: id } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
   // Birthday
   const addBirthday = useCallback((bday: Birthday) => {
     setModState(prev => {
       const next = { ...prev, birthdays: [...prev.birthdays, bday] };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
+  const updateBirthday = useCallback((bday: Birthday) => {
+    setModState(prev => {
+      const next = { ...prev, birthdays: prev.birthdays.map(b => b.id === bday.id ? bday : b) };
       saveModuleData(next);
       return next;
     });
@@ -272,15 +289,56 @@ export function useModuleState() {
     });
   }, []);
 
+  // Study
+  const addStudySubject = useCallback((name: string, color: string) => {
+    setModState(prev => {
+      const subject: StudySubject = { id: 'sub_' + Date.now(), name, color, resources: [] };
+      const next = { ...prev, study: { ...prev.study, subjects: [...prev.study.subjects, subject] } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
+  const deleteStudySubject = useCallback((id: string) => {
+    setModState(prev => {
+      const next = { ...prev, study: { ...prev.study, subjects: prev.study.subjects.filter(s => s.id !== id) } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
+  const addStudyResource = useCallback((subjectId: string, resource: any) => {
+    setModState(prev => {
+      const subjects = prev.study.subjects.map(s => {
+        if (s.id !== subjectId) return s;
+        return { ...s, resources: [...s.resources, { ...resource, id: 'res_' + Date.now() }] };
+      });
+      const next = { ...prev, study: { ...prev.study, subjects } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
+  const addStudySession = useCallback((subjectId: string, duration: number, topic?: string, questions?: number) => {
+    setModState(prev => {
+      const today = formatDate(new Date());
+      const session = { date: today, duration, subjectId, topic, questions };
+      const next = { ...prev, study: { ...prev.study, sessions: [...prev.study.sessions, session] } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
   return {
     modState,
     save,
     addMedicine, deleteMedicine, toggleMedTaken,
     addWater, deleteWaterEntry, saveWaterProfile,
-    addExercise, useGymTemplate, toggleExercise,
-    addBirthday, deleteBirthday,
+    addExercise, useGymTemplate, toggleExercise, setActiveProgram,
+    addBirthday, updateBirthday, deleteBirthday,
     updateIncome, addExpense, deleteExpense, addShoppingList, toggleShoppingItem,
     addSleepLog,
     addGoal, updateGoalProgress, deleteGoal,
+    addStudySession, addStudySubject, deleteStudySubject, addStudyResource,
   };
 }

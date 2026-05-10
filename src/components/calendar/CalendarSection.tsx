@@ -200,9 +200,20 @@ function DayView({
     <section className="calendar-section">
       <div className="calendar-header day-calendar-header">
         <div className="cal-time-header">Saat</div>
-        <div className={`cal-day-header${today ? ' today' : ''}`}>
-          <span className="day-name">{DAYS_SHORT[dayIndex]}</span>
-          <span className="day-date">{anchorDate.getDate()}</span>
+        <div className={`cal-day-header${today ? ' today' : ''}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10px 8px', minHeight: 90 }}>
+          <span className="day-name" style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', color: today ? '#ef4444' : '#64748b', marginBottom: 2 }}>{DAYS_SHORT[dayIndex]}</span>
+          <span className="day-date" style={{ fontSize: '1.6rem', fontWeight: 950, color: '#1e293b', lineHeight: 1 }}>{anchorDate.getDate()}</span>
+          
+          {dayAll.length > 0 && (
+            <div className="day-progress-mini" style={{ width: '100%', maxWidth: 140, marginTop: 10 }}>
+              <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, overflow: 'hidden', display: 'flex' }}>
+                 <div style={{ width: `${(dayAll.filter(e => e.completed).length / dayAll.length) * 100}%`, background: '#10b981', transition: 'width 0.3s ease' }} />
+              </div>
+              <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#94a3b8', marginTop: 4 }}>
+                 {dayAll.filter(e => e.completed).length}/{dayAll.length}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -539,9 +550,12 @@ function EventCard({
   const kindClass = ev.kind === 'task' ? ' kind-task' : ' kind-event';
   const catColor = EVENT_CATEGORY_COLORS[ev.category] ?? '#64748b';
 
+  const past = isPast(new Date(ev.date + 'T23:59:59')) && !isToday(new Date(ev.date));
+  const isUndonePast = past && !ev.completed;
+  
   return (
     <div
-      className={`event-card ${importanceClass(ev)}${completedCls}${ppClass}${kindClass}${wide ? ' wide' : ''}`}
+      className={`event-card ${importanceClass(ev)}${completedCls}${ppClass}${kindClass}${wide ? ' wide' : ''}${isUndonePast ? ' past-undone' : ''}${past && !isUndonePast ? ' past-done' : ''}`}
       style={{ top, height, borderLeftColor: catColor }}
       data-id={ev.id}
       draggable={!deleteMode}

@@ -58,7 +58,6 @@ function getDayRoutineStatus(
   if (isPastDay && completedCount < totalHabits) return 'missed';
   return null;
 }
-
 export default function CalSidebar({ 
   currentWeekStart, 
   events, 
@@ -67,7 +66,7 @@ export default function CalSidebar({
   onNext, 
   onSelectDate,
   hiddenCategories,
-  onToggleCategory
+  onToggleCategory,
 }: Props) {
   const [habits, setHabits] = useState<WeeklyHabit[]>([]);
   const [todos, setTodos] = useState<WeeklyTodo[]>([]);
