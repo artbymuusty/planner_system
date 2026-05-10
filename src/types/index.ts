@@ -182,6 +182,24 @@ export interface Goal {
   icon: string;
 }
 
+export interface JournalEntry {
+  id: string;
+  date: string; // YYYY-MM-DD
+  content: string;
+  mood?: string;
+  title?: string;
+  gratitude?: string[];
+  weather?: string;
+  location?: string;
+  paperStyle?: 'lined' | 'grid' | 'blank' | 'dots';
+  quote?: string;
+  color?: string;
+}
+
+export interface JournalState {
+  entries: Record<string, JournalEntry>;
+}
+
 export interface ModuleState {
   medicines: Medicine[];
   water: WaterState;
@@ -194,6 +212,7 @@ export interface ModuleState {
     sessions: { date: string; duration: number; subjectId: string; topic?: string; questions?: number }[];
     subjects: StudySubject[];
   };
+  journal: JournalState;
 }
 
 export interface StudyResource {
@@ -224,5 +243,5 @@ export interface WeeklyTodo {
   completed: boolean;
 }
 
-export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | 'settings' | 'study' | null;
+export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | 'settings' | 'study' | 'journal' | null;
 export type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;

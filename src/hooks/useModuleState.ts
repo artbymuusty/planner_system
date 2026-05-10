@@ -14,6 +14,7 @@ const defaultModState: ModuleState = {
   sleep: { logs: [], goalMin: 7, goalMax: 9 },
   goals: [],
   study: { sessions: [], subjects: [] },
+  journal: { entries: {} },
 };
 
 export function useModuleState() {
@@ -329,6 +330,28 @@ export function useModuleState() {
     });
   }, []);
 
+  // Journal
+  const saveJournalEntry = useCallback((date: string, content: string, mood?: string, title?: string, gratitude?: string[], weather?: string, location?: string, paperStyle?: any, quote?: string, color?: string) => {
+    setModState(prev => {
+      const entries = { ...prev.journal.entries };
+      const id = entries[date]?.id || 'jrnl_' + Date.now();
+      entries[date] = { id, date, content, mood, title, gratitude, weather, location, paperStyle, quote, color };
+      const next = { ...prev, journal: { ...prev.journal, entries } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
+  const deleteJournalEntry = useCallback((date: string) => {
+    setModState(prev => {
+      const entries = { ...prev.journal.entries };
+      delete entries[date];
+      const next = { ...prev, journal: { ...prev.journal, entries } };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
   return {
     modState,
     save,
@@ -340,5 +363,6 @@ export function useModuleState() {
     addSleepLog,
     addGoal, updateGoalProgress, deleteGoal,
     addStudySession, addStudySubject, deleteStudySubject, addStudyResource,
+    saveJournalEntry, deleteJournalEntry,
   };
 }

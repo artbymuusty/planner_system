@@ -30,6 +30,7 @@ import BudgetOverlay from '@/components/modules/BudgetOverlay';
 import SleepOverlay from '@/components/modules/SleepOverlay';
 import GoalsOverlay from '@/components/modules/GoalsOverlay';
 import SettingsOverlay from '@/components/modules/SettingsOverlay';
+import JournalOverlay from '@/components/modules/JournalOverlay';
 
 import { seedScenario, emptyModuleState } from '@/lib/seedScenario';
 import { OPENAI_KEY_STORAGE } from '@/lib/openaiClient';
@@ -454,6 +455,14 @@ export default function PlannerApp() {
             planner.addEvent(preset);
           }
         }}
+      />
+
+      <JournalOverlay
+        active={activeModule === 'journal'}
+        modState={modules.modState}
+        onClose={() => setActiveModule(null)}
+        onSaveEntry={modules.saveJournalEntry}
+        onDeleteEntry={modules.deleteJournalEntry}
       />
 
       <StatisticsOverlay
