@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Plus, X, Check } from 'lucide-react';
-import type { PlannerEvent } from '@/types';
+import type { PlannerEvent, EventCategory } from '@/types';
 import type { WeeklyHabit, WeeklyTodo } from '@/types';
 import { MONTHS_TR } from '@/lib/constants';
 import { formatDate, isToday, getWeekDates } from '@/lib/dateUtils';
@@ -14,6 +14,8 @@ interface Props {
   onPrev: () => void;
   onNext: () => void;
   onSelectDate: (date: Date) => void;
+  hiddenCategories: EventCategory[];
+  onToggleCategory: (cat: EventCategory) => void;
 }
 
 const DAY_HEADERS = ['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pa'];
@@ -57,7 +59,16 @@ function getDayRoutineStatus(
   return null;
 }
 
-export default function CalSidebar({ currentWeekStart, events, onAddEvent, onPrev, onNext, onSelectDate }: Props) {
+export default function CalSidebar({ 
+  currentWeekStart, 
+  events, 
+  onAddEvent, 
+  onPrev, 
+  onNext, 
+  onSelectDate,
+  hiddenCategories,
+  onToggleCategory
+}: Props) {
   const [habits, setHabits] = useState<WeeklyHabit[]>([]);
   const [todos, setTodos] = useState<WeeklyTodo[]>([]);
   const [newHabit, setNewHabit] = useState('');
@@ -274,6 +285,45 @@ export default function CalSidebar({ currentWeekStart, events, onAddEvent, onPre
           </div>
         </div>
       )}
+
+      <div className="cal-sidebar-sep" />
+
+      {/* Kategoriler */}
+      <div className="cs-todo-section" id="categoriesFilter" style={{ paddingBottom: 20 }}>
+        <div className="cs-section-title">Kategoriler</div>
+        <div className="cs-todo-list">
+          {(['personal', 'work', 'study', 'health', 'other'] as EventCategory[]).map(cat => {
+            const isHidden = hiddenCategories.includes(cat);
+            const label = {
+              personal: 'Kişisel',
+              work: 'İş',
+              study: 'Ders',
+              health: 'Sağlık',
+              other: 'Diğer'
+            }[cat];
+            const color = {
+              personal: '#60a5fa',
+              work: '#f87171',
+              study: '#fbbf24',
+              health: '#4ade80',
+              other: '#94a3b8'
+            }[cat];
+
+            return (
+              <div key={cat} className="cs-todo-item" style={{ borderLeft: `3px solid ${color}`, paddingLeft: 8 }}>
+                <button 
+                  className={`cs-todo-chk${!isHidden ? ' on' : ''}`} 
+                  onClick={() => onToggleCategory(cat)}
+                  style={!isHidden ? { background: color, borderColor: color } : {}}
+                >
+                  {!isHidden && <Check size={12} />}
+                </button>
+                <span className="cs-todo-text" style={{ fontSize: '0.85rem' }}>{label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </aside>
   );
 }

@@ -9,10 +9,11 @@ interface Props {
   modState: ModuleState;
   onClose: () => void;
   onAddWater: (ml: number) => void;
+  onDeleteWaterEntry: (index: number) => void;
   onSaveProfile: (h: number, w: number, a: number, gender: 'male' | 'female') => void;
 }
 
-export default function WaterOverlay({ active, modState, onClose, onAddWater, onSaveProfile }: Props) {
+export default function WaterOverlay({ active, modState, onClose, onAddWater, onDeleteWaterEntry, onSaveProfile }: Props) {
   const [customAmount, setCustomAmount] = useState('');
   const [profile, setProfile] = useState({
     height: String(modState.water.height || ''),
@@ -64,9 +65,11 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
             </div>
             <div className="water-quick-btns">
               {[200, 250, 500, 1000].map(ml => (
-                <button key={ml} className="water-add-btn" onClick={() => onAddWater(ml)}>
-                  +{ml >= 1000 ? '1L' : `${ml}ml`}
-                </button>
+                <div key={ml} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <button className="water-add-btn" onClick={() => onAddWater(ml)}>
+                    +{ml >= 1000 ? '1L' : `${ml}ml`}
+                  </button>
+                </div>
               ))}
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
@@ -83,10 +86,19 @@ export default function WaterOverlay({ active, modState, onClose, onAddWater, on
             <div className="water-history" style={{ marginTop: 14 }}>
               {entries.length === 0
                 ? <p style={{ color: '#64748b', fontSize: '0.8rem', textAlign: 'center' }}>Bugün henüz su içilmedi</p>
-                : [...entries].reverse().map((e, i) => (
-                    <div key={i} className="water-history-item">
-                      <span className="time">{e.time}</span>
-                      <span className="amount">+{e.amount}ml</span>
+                : entries.map((e, idx) => ({ ...e, originalIndex: idx })).reverse().map((e) => (
+                    <div key={e.originalIndex} className="water-history-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <span className="time">{e.time}</span>
+                        <span className="amount">+{e.amount}ml</span>
+                      </div>
+                      <button 
+                        onClick={() => onDeleteWaterEntry(e.originalIndex)}
+                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '2px 6px', borderRadius: 4 }}
+                        title="Sil"
+                      >
+                        ✕
+                      </button>
                     </div>
                   ))
               }

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import type { ActiveModule, PlannerEvent } from '@/types';
+import { useState, useCallback, useMemo } from 'react';
+import type { ActiveModule, PlannerEvent, EventCategory } from '@/types';
 import { usePlannerState } from '@/hooks/usePlannerState';
 import { useModuleState } from '@/hooks/useModuleState';
 
@@ -42,6 +42,17 @@ export default function PlannerApp() {
   const [showTour, setShowTour] = useState(false);
   const [view, setView] = useState<CalendarView>('week');
   const [addPreset, setAddPreset] = useState<AddEventPreset | null>(null);
+  const [hiddenCategories, setHiddenCategories] = useState<EventCategory[]>([]);
+
+  const toggleCategory = useCallback((cat: EventCategory) => {
+    setHiddenCategories(prev => 
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  }, []);
+
+  const visibleEvents = useMemo(() => {
+    return planner.state.events.filter(e => !hiddenCategories.includes(e.category));
+  }, [planner.state.events, hiddenCategories]);
 
   // Event click handling: complete if not in delete mode, else confirm delete
   const handleEventClick = useCallback((id: string) => {
@@ -258,13 +269,15 @@ export default function PlannerApp() {
             onPrev={() => handleNavigate(-1)}
             onNext={() => handleNavigate(1)}
             onSelectDate={planner.setCurrentDate}
+            hiddenCategories={hiddenCategories}
+            onToggleCategory={toggleCategory}
           />
 
           <div className="calendar-area">
             <CalMainHeader
               view={view}
               anchorDate={anchorDate}
-              events={planner.state.events}
+              events={visibleEvents}
               onToday={handleToday}
               onAddEvent={handleOpenAddModal}
             />
@@ -272,7 +285,7 @@ export default function PlannerApp() {
             <CalendarSection
               view={view}
               anchorDate={anchorDate}
-              events={planner.state.events}
+              events={visibleEvents}
               deleteMode={planner.state.deleteMode}
               onEventClick={handleEventClick}
               onDeleteEvent={id => { planner.setPendingDelete(id); setActiveModal('delete'); }}
@@ -341,6 +354,7 @@ export default function PlannerApp() {
         modState={modules.modState}
         onClose={() => setActiveModule(null)}
         onAddWater={modules.addWater}
+        onDeleteWaterEntry={modules.deleteWaterEntry}
         onSaveProfile={modules.saveWaterProfile}
       />
 

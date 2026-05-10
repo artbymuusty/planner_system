@@ -19,6 +19,7 @@ const TOUR_STEPS: TourStep[] = [
   { target: '#budgetBtn', title: '💰 Bütçe & Alışveriş', desc: 'Aylık gelir ve harcamalarınızı takip edin. Market alışveriş listeleri oluşturup takvimde gösterin.', pos: 'right' },
   { target: '#sleepBtn', title: '😴 Uyku Takibi', desc: 'Uyku saatlerinizi kaydedin, detaylı sağlık raporu alın. Yetersiz uykunun etkilerini görün.', pos: 'right' },
   { target: '#statisticsBtn', title: '📊 İstatistikler', desc: 'Tamamlanma ve erteleme analizlerini ayrı panelde görüntüleyebilirsiniz.', pos: 'right' },
+  { target: '#categoriesFilter', title: '🏷️ Kategoriler', desc: 'Takvimde hangi kategorilerin görüneceğini buradan seçebilirsiniz. İş, Kişisel veya Ders gibi kategorileri filtreleyerek odaklanmanızı sağlar.', pos: 'right' },
 ];
 
 interface Props {

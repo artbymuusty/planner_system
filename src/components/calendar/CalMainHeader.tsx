@@ -171,7 +171,7 @@ export default function CalMainHeader({ view, anchorDate, events, onToday, onAdd
           className="cal-add-btn"
         >
           <PlusIcon />
-          <span>Etkinlik Ekle</span>
+          <span>Hızlı Ekle</span>
         </button>
       </div>
     </div>

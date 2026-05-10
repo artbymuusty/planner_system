@@ -83,6 +83,28 @@ export function useModuleState() {
     });
   }, []);
 
+  const deleteWaterEntry = useCallback((index: number) => {
+    setModState(prev => {
+      const today = formatDate(new Date());
+      const todayLog = prev.water.log[today];
+      if (!todayLog) return prev;
+
+      const entries = [...todayLog.entries];
+      const removed = entries.splice(index, 1)[0];
+      const updated = {
+        total: Math.max(0, todayLog.total - (removed?.amount || 0)),
+        entries,
+      };
+
+      const next = {
+        ...prev,
+        water: { ...prev.water, log: { ...prev.water.log, [today]: updated } },
+      };
+      saveModuleData(next);
+      return next;
+    });
+  }, []);
+
   const saveWaterProfile = useCallback((height: number, weight: number, age: number, gender: 'male' | 'female') => {
     setModState(prev => {
       const dailyGoal = Math.round((weight * 35 + (gender === 'male' ? 500 : 300)) / 100) * 100;
@@ -254,7 +276,7 @@ export function useModuleState() {
     modState,
     save,
     addMedicine, deleteMedicine, toggleMedTaken,
-    addWater, saveWaterProfile,
+    addWater, deleteWaterEntry, saveWaterProfile,
     addExercise, useGymTemplate, toggleExercise,
     addBirthday, deleteBirthday,
     updateIncome, addExpense, deleteExpense, addShoppingList, toggleShoppingItem,
