@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, HelpCircle, Bell, BellRing, Info, Lightbulb, CheckCircle2 } from 'lucide-react';
-import { BellIcon } from '@heroicons/react/24/outline';
+import { Search, HelpCircle, Bell, BellRing } from 'lucide-react';
 
 export type CalendarView = 'day' | 'week' | 'month';
 
@@ -35,6 +34,7 @@ export default function TopBar({ view, onViewChange, onTour, onProfile, userName
   const [search, setSearch] = useState('');
   const [showBell, setShowBell] = useState(false);
   const [tipIdx, setTipIdx] = useState(0);
+  const displayName = userName || 'Test Kullanıcı';
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -101,21 +101,21 @@ export default function TopBar({ view, onViewChange, onTour, onProfile, userName
           onClick={onTour}
           aria-label="Yardım"
           title="Öğretici modu başlat"
-          className="topbar-icon-btn"
+          className="topbar-icon-btn topbar-tour-btn"
         >
           <HelpCircle strokeWidth={2} />
         </button>
         <button
           onClick={onProfile}
-          title="Profil / Giriş"
-          className="topbar-profile"
+          title="Profil"
+          className="topbar-profile topbar-profile-btn"
         >
-          <div className="topbar-avatar" style={{ background: userName ? '#4f46e5' : '#e2e8f0', color: userName ? 'white' : '#64748b' }}>
-            {(userName || 'M').charAt(0).toUpperCase()}
+          <div className="topbar-avatar" style={{ background: '#4f46e5', color: 'white' }}>
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div className="topbar-profile-info">
-            <span className="topbar-profile-name">{userName || 'Misafir'}</span>
-            <span className="topbar-profile-sub">{userName ? 'Pro Üye' : 'Giriş Yap'}</span>
+            <span className="topbar-profile-name">{displayName}</span>
+            <span className="topbar-profile-sub">Pro Üye</span>
           </div>
         </button>
       </div>

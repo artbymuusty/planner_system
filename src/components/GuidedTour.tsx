@@ -10,17 +10,23 @@ interface TourStep {
 }
 
 const TOUR_STEPS: TourStep[] = [
-  { target: '.cal-main-header', title: '📅 Ana Takvim', desc: 'Zamanını yönetmeye buradan başla! Günlük, haftalık ve aylık görünümler arasında geçiş yapabilirsin.', pos: 'bottom' },
-  { target: '#homeBtn', title: '🏠 Navigasyon', desc: 'Bu menü ile farklı modüllere hızlıca geçiş yapabilirsin. Her modül senin verimliliğini artırmak için tasarlandı.', pos: 'right' },
-  { target: '#medicineBtn', title: '💊 İlaç & Sağlık', desc: 'İlaçlarını ekle, dozajlarını (kaç adet) ve vakitlerini takip et. Sağlık her şeyden önce gelir!', pos: 'right' },
+  { target: '.topbar-tour-btn', title: '🎓 Eğitim Modu', desc: 'Bu buton uygulamadaki ana akışları adım adım gösterir. Yeni eklenen AI fotoğraf analizi, taslak düzenleme ve otomatik kayıt özelliklerini de buradan öğrenebilirsin.', pos: 'bottom' },
+  { target: '.topbar-profile-btn', title: '👤 Test Kullanıcı', desc: 'Uygulama artık kayıt veya giriş istemez. Buraya tıklayınca sadece Test Kullanıcı oturum popupı açılır ve Kapat ile ekrana dönersin.', pos: 'bottom' },
+  { target: '.cal-main-header', title: '📅 Ana Takvim', desc: 'Zamanını yönetmeye buradan başla. AI bir fotoğraftan tarihli görev veya etkinlik çıkardığında takvime ekler ve seni ilgili haftaya götürür.', pos: 'bottom' },
+  { target: '#homeBtn', title: '🏠 Navigasyon', desc: 'Bu menü ile farklı modüllere hızlıca geçiş yapabilirsin. AI bir şey eklediğinde ilgili modül, örneğin İlaçlarım veya Harcamalar, otomatik açılır.', pos: 'right' },
+  { target: '.assistant-fab', title: '🤖 AI Asistan', desc: 'Sağ alttaki asistana fotoğraf verebilirsin. Asistan önce içeriği analiz eder, ekleme taslağını liste halinde gösterir; Düzenle ile satırları değiştirip sonra Ekle dersin.', pos: 'left' },
+  { target: '#medicineBtn', title: '💊 İlaç & Sağlık', desc: 'İlaç kutusu veya reçete fotoğrafı verdiğinde ilaç adı, doz ve kullanım notları taslağa düşer. Onayladığında sol menüdeki İlaçlarım alanına eklenir.', pos: 'right' },
   { target: '#waterBtn', title: '💧 Hidrasyon', desc: 'Boy ve kilona göre su hedefini belirle. Yeterli su içmek odaklanmanı %15 artırır.', pos: 'right' },
   { target: '#gymBtn', title: '🏋️ Spor Takibi', desc: 'Antrenman programını oluştur veya hazır şablonlardan (Evde, Kardiyo vb.) seçim yap.', pos: 'right' },
   { target: '#birthdayBtn', title: '🎂 Hatırlatıcı', desc: 'Sevdiklerinin doğum günlerini ve hediye planlarını buradan yönet. Unutma, küçük sürprizler bağları güçlendirir.', pos: 'right' },
-  { target: '#budgetBtn', title: '💰 Finans Yönetimi', desc: 'Gelir-gider dengeni koru. Alışveriş listeni tamamlayınca direkt harcama olarak kaydedebilirsin.', pos: 'right' },
+  { target: '#budgetBtn', title: '💰 Finans Yönetimi', desc: 'Gelir-gider dengeni koru. Fiş veya makbuz fotoğrafı yüklersen asistan toplam tutarı, satıcıyı ve kategoriyi çıkarıp Harcamalar taslağına ekler.', pos: 'right' },
   { target: '#sleepBtn', title: '😴 Uyku Kalitesi', desc: 'Uyku düzenini takip et ve haftalık raporlarını incele. Kaliteli uyku, kaliteli bir gün demektir.', pos: 'right' },
-  { target: '#studyBtn', title: '📚 Kütüphane', desc: 'Derslerini raflara diz, Pomodoro sayacı ile odaklan ve çalışma günlüğünü tut.', pos: 'right' },
-  { target: '#statisticsBtn', title: '📊 Analizler', desc: 'Geriye dönük performansını, erteleme alışkanlıklarını ve başarı oranlarını buradan izle.', pos: 'right' },
-  { target: '.topbar-actions', title: '🔔 Bildirimler', desc: 'Buradaki zili takip et! Senin için hazırladığımız özel verimlilik ipuçları burada belirecek.', pos: 'bottom' },
+  { target: '#journalBtn', title: '📓 Günlük', desc: 'Gün içinde aldığın notları ve duygu durumunu burada tut. Takvim, ders, sağlık ve bütçe kayıtlarınla birlikte günlük planını tamamlar.', pos: 'right' },
+  { target: '#studyBtn', title: '📚 Kütüphane', desc: 'Derslerini raflara diz, Pomodoro sayacı ile odaklan ve çalışma günlüğünü tut. El yazısı ödev listesi fotoğrafı verdiğinde tarihli ödevler takvime aktarılır.', pos: 'right' },
+  { target: '#statisticsBtn', title: '📊 Analizler', desc: 'Geriye dönük performansını, erteleme alışkanlıklarını ve başarı oranlarını buradan izle. OpenAI anahtarı varsa haftalık AI özetleri de çalışır.', pos: 'right' },
+  { target: '#settingsBtn', title: '⚙️ Ayarlar', desc: 'OpenAI API anahtarı .env dosyasında yoksa Ayarlar ekranı senden anahtar eklemeni ister. .env varsa uygulama onu kullanır, Vercel ortam değişkenleriyle de çalışır.', pos: 'right' },
+  { target: '.topbar-search', title: '🔎 Hızlı Arama', desc: 'Etkinlik, görev veya not arayarak yoğun takvim içinde hızlıca sonuç bulabilirsin. Görünüm düğmeleriyle gün, hafta ve ay moduna geçebilirsin.', pos: 'bottom' },
+  { target: '.topbar-actions', title: '🔔 Bildirimler', desc: 'Zil verimlilik ipuçlarını gösterir. Yanındaki eğitim ve profil butonları artık yeni Test Kullanıcı ve rehber akışlarıyla uyumlu çalışır.', pos: 'bottom' },
 ];
 
 interface Props {
@@ -35,7 +41,7 @@ export default function GuidedTour({ active, onEnd }: Props) {
 
   const positionPopup = useCallback((el: Element, pos: string) => {
     const rect = el.getBoundingClientRect();
-    const pw = 340, ph = 180;
+    const pw = 340, ph = 220;
     let top: number, left: number;
     let aC = '';
 

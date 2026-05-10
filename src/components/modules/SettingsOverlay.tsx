@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Database, Eye, EyeOff, Flame, Key, Loader2, RotateCcw, Save, Trash2, Zap } from 'lucide-react';
-import { OPENAI_KEY_STORAGE, openaiChat } from '@/lib/openaiClient';
+import { OPENAI_KEY_STORAGE, openaiChat, openaiStatus } from '@/lib/openaiClient';
 
 interface Props {
   active: boolean;
@@ -53,6 +53,11 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
   const [test, setTest] = useState<TestState>({ status: 'idle' });
   const [scenarioToast, setScenarioToast] = useState<Toast>(null);
   const [pendingAction, setPendingAction] = useState<'load' | 'reset' | null>(null);
+  const [serverStatus, setServerStatus] = useState<{ configured: boolean; model: string; keySource?: 'user' | 'env' | null }>({
+    configured: false,
+    model: '',
+    keySource: null,
+  });
 
   // Mount'ta localStorage'dan oku
   useEffect(() => {
@@ -73,6 +78,9 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
       setSavedTick(false);
       setTest({ status: 'idle' });
       setScenarioToast(null);
+      openaiStatus()
+        .then(status => setServerStatus(status))
+        .catch(() => setServerStatus({ configured: false, model: '', keySource: null }));
     }
   }, [active]);
 
@@ -105,6 +113,9 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
     setDraft('');
     setSavedTick(true);
     setTimeout(() => setSavedTick(false), 1800);
+    openaiStatus({ apiKey: trimmed })
+      .then(status => setServerStatus(status))
+      .catch(() => setServerStatus({ configured: false, model: '', keySource: null }));
   };
 
   const handleClear = () => {
@@ -112,6 +123,9 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
     setStored('');
     setDraft('');
     setTest({ status: 'idle' });
+    openaiStatus()
+      .then(status => setServerStatus(status))
+      .catch(() => setServerStatus({ configured: false, model: '', keySource: null }));
   };
 
   const handleTest = async () => {
@@ -135,6 +149,8 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
   const display = stored
     ? (reveal ? stored : maskKey(stored))
     : '';
+  const hasEnvKey = !stored && serverStatus.configured && serverStatus.keySource === 'env';
+  const canTest = Boolean(stored) || serverStatus.configured;
 
   return (
     <div className={`module-overlay${active ? ' active' : ''}`}>
@@ -151,9 +167,9 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
             <Key size={16} /> OpenAI API Key
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 14 }}>
-            AI destekli özellikler (öneri, analiz, sohbet vb.) için kullanılır. Anahtarın sadece bu cihazın
-            tarayıcısındaki <code>localStorage</code>&apos;ında saklanır, sunucuya gönderilmez. Anahtarı buradan
-            <strong> kaydedebilir, gizleyebilir, test edebilir veya silebilirsin.</strong>
+            AI destekli özellikler (öneri, analiz, sohbet vb.) için kullanılır. Önce sunucudaki
+            <code> OPENAI_API_KEY</code> kullanılır; yoksa bu cihazdan aşağıya API key eklemeni isteriz.
+            Settings&apos;te kaydedilen anahtar sadece bu tarayıcının <code>localStorage</code>&apos;ında saklanır.
           </p>
 
           {/* Kayıtlı key görünümü */}
@@ -182,12 +198,19 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
                 </button>
               </div>
             </div>
+          ) : hasEnvKey ? (
+            <div style={{
+              padding: '12px 14px', background: '#ecfdf5', border: '1px dashed #22c55e',
+              borderRadius: 12, color: '#166534', fontSize: '0.85rem', marginBottom: 12,
+            }}>
+              ✓ Sunucuda <code>OPENAI_API_KEY</code> tanımlı. Settings&apos;ten API key eklemeden AI özelliklerini kullanabilirsin.
+            </div>
           ) : (
             <div style={{
               padding: '12px 14px', background: '#fff7ed', border: '1px dashed #fbbf24',
               borderRadius: 12, color: '#92400e', fontSize: '0.85rem', marginBottom: 12,
             }}>
-              ℹ️ Henüz kayıtlı bir anahtar yok. Aşağıdan ekleyebilirsin.
+              ℹ️ Sunucuda <code>OPENAI_API_KEY</code> bulunamadı ve bu tarayıcıda kayıtlı anahtar yok. Aşağıdan ekleyebilirsin.
             </div>
           )}
 
@@ -221,9 +244,9 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
               type="button"
               className="m-btn secondary"
               onClick={handleTest}
-              disabled={test.status === 'loading' || !stored}
+              disabled={test.status === 'loading' || !canTest}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-              title={!stored ? 'Önce bir anahtar kaydet' : 'Anahtarı test et'}
+              title={!canTest ? 'Önce .env veya Settings üzerinden bir anahtar ekle' : 'Anahtarı test et'}
             >
               {test.status === 'loading'
                 ? (<><Loader2 size={14} className="spin" /> Test ediliyor...</>)

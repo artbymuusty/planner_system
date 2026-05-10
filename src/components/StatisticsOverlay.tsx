@@ -5,7 +5,7 @@ import { FileDown, Loader2, Mail, Sparkles } from 'lucide-react';
 import type { PlannerEvent } from '@/types';
 import { formatDate, getWeekDates } from '@/lib/dateUtils';
 import { POSTPONE_REASON_LABELS } from '@/lib/constants';
-import { hasStoredOpenAIKey, openaiChat } from '@/lib/openaiClient';
+import { openaiChat, openaiStatus } from '@/lib/openaiClient';
 import CompletionSection from '@/components/sections/CompletionSection';
 import PostponeSection from '@/components/sections/PostponeSection';
 
@@ -151,15 +151,19 @@ export default function StatisticsOverlay({
   useEffect(() => {
     if (active) {
       setAi({ status: 'idle' });
-      setKeyConfigured(hasStoredOpenAIKey());
+      openaiStatus()
+        .then(status => setKeyConfigured(status.configured))
+        .catch(() => setKeyConfigured(false));
     }
   }, [active]);
 
   const handleGenerate = async () => {
-    if (!hasStoredOpenAIKey()) {
+    const status = await openaiStatus().catch(() => ({ configured: false, model: '' }));
+    setKeyConfigured(status.configured);
+    if (!status.configured) {
       setAi({
         status: 'error',
-        message: 'OpenAI API anahtarı bulunamadı. Sol menüden ⚙️ Ayarlar → OpenAI API Key bölümünden ekleyebilirsin.',
+        message: 'OpenAI API anahtarı bulunamadı. Sunucuda .env OPENAI_API_KEY yoksa Sol menüden ⚙️ Ayarlar → OpenAI API Key bölümünden ekleyebilirsin.',
       });
       return;
     }
@@ -247,7 +251,7 @@ export default function StatisticsOverlay({
               </button>
               {!keyConfigured && (
                 <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                  Önce ⚙️ Ayarlar'dan API key gir
+                  .env yoksa ⚙️ Ayarlar&apos;dan API key gir
                 </span>
               )}
             </div>

@@ -39,7 +39,12 @@ export interface OpenAIChatError {
  */
 export async function openaiChat(
   input: string,
-  opts: { apiKey?: string; signal?: AbortSignal } = {}
+  opts: {
+    apiKey?: string;
+    signal?: AbortSignal;
+    images?: string[];
+    responseFormat?: 'photo_planner_plan';
+  } = {}
 ): Promise<OpenAIChatResponse> {
   const key = (opts.apiKey ?? getStoredOpenAIKey()).trim();
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
@@ -48,7 +53,11 @@ export async function openaiChat(
   const res = await fetch('/api/openai/chat', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ input }),
+    body: JSON.stringify({
+      input,
+      images: opts.images,
+      responseFormat: opts.responseFormat,
+    }),
     signal: opts.signal,
   });
 
@@ -68,7 +77,9 @@ export async function openaiChat(
 /**
  * /api/openai/chat'e GET atar — key konfigüre mi kontrolü.
  */
-export async function openaiStatus(opts: { apiKey?: string } = {}): Promise<{ configured: boolean; model: string }> {
+export async function openaiStatus(
+  opts: { apiKey?: string } = {}
+): Promise<{ configured: boolean; model: string; keySource?: 'user' | 'env' | null }> {
   const key = (opts.apiKey ?? getStoredOpenAIKey()).trim();
   const headers: Record<string, string> = {};
   if (key) headers['x-openai-key'] = key;

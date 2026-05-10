@@ -14,13 +14,13 @@
  * Mesaj kaynağı karması:
  *   - Şablon (anında, key gerekmez): basit hatırlatmalar
  *   - AI (openaiChat): erteleme analizi, alt görev bölme, hedef tahmini
- *     → API key yoksa AI trigger'ları sessizce atlanır.
+ *     → API key yoksa fallback mesajlara döner.
  */
 
 import { useEffect, useRef, useCallback } from 'react';
 import type { PlannerEvent, ModuleState } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
-import { openaiChat, hasStoredOpenAIKey } from '@/lib/openaiClient';
+import { openaiChat } from '@/lib/openaiClient';
 
 export interface ProactiveMessage {
   id: string;
@@ -142,31 +142,27 @@ export function useProactiveAssistant(
 
         if (newCount === 2) {
           emit('postpone2', 'once', async () => {
-            if (hasStoredOpenAIKey()) {
-              try {
-                const res = await openaiChat(
-                  `Kullanıcı "${e.name}" görevini 2. kez erteledi (kategori: ${e.category}, önem: ${e.importance}). ` +
-                  `Türkçe, kısa (2-3 cümle), empatik bir mesaj yaz. Erteleme nedenini sor ve 1 küçük somut öneri ver. ` +
-                  `Markdown KULLANMA, sade düz metin yaz.`
-                );
-                return res.text;
-              } catch { return ''; }
-            }
+            try {
+              const res = await openaiChat(
+                `Kullanıcı "${e.name}" görevini 2. kez erteledi (kategori: ${e.category}, önem: ${e.importance}). ` +
+                `Türkçe, kısa (2-3 cümle), empatik bir mesaj yaz. Erteleme nedenini sor ve 1 küçük somut öneri ver. ` +
+                `Markdown KULLANMA, sade düz metin yaz.`
+              );
+              if (res.text) return res.text;
+            } catch {}
             return `"${e.name}" görevini 2. kez erteledin 🤔 Sebebi neydi? Belki birlikte ufak bir çözüm bulabiliriz.`;
           }, e.id);
         } else if (newCount >= 3) {
           emit('postpone3', 'once', async () => {
-            if (hasStoredOpenAIKey()) {
-              try {
-                const res = await openaiChat(
-                  `Kullanıcı "${e.name}" görevini ${newCount}. kez erteledi. Bu görev muhtemelen büyük geliyor. ` +
-                  `Türkçe yanıt ver: önce 1 cümle empati. Sonra "Bunu şu küçük adımlara bölelim:" diyerek ` +
-                  `3-4 küçük somut alt parçaya böl, her birini "• " ile başlatarak madde madde liste yap. ` +
-                  `Markdown başlık/kalın KULLANMA, sade düz metin yaz.`
-                );
-                return res.text;
-              } catch { return ''; }
-            }
+            try {
+              const res = await openaiChat(
+                `Kullanıcı "${e.name}" görevini ${newCount}. kez erteledi. Bu görev muhtemelen büyük geliyor. ` +
+                `Türkçe yanıt ver: önce 1 cümle empati. Sonra "Bunu şu küçük adımlara bölelim:" diyerek ` +
+                `3-4 küçük somut alt parçaya böl, her birini "• " ile başlatarak madde madde liste yap. ` +
+                `Markdown başlık/kalın KULLANMA, sade düz metin yaz.`
+              );
+              if (res.text) return res.text;
+            } catch {}
             return (
               `"${e.name}" görevini ${newCount}. kez erteledin. Belki büyük geliyor — küçük parçalara bölmeyi düşündün mü?\n\n` +
               `• Görevin ilk 15 dakikalık parçasını yap\n• Sonra hızlı bir mola ver\n• Bir sonraki adımı belirle`
@@ -292,7 +288,6 @@ export function useProactiveAssistant(
   // 10: Hedef tahmini — ilerleme yavaş olan hedef için AI değerlendirmesi
   // -------------------------------------------------------------------
   useEffect(() => {
-    if (!hasStoredOpenAIKey()) return;
     const goals = modState.goals || [];
     goals.forEach(g => {
       if (g.target <= 0 || g.current >= g.target) return;

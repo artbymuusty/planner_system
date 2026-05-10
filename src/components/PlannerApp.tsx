@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useCallback, useMemo } from 'react';
-import type { ActiveModule, PlannerEvent, EventCategory } from '@/types';
+import type { ActiveModule, PlannerEvent, EventCategory, Medicine, Expense } from '@/types';
 import { usePlannerState } from '@/hooks/usePlannerState';
 import { useModuleState } from '@/hooks/useModuleState';
-import { formatDate } from '@/lib/dateUtils';
+import { formatDate, getMonday } from '@/lib/dateUtils';
 import { computeStreak } from '@/lib/statsUtils';
 
 import AppSidebar from '@/components/AppSidebar';
@@ -273,6 +273,27 @@ export default function PlannerApp() {
     }
   }, [planner, modules]);
 
+  const handleAddAiMedicines = useCallback((medicines: Medicine[]) => {
+    medicines.forEach(med => modules.addMedicine(med));
+  }, [modules]);
+
+  const handleAddAiExpenses = useCallback((expenses: Expense[]) => {
+    expenses.forEach(expense => modules.addExpense(expense));
+  }, [modules]);
+
+  const handleAddAiEvents = useCallback((aiEvents: PlannerEvent[]) => {
+    planner.addEvents(aiEvents);
+    const firstDate = aiEvents.find(ev => ev.date)?.date;
+    if (!firstDate) return;
+
+    const parsed = new Date(`${firstDate}T00:00:00`);
+    if (Number.isNaN(parsed.getTime())) return;
+
+    setActiveModule(null);
+    setView('week');
+    planner.setCurrentDate(getMonday(parsed));
+  }, [planner]);
+
   const { streak } = useMemo(() => computeStreak(planner.state.events), [planner.state.events]);
   const waterPercent = useMemo(() => {
     const today = formatDate(new Date());
@@ -295,7 +316,7 @@ export default function PlannerApp() {
           onViewChange={setView}
           onTour={() => setShowTour(true)}
           onProfile={() => setActiveModal('login')}
-          userName={planner.state.user?.name || null}
+          userName="Test Kullanıcı"
         />
 
         <div className="content-area">
@@ -342,8 +363,6 @@ export default function PlannerApp() {
         open={activeModal === 'login'}
         user={planner.state.user}
         onClose={() => setActiveModal(null)}
-        onLogin={planner.login}
-        onLogout={planner.logout}
       />
 
       <AddEventModal
@@ -501,6 +520,11 @@ export default function PlannerApp() {
         events={planner.state.events}
         modState={modules.modState}
         currentWeekStart={planner.state.currentWeekStart}
+        onAddAiEvents={handleAddAiEvents}
+        onAddAiMedicines={handleAddAiMedicines}
+        onOpenMedicine={() => setActiveModule('medicine')}
+        onAddAiExpenses={handleAddAiExpenses}
+        onOpenBudget={() => setActiveModule('budget')}
       />
     </div>
   );
