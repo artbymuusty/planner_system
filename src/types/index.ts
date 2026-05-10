@@ -205,5 +205,5 @@ export interface WeeklyTodo {
   completed: boolean;
 }
 
-export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | null;
+export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | 'settings' | null;
 export type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;

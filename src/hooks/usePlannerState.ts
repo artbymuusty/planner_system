@@ -167,6 +167,23 @@ export function usePlannerState() {
     });
   }, [saveAndUpdate]);
 
+  /**
+   * Tüm event listesini ve user'ı atomik olarak değiştirir.
+   * Test senaryosu yükleme ve full reset için kullanılır.
+   */
+  const replaceAll = useCallback((events: PlannerEvent[], user: typeof state.user) => {
+    savePlannerData(events, user);
+    setState(prev => ({
+      ...prev,
+      events,
+      user,
+      pendingDeleteId: null,
+      pendingReaddEvent: null,
+      pendingSplitEvent: null,
+      deleteMode: false,
+    }));
+  }, []);
+
   return {
     state,
     navigateWeek,
@@ -188,5 +205,6 @@ export function usePlannerState() {
     setSelectedImportance,
     login,
     logout,
+    replaceAll,
   };
 }

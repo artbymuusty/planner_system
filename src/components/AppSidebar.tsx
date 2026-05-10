@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart3, Cake, Dumbbell, Droplets, Home, Moon, Pill, Wallet } from 'lucide-react';
+import { BarChart3, Cake, Dumbbell, Droplets, Home, Moon, Pill, Settings, Wallet } from 'lucide-react';
 import type { ActiveModule } from '@/types';
 
 interface Props {
@@ -38,6 +38,17 @@ export default function AppSidebar({
         <button className={`sidebar-btn${activeModule === 'sleep' ? ' active' : ''}`} id="sleepBtn" title="Uyku" onClick={() => onModule('sleep')}><Moon /></button>
         <button className={`sidebar-btn${activeModule === 'statistics' ? ' active' : ''}`} id="statisticsBtn" title="İstatistikler" onClick={() => onModule('statistics')}>
           <BarChart3 />
+        </button>
+      </div>
+
+      <div className="sidebar-bottom">
+        <button
+          className={`sidebar-btn${activeModule === 'settings' ? ' active' : ''}`}
+          id="settingsBtn"
+          title="Ayarlar"
+          onClick={() => onModule('settings')}
+        >
+          <Settings />
         </button>
       </div>
     </aside>

@@ -26,6 +26,10 @@ import BirthdayOverlay from '@/components/modules/BirthdayOverlay';
 import BudgetOverlay from '@/components/modules/BudgetOverlay';
 import SleepOverlay from '@/components/modules/SleepOverlay';
 import GoalsOverlay from '@/components/modules/GoalsOverlay';
+import SettingsOverlay from '@/components/modules/SettingsOverlay';
+
+import { seedScenario, emptyModuleState } from '@/lib/seedScenario';
+import { OPENAI_KEY_STORAGE } from '@/lib/openaiClient';
 
 type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;
 
@@ -213,6 +217,22 @@ export default function PlannerApp() {
     else planner.setCurrentDate(new Date());
   };
 
+  // === Test senaryosu / sıfırlama ===
+  const handleLoadScenario = useCallback(() => {
+    const seed = seedScenario();
+    planner.replaceAll(seed.events, seed.user);
+    modules.save(seed.modules);
+    setActiveModule(null); // Ana sayfaya dön ki kullanıcı sonucu görsün
+  }, [planner, modules]);
+
+  const handleResetAll = useCallback(() => {
+    planner.replaceAll([], null);
+    modules.save(emptyModuleState());
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(OPENAI_KEY_STORAGE);
+    }
+  }, [planner, modules]);
+
   return (
     <div className="app-container">
       <AppSidebar
@@ -244,6 +264,7 @@ export default function PlannerApp() {
             <CalMainHeader
               view={view}
               anchorDate={anchorDate}
+              events={planner.state.events}
               onToday={handleToday}
               onAddEvent={handleOpenAddModal}
             />
@@ -375,6 +396,13 @@ export default function PlannerApp() {
         onReadd={handleReaddClick}
         onSplit={handleSplitClick}
         onClose={() => setActiveModule(null)}
+      />
+
+      <SettingsOverlay
+        active={activeModule === 'settings'}
+        onClose={() => setActiveModule(null)}
+        onLoadScenario={handleLoadScenario}
+        onResetAll={handleResetAll}
       />
 
       <GuidedTour active={showTour} onEnd={() => setShowTour(false)} />
