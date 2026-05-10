@@ -1,28 +1,30 @@
-# PlanFlow AI
+# Life Planner
 
-## Seçilen Problem
+## Proje Hakkında
 
-Bu proje PlanFlow AI Challenge kapsamında geliştirilmiştir.
+Life Planner, PlanFlow AI Challenge kapsamında geliştirilmiş AI destekli bir görev planlama ve davranış analizi sistemidir.
 
 Seçilen Problem:
 ### Problem 3 — Sürekli Ertelenen Görevler
 
-Birçok kullanıcı görevlerini yalnızca unutkanlık nedeniyle değil; yorgunluk, mental yük, belirsizlik, yanlış süre tahmini veya beklenmedik durumlar nedeniyle sürekli ertelemektedir. Bu proje, kullanıcıya daha fazla bildirim göndermek yerine erteleme davranışının nedenlerini anlamaya ve kullanıcıyı göreve başlatmaya odaklanmaktadır.
+Birçok kullanıcı görevlerini yalnızca unutkanlık nedeniyle değil; yorgunluk, mental yük, belirsizlik, yanlış süre tahmini veya beklenmedik durumlar nedeniyle sürekli ertelemektedir. Bu durum zamanla görevlerin psikolojik olarak daha büyük görünmesine ve kullanıcıların göreve başlamasını daha zor hale getirmesine neden olmaktadır.
+
+Bu proje, kullanıcıya daha fazla bildirim göndermek yerine erteleme davranışının nedenlerini anlamaya ve kullanıcıyı yeniden harekete geçirmeye odaklanmaktadır.
 
 ---
 
-# Proje Fikri
+# Proje Amacı
 
-PlanFlow AI, kullanıcıların sürekli ertelediği görevleri analiz eden ve kişiselleştirilmiş başlangıç önerileri oluşturan AI destekli bir planlama asistanıdır.
+Life Planner’ın amacı kullanıcıların sürekli ertelediği görevleri analiz ederek:
+- erteleme davranışını takip etmek,
+- görevin neden ertelenmiş olabileceğini yorumlamak,
+- görevleri daha küçük ve uygulanabilir parçalara bölmek,
+- kullanıcıya başlangıç önerileri sunmak,
+- yeniden planlama oluşturmak
 
-Sistem:
-- ertelenen görevleri analiz eder,
-- erteleme davranışlarını takip eder,
-- görevleri daha küçük ve uygulanabilir parçalara böler,
-- yeniden planlama önerileri oluşturur,
-- kullanıcıya küçük başlangıç adımları sunar.
+ve kullanıcıyı psikolojik olarak göreve başlatmayı kolaylaştırmaktır.
 
-PlanFlow AI klasik bir yapılacaklar listesi uygulaması yerine kullanıcı davranışını analiz eden bir “AI mentor” mantığında çalışmaktadır.
+Sistem klasik bir yapılacaklar listesi uygulaması yerine kullanıcı davranışını analiz eden bir “AI mentor” mantığında çalışmaktadır.
 
 ---
 
@@ -31,10 +33,11 @@ PlanFlow AI klasik bir yapılacaklar listesi uygulaması yerine kullanıcı davr
 - Erteleme davranışı takibi
 - AI destekli görev analizi
 - Görev küçültme sistemi
-- Başlangıç oturumu önerileri
 - Akıllı yeniden planlama
+- Başlangıç oturumu önerileri
+- Kullanıcı davranışı analizi
 - Kişiselleştirilmiş AI önerileri
-- Kullanıcı dostu arayüz
+- Sade ve kullanıcı dostu arayüz
 
 ---
 
@@ -54,6 +57,30 @@ PlanFlow AI klasik bir yapılacaklar listesi uygulaması yerine kullanıcı davr
 
 ---
 
+# Sistem Mimarisi
+
+Sistem temel olarak kullanıcı arayüzü, görev takip sistemi ve AI analiz katmanından oluşmaktadır.
+
+Kullanıcı tarafından oluşturulan görevler sistem içerisinde kayıt altına alınmaktadır. Bir görev ertelendiğinde sistem:
+- görevin kaç kez ertelendiğini,
+- hangi zaman aralıklarında ertelendiğini,
+- kullanıcı geri bildirimlerini,
+- tekrar eden davranışları
+
+analiz etmektedir.
+
+Toplanan veriler AI analiz katmanına gönderilmektedir. Yapay zeka burada görevin neden ertelenmiş olabileceğini yorumlayarak kullanıcıya özel öneriler oluşturmaktadır.
+
+Bu öneriler:
+- görevi küçük parçalara bölme,
+- başlangıç adımı oluşturma,
+- yeniden planlama yapma,
+- daha uygun çalışma zamanı önerme
+
+gibi işlemleri kapsamaktadır.
+
+---
+
 # Örnek AI Prompt Yapısı
 
 ```text
@@ -69,12 +96,58 @@ Generate:
 
 ---
 
+# Sistem Akışı
+
+```text
+[ Kullanıcı Görev Oluşturur ]
+                ↓
+[ Görev Sisteme Kaydedilir ]
+                ↓
+[ Görev Ertelenir ]
+                ↓
+[ Davranış Verileri Toplanır ]
+                ↓
+[ OpenAI Analizi ]
+                ↓
+[ AI Önerileri Oluşturulur ]
+                ↓
+[ Görev Küçültme ve Yeniden Planlama ]
+```
+
+---
+
+# Demo Kullanım Senaryosu
+
+1. Kullanıcı yeni bir görev oluşturur.
+2. Görev birkaç kez ertelenir.
+3. Sistem erteleme davranışını analiz eder.
+4. AI olası erteleme nedenlerini yorumlar.
+5. Görev küçük ve uygulanabilir adımlara bölünür.
+6. Kullanıcıya yeniden başlama önerileri sunulur.
+
+Örnek:
+“Bitirme Projesi Raporu Yaz”
+
+AI önerileri:
+- Başlıkları oluştur
+- Giriş paragrafını yaz
+- Kaynak listesini düzenle
+- 15 dakikalık başlangıç oturumu başlat
+
+---
+
 # Kurulum
 
 Projeyi klonlayın:
 
 ```bash
 git clone https://github.com/repository-link.git
+```
+
+Proje klasörüne girin:
+
+```bash
+cd plannersystem
 ```
 
 Bağımlılıkları yükleyin:
@@ -107,23 +180,12 @@ OPENAI_API_KEY=your_openai_api_key
 
 ---
 
-# Sistem Akışı
+# Karşılaşılan Zorluklar
 
-```text
-[ Kullanıcı Görev Oluşturur ]
-                ↓
-[ Görev Sisteme Kaydedilir ]
-                ↓
-[ Görev Ertelenir ]
-                ↓
-[ Davranış Verileri Toplanır ]
-                ↓
-[ OpenAI Analizi ]
-                ↓
-[ AI Önerileri Oluşturulur ]
-                ↓
-[ Görev Küçültme ve Yeniden Planlama ]
-```
+- İnsan davranışını teknik veriler ile yorumlamak
+- Erteleme nedenlerini tahmin etmek
+- Kullanıcıyı baskılamayan AI önerileri üretmek
+- Görevleri daha gerçekçi ve uygulanabilir hale getirmek
 
 ---
 
@@ -135,9 +197,10 @@ OPENAI_API_KEY=your_openai_api_key
 - Sesli asistan entegrasyonu
 - Mobil uygulama desteği
 - Alışkanlık öğrenme modeli
+- Adaptif günlük planlama sistemi
 
 ---
 
 # Takım
 
-LIFE PLANNER TEAM
+ZENITH TEAM
