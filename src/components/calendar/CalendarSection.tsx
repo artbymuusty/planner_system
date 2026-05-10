@@ -140,8 +140,8 @@ function WeekView({
                   const totalHours = offsetY / HOUR_HEIGHT;
                   const targetStartHourFloat = START_HOUR + totalHours;
                   
-                  let newStartH = Math.floor(targetStartHourFloat);
-                  let newStartM = (targetStartHourFloat % 1) < 0.5 ? 0 : 30;
+                  const newStartH = Math.floor(targetStartHourFloat);
+                  const newStartM = (targetStartHourFloat % 1) < 0.5 ? 0 : 30;
 
                   onEventDrop(eventId, dateStr, newStartH, newStartM);
                 }}

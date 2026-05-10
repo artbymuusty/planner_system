@@ -39,6 +39,10 @@ import { OPENAI_KEY_STORAGE } from '@/lib/openaiClient';
 
 type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;
 
+function isPlannerEvent(event: PlannerEvent | Pick<PlannerEvent, 'id' | 'name'>): event is PlannerEvent {
+  return 'date' in event && 'startTime' in event && 'endTime' in event;
+}
+
 export default function PlannerApp() {
   const planner = usePlannerState();
   const modules = useModuleState();
@@ -402,7 +406,6 @@ export default function PlannerApp() {
         onAdd={modules.addMedicine}
         onDelete={modules.deleteMedicine}
         onToggleTaken={modules.toggleMedTaken}
-        currentWeekStart={planner.state.currentWeekStart}
       />
 
       <WaterOverlay
@@ -482,7 +485,7 @@ export default function PlannerApp() {
               name: preset.name
             });
             setActiveModal('addEvent');
-          } else {
+          } else if (isPlannerEvent(preset)) {
             planner.addEvent(preset);
           }
         }}

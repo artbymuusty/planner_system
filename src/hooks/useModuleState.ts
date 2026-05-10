@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import type { ModuleState, Medicine, Birthday, Expense, ShoppingList, SleepLog, Goal, GymExercise, GymProgram } from '@/types';
+import type { ModuleState, Medicine, Birthday, Expense, ShoppingList, SleepLog, Goal, GymExercise, GymProgram, JournalEntry, StudyResource, StudySubject } from '@/types';
 import { saveModuleData, loadModuleData } from '@/lib/storage';
 import { formatDate } from '@/lib/dateUtils';
 
@@ -308,7 +308,7 @@ export function useModuleState() {
     });
   }, []);
 
-  const addStudyResource = useCallback((subjectId: string, resource: any) => {
+  const addStudyResource = useCallback((subjectId: string, resource: Omit<StudyResource, 'id'>) => {
     setModState(prev => {
       const subjects = prev.study.subjects.map(s => {
         if (s.id !== subjectId) return s;
@@ -331,7 +331,7 @@ export function useModuleState() {
   }, []);
 
   // Journal
-  const saveJournalEntry = useCallback((date: string, content: string, mood?: string, title?: string, gratitude?: string[], weather?: string, location?: string, paperStyle?: any, quote?: string, color?: string) => {
+  const saveJournalEntry = useCallback((date: string, content: string, mood?: string, title?: string, gratitude?: string[], weather?: string, location?: string, paperStyle?: JournalEntry['paperStyle'], quote?: string, color?: string) => {
     setModState(prev => {
       const entries = { ...prev.journal.entries };
       const id = entries[date]?.id || 'jrnl_' + Date.now();

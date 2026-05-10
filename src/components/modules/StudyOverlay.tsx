@@ -2,8 +2,10 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { Book, Play, Pause, RotateCcw, Plus, History, Library, Trash2, Calendar, Music, Trophy, Upload, CheckCircle2, TrendingUp, Zap, Clock, Settings, AlertCircle, Target, Maximize2, Minimize2 } from 'lucide-react';
-import type { ModuleState, StudySubject } from '@/types';
+import type { ModuleState, PlannerEvent } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
+
+type StudyEventPreset = Pick<PlannerEvent, 'id' | 'name'>;
 
 interface Props {
   active: boolean;
@@ -14,7 +16,7 @@ interface Props {
   onAddSession: (subjectId: string, duration: number, topic?: string, questions?: number) => void;
   onAddSubject: (name: string, color: string) => void;
   onDeleteSubject: (id: string) => void;
-  onAddEvent?: (event: any) => void;
+  onAddEvent?: (event: PlannerEvent | StudyEventPreset) => void;
 }
 
 export default function StudyOverlay({

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, type CSSProperties } from 'react';
 import type { ModuleState, JournalEntry } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
 import { 
@@ -13,9 +13,13 @@ interface Props {
   active: boolean;
   modState: ModuleState;
   onClose: () => void;
-  onSaveEntry: (date: string, content: string, mood?: string, title?: string, gratitude?: string[], weather?: string, location?: string, paperStyle?: any, quote?: string, color?: string) => void;
+  onSaveEntry: (date: string, content: string, mood?: string, title?: string, gratitude?: string[], weather?: string, location?: string, paperStyle?: JournalEntry['paperStyle'], quote?: string, color?: string) => void;
   onDeleteEntry: (date: string) => void;
 }
+
+type JournalPaperStyle = NonNullable<JournalEntry['paperStyle']>;
+type MoodColorStyle = CSSProperties & Record<'--mood-color', string>;
+type BookColorStyle = CSSProperties & Record<'--book-color', string>;
 
 const MOODS = [
   { icon: <Smile />, label: 'Mutlu', val: 'happy', color: '#10b981' },
@@ -181,8 +185,8 @@ export default function JournalOverlay({ active, modState, onClose, onSaveEntry,
                     <span><Feather size={14} /> {Math.ceil(wordCount / 200)} dk okuma</span>
                   </div>
                   <div className="paper-style-selector">
-                    {['lined', 'grid', 'dots', 'blank'].map(s => (
-                      <button key={s} className={paperStyle === s ? 'active' : ''} onClick={() => setPaperStyle(s as any)} />
+                    {(['lined', 'grid', 'dots', 'blank'] as JournalPaperStyle[]).map(s => (
+                      <button key={s} className={paperStyle === s ? 'active' : ''} onClick={() => setPaperStyle(s)} />
                     ))}
                   </div>
                 </div>
@@ -229,7 +233,7 @@ export default function JournalOverlay({ active, modState, onClose, onSaveEntry,
               <div className="card-header"><h3>Ruh Halim</h3><Heart size={16} /></div>
               <div className="mood-grid">
                 {MOODS.map(m => (
-                  <button key={m.val} onClick={() => setMood(m.val)} className={`mood-btn ${mood === m.val ? 'active' : ''}`} style={{ '--mood-color': m.color } as any}>
+                  <button key={m.val} onClick={() => setMood(m.val)} className={`mood-btn ${mood === m.val ? 'active' : ''}`} style={{ '--mood-color': m.color } as MoodColorStyle}>
                     {m.icon}<span>{m.label}</span>
                   </button>
                 ))}
@@ -266,7 +270,7 @@ export default function JournalOverlay({ active, modState, onClose, onSaveEntry,
                       key={e.date} 
                       onClick={() => setSelectedDate(e.date)}
                       className={`mini-book ${selectedDate === e.date ? 'active' : ''}`}
-                      style={{ '--book-color': e.color || '#111827' } as any}
+                      style={{ '--book-color': e.color || '#111827' } as BookColorStyle}
                     >
                       <div className="book-cover">
                         <div className="book-spine" />
