@@ -5,7 +5,8 @@ import type { ModuleState, JournalEntry } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
 import { 
   Book, Save, Trash2, Smile, Meh, Frown, Sparkles, 
-  MapPin, Cloud, Quote, Hash, Heart, RefreshCw, Feather
+  MapPin, Cloud, Quote, Hash, Heart, RefreshCw, Feather,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 interface Props {
