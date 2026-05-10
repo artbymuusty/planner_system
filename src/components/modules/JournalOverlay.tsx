@@ -236,18 +236,6 @@ export default function JournalOverlay({ active, modState, onClose, onSaveEntry,
               </div>
             </div>
 
-            {/* Gratitude */}
-            <div className="module-card journal-card">
-              <div className="card-header"><h3>Şükran Köşesi</h3><Sparkles size={16} /></div>
-              <div className="gratitude-list">
-                {[0,1,2].map(i => (
-                  <input key={i} placeholder="Mutluluk sebebi..." value={gratitude[i]} onChange={e => {
-                    const next = [...gratitude]; next[i] = e.target.value; setGratitude(next);
-                  }} />
-                ))}
-              </div>
-            </div>
-
             {/* Past Books Library - Horizontal */}
             <div className="module-card journal-card" style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
               <div className="card-header" style={{ marginBottom: 10 }}>

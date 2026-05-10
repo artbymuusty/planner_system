@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { Book, Play, Pause, RotateCcw, Plus, History, Library, Trash2, Calendar, Music, Trophy, Upload, CheckCircle2, TrendingUp, Zap, Clock, Settings, AlertCircle } from 'lucide-react';
+import { Book, Play, Pause, RotateCcw, Plus, History, Library, Trash2, Calendar, Music, Trophy, Upload, CheckCircle2, TrendingUp, Zap, Clock, Settings, AlertCircle, Target, Maximize2, Minimize2 } from 'lucide-react';
 import type { ModuleState, StudySubject } from '@/types';
 import { formatDate } from '@/lib/dateUtils';
 
 interface Props {
   active: boolean;
   modState: ModuleState;
+  focusMode: boolean;
+  onToggleFocus: () => void;
   onClose: () => void;
   onAddSession: (subjectId: string, duration: number, topic?: string, questions?: number) => void;
   onAddSubject: (name: string, color: string) => void;
@@ -15,9 +17,10 @@ interface Props {
   onAddEvent?: (event: any) => void;
 }
 
-export default function StudyOverlay({ 
-  active, modState, onClose, onAddSession, onAddSubject, onDeleteSubject, onAddEvent 
+export default function StudyOverlay({
+  active, modState, focusMode, onToggleFocus, onClose, onAddSession, onAddSubject, onDeleteSubject, onAddEvent
 }: Props) {
+  const [pomodoroFullscreen, setPomodoroFullscreen] = useState(false);
   const [activeSubjectId, setActiveSubjectId] = useState<string | null>(null);
   const [showAddSubject, setShowAddSubject] = useState(false);
   const [newSubName, setNewSubName] = useState('');
@@ -166,14 +169,37 @@ export default function StudyOverlay({
 
       <div className="module-body" style={{ padding: '24px 40px' }}>
         {/* Bookshelf */}
-        <div className="library-shelf-container" style={{ marginBottom: 40 }}>
+        <div className="library-shelf-container" style={{ marginBottom: 40, display: pomodoroFullscreen ? 'none' : 'block' }}>
           <div className="shelf-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#475569' }}>Ders Rafları</span>
             </div>
-            <button className="m-btn primary" onClick={() => setShowAddSubject(true)} style={{ background: '#6366f1', borderRadius: 12 }}>
-              <Plus size={18} /> Yeni Ders Ekle
-            </button>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                className="m-btn"
+                onClick={() => {
+                  // Odak modu kapanırken pomodoro tam ekran da otomatik kapansın (tam ekran, odak modunu içerir)
+                  if (focusMode && pomodoroFullscreen) setPomodoroFullscreen(false);
+                  onToggleFocus();
+                }}
+                title="Odak Modu — sidebar ve üst barı gizler"
+                style={{
+                  background: focusMode ? 'rgba(239,68,68,0.1)' : '#f1f5f9',
+                  color: focusMode ? '#ef4444' : '#475569',
+                  border: focusMode ? '1px solid rgba(239,68,68,0.3)' : '1px solid #e2e8f0',
+                  borderRadius: 12,
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                <Target size={18} /> {focusMode ? 'Odak Modunu Kapat' : 'Odak Modu'}
+              </button>
+              <button className="m-btn primary" onClick={() => setShowAddSubject(true)} style={{ background: '#6366f1', borderRadius: 12 }}>
+                <Plus size={18} /> Yeni Ders Ekle
+              </button>
+            </div>
           </div>
 
           <div className="shelf-row" style={{ 
@@ -189,7 +215,7 @@ export default function StudyOverlay({
           </div>
         </div>
 
-        <div className="module-grid" style={{ gridTemplateColumns: '1fr 380px', gap: 30 }}>
+        <div className="module-grid" style={{ gridTemplateColumns: pomodoroFullscreen ? '1fr' : '1fr 380px', gap: 30 }}>
           {/* Work Panel */}
           <div className="module-card" style={{ background: '#fff', padding: 30, borderRadius: 24, border: '1px solid #f1f5f9', boxShadow: '0 10px 40px rgba(0,0,0,0.03)' }}>
             {activeSubject ? (
@@ -200,6 +226,27 @@ export default function StudyOverlay({
                     <p style={{ margin: 0, color: '#64748b', fontWeight: 600 }}>Çalışma Masasındasın</p>
                   </div>
                   <div style={{ display: 'flex', gap: 10 }}>
+                     <button
+                        className="m-btn"
+                        onClick={() => {
+                          // Tam ekran açılırken odak modu da otomatik açılsın; kapanırken odak modu da kapansın.
+                          const next = !pomodoroFullscreen;
+                          setPomodoroFullscreen(next);
+                          if (next && !focusMode) onToggleFocus();
+                          if (!next && focusMode) onToggleFocus();
+                        }}
+                        title={pomodoroFullscreen ? 'Tam Ekrandan Çık' : 'Pomodoroyu Tam Ekran Yap'}
+                        style={{
+                          background: pomodoroFullscreen ? 'rgba(99,102,241,0.1)' : '#f1f5f9',
+                          color: pomodoroFullscreen ? '#6366f1' : '#475569',
+                          border: 'none',
+                          width: 45,
+                          height: 45,
+                          borderRadius: 12,
+                        }}
+                     >
+                        {pomodoroFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                     </button>
                      <button className="m-btn secondary" onClick={() => onAddEvent?.({ id: 'study_preset_' + activeSubject.id, name: activeSubject.name })} title="Takvime Planla" style={{ background: '#f1f5f9', color: '#6366f1', border: 'none', width: 45, height: 45, borderRadius: 12 }}>
                         <Calendar size={20} />
                      </button>
@@ -290,7 +337,7 @@ export default function StudyOverlay({
           </div>
 
           {/* Sidebar */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div style={{ display: pomodoroFullscreen ? 'none' : 'flex', flexDirection: 'column', gap: 20 }}>
             {/* Performance Stats */}
             <div className="module-card" style={{ background: '#fff', padding: 24, borderRadius: 24, border: '1px solid #f1f5f9' }}>
                <h3 style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '1.1rem', fontWeight: 900, marginBottom: 20 }}>

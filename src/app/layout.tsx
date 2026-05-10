@@ -4,6 +4,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Hackathon Planner - Haftalık Takvim",
   description: "Hackathon Planner - Haftalık takvim ve görev yönetimi uygulaması",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

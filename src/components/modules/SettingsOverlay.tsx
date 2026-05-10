@@ -145,6 +145,114 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
 
       <div style={{ padding: '24px 28px 28px', maxWidth: 720 }}>
 
+        {/* === OpenAI API Key Kartı === */}
+        <div className="module-card">
+          <h3 style={{ borderLeftColor: '#6366f1', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Key size={16} /> OpenAI API Key
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 14 }}>
+            AI destekli özellikler (öneri, analiz, sohbet vb.) için kullanılır. Anahtarın sadece bu cihazın
+            tarayıcısındaki <code>localStorage</code>&apos;ında saklanır, sunucuya gönderilmez. Anahtarı buradan
+            <strong> kaydedebilir, gizleyebilir, test edebilir veya silebilirsin.</strong>
+          </p>
+
+          {/* Kayıtlı key görünümü */}
+          {stored ? (
+            <div className="settings-key-row">
+              <div className="settings-key-display">
+                <span className="settings-key-label">Kayıtlı Anahtar</span>
+                <span className="settings-key-value">{display}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  type="button"
+                  className="settings-key-eye"
+                  onClick={() => setReveal(r => !r)}
+                  title={reveal ? 'Gizle' : 'Göster'}
+                >
+                  {reveal ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+                <button
+                  type="button"
+                  className="settings-key-clear"
+                  onClick={handleClear}
+                  title="Anahtarı sil"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{
+              padding: '12px 14px', background: '#fff7ed', border: '1px dashed #fbbf24',
+              borderRadius: 12, color: '#92400e', fontSize: '0.85rem', marginBottom: 12,
+            }}>
+              ℹ️ Henüz kayıtlı bir anahtar yok. Aşağıdan ekleyebilirsin.
+            </div>
+          )}
+
+          {/* Yeni key ekleme inputu */}
+          <div className="settings-key-input-row">
+            <input
+              type="password"
+              className="settings-key-input"
+              placeholder={stored ? 'Yeni anahtarla değiştir (sk-... )' : 'sk-proj-... veya sk-...'}
+              value={draft}
+              onChange={e => setDraft(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') handleSave(); }}
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button
+              type="button"
+              className="m-btn primary"
+              onClick={handleSave}
+              disabled={!draft.trim()}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+            >
+              <Save size={14} />
+              {savedTick ? 'Kaydedildi ✓' : 'Kaydet'}
+            </button>
+          </div>
+
+          {/* Test bağlantı butonu */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="m-btn secondary"
+              onClick={handleTest}
+              disabled={test.status === 'loading' || !stored}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              title={!stored ? 'Önce bir anahtar kaydet' : 'Anahtarı test et'}
+            >
+              {test.status === 'loading'
+                ? (<><Loader2 size={14} className="spin" /> Test ediliyor...</>)
+                : (<><Zap size={14} /> Bağlantıyı Test Et</>)}
+            </button>
+
+            {test.status === 'ok' && (
+              <span style={{
+                fontSize: '0.8rem', color: '#16a34a', background: 'rgba(34,197,94,0.1)',
+                padding: '6px 10px', borderRadius: 8, fontWeight: 700,
+              }}>
+                ✓ Çalışıyor — model: <code>{test.model}</code>{test.source ? ` · kaynak: ${test.source}` : ''}
+                {test.text && test.text !== 'OK' ? ` · yanıt: "${test.text.slice(0, 30)}"` : ''}
+              </span>
+            )}
+            {test.status === 'error' && (
+              <span style={{
+                fontSize: '0.8rem', color: '#dc2626', background: 'rgba(239,68,68,0.1)',
+                padding: '6px 10px', borderRadius: 8, fontWeight: 700,
+              }}>
+                ✗ Hata: {test.message}
+              </span>
+            )}
+          </div>
+
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 12 }}>
+            🔑 Anahtarını <a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer" style={{ color: '#6366f1', fontWeight: 700 }}>platform.openai.com/api-keys</a> üzerinden alabilirsin.
+          </p>
+        </div>
 
         {/* === Test & Sıfırlama Kartı === */}
         <div className="module-card" style={{ marginTop: 16 }}>

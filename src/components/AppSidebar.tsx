@@ -1,18 +1,16 @@
 'use client';
 
-import { BarChart3, Cake, Dumbbell, Droplets, Home, Moon, Pill, Settings, Wallet, Book, Target, Library, PenTool } from 'lucide-react';
+import { BarChart3, Cake, Dumbbell, Droplets, Home, Moon, Pill, Settings, Wallet, Book, Library, PenTool } from 'lucide-react';
 import type { ActiveModule } from '@/types';
 
 interface Props {
   activeModule: ActiveModule;
   onHome: () => void;
   onModule: (mod: ActiveModule) => void;
-  focusMode: boolean;
-  onToggleFocus: () => void;
 }
 
 export default function AppSidebar({
-  activeModule, onHome, onModule, focusMode, onToggleFocus
+  activeModule, onHome, onModule
 }: Props) {
   return (
     <aside className="sidebar" id="sidebar">
@@ -46,15 +44,6 @@ export default function AppSidebar({
       </div>
 
       <div className="sidebar-bottom">
-        <button
-          className={`sidebar-btn${focusMode ? ' active' : ''}`}
-          style={focusMode ? { color: '#ef4444', background: 'rgba(239,68,68,0.1)' } : {}}
-          id="focusBtn"
-          title="Odak Modu"
-          onClick={onToggleFocus}
-        >
-          <Target />
-        </button>
         <button
           className={`sidebar-btn${activeModule === 'settings' ? ' active' : ''}`}
           id="settingsBtn"

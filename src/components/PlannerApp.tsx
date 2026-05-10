@@ -31,6 +31,8 @@ import SleepOverlay from '@/components/modules/SleepOverlay';
 import GoalsOverlay from '@/components/modules/GoalsOverlay';
 import SettingsOverlay from '@/components/modules/SettingsOverlay';
 import JournalOverlay from '@/components/modules/JournalOverlay';
+import AssistantWidget from '@/components/AssistantWidget';
+import { useProactiveAssistant, type ProactiveMessage } from '@/hooks/useProactiveAssistant';
 
 import { seedScenario, emptyModuleState } from '@/lib/seedScenario';
 import { OPENAI_KEY_STORAGE } from '@/lib/openaiClient';
@@ -48,6 +50,16 @@ export default function PlannerApp() {
   const [addPreset, setAddPreset] = useState<AddEventPreset | null>(null);
   const [hiddenCategories, setHiddenCategories] = useState<EventCategory[]>([]);
   const [focusMode, setFocusMode] = useState(false);
+  const [proactiveMsgs, setProactiveMsgs] = useState<ProactiveMessage[]>([]);
+
+  // Proaktif asistan — uygulama state'ini izleyip uygun anlarda mesaj gönderir
+  useProactiveAssistant(
+    planner.state.events,
+    modules.modState,
+    useCallback((msg: ProactiveMessage) => {
+      setProactiveMsgs(prev => [...prev, msg]);
+    }, [])
+  );
 
   const toggleCategory = useCallback((cat: EventCategory) => {
     setHiddenCategories(prev => 
@@ -275,8 +287,6 @@ export default function PlannerApp() {
         activeModule={activeModule}
         onHome={() => setActiveModule(null)}
         onModule={mod => setActiveModule(prev => prev === mod ? null : mod)}
-        focusMode={focusMode}
-        onToggleFocus={() => setFocusMode(p => !p)}
       />
 
       <main className="main-area">
@@ -435,7 +445,9 @@ export default function PlannerApp() {
       <StudyOverlay
         active={activeModule === 'study'}
         modState={modules.modState}
-        onClose={() => setActiveModule(null)}
+        focusMode={focusMode}
+        onToggleFocus={() => setFocusMode(p => !p)}
+        onClose={() => { setFocusMode(false); setActiveModule(null); }}
         onAddSession={modules.addStudySession}
         onAddSubject={modules.addStudySubject}
         onDeleteSubject={modules.deleteStudySubject}
@@ -482,6 +494,14 @@ export default function PlannerApp() {
       />
 
       <GuidedTour active={showTour} onEnd={() => setShowTour(false)} />
+
+      <AssistantWidget
+        onOpenSettings={() => setActiveModule('settings')}
+        proactiveMessages={proactiveMsgs}
+        events={planner.state.events}
+        modState={modules.modState}
+        currentWeekStart={planner.state.currentWeekStart}
+      />
     </div>
   );
 }
