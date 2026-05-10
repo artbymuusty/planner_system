@@ -55,6 +55,13 @@ export default function TopBar({ view, onViewChange, onTour, onProfile, userName
           aria-label="Bildirimler"
           title="Bildirimler"
           className="topbar-icon-btn"
+          onClick={() => {
+            const el = document.createElement('div');
+            el.className = 'notification info';
+            el.innerText = 'Okunmamış bildiriminiz yok.';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 4500);
+          }}
         >
           <BellIcon strokeWidth={2} />
         </button>

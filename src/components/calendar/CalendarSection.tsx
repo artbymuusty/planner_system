@@ -22,6 +22,7 @@ interface Props {
   /** Boş slot tıklaması — pre-filled add modal aç. */
   onSlotClick?: (dateStr: string, hour: number, minute: number) => void;
   getBirthdayBanners?: (dateStr: string) => { name: string }[];
+  onEventDrop?: (id: string, newDate: string, newStartH: number, newStartM: number) => void;
 }
 
 /**
@@ -60,6 +61,7 @@ function WeekView({
   onSplit,
   onSlotClick,
   getBirthdayBanners,
+  onEventDrop,
 }: Props) {
   const dates = getWeekDates(anchorDate);
 
@@ -100,20 +102,49 @@ function WeekView({
               className={`day-column${today ? ' today-col' : ''}${past ? ' past-col' : ''}`}
               data-date={dateStr}
             >
-              <AllDayShelf
-                bdays={bdays}
-                tasks={allDayItems}
-                onEventClick={onEventClick}
-                onComplete={onComplete}
-                onPostpone={onPostpone}
-                onSplit={onSplit}
-                deleteMode={deleteMode}
-                onDelete={onDeleteEvent}
-              />
+              <div
+                className="day-column-header-area"
+                onDragOver={e => e.preventDefault()}
+                onDrop={e => {
+                  e.preventDefault();
+                  const eventId = e.dataTransfer.getData('text/plain');
+                  if (eventId && onEventDrop) {
+                    onEventDrop(eventId, dateStr, 9, 0); // Varsayılan başlangıç saati
+                  }
+                }}
+              >
+                <AllDayShelf
+                  bdays={bdays}
+                  tasks={allDayItems}
+                  onEventClick={onEventClick}
+                  onComplete={onComplete}
+                  onPostpone={onPostpone}
+                  onSplit={onSplit}
+                  deleteMode={deleteMode}
+                  onDelete={onDeleteEvent}
+                />
+              </div>
 
               <div
                 className="time-grid"
                 style={{ minHeight: (END_HOUR - START_HOUR + 1) * HOUR_HEIGHT }}
+                onDragOver={e => e.preventDefault()}
+                onDrop={e => {
+                  e.preventDefault();
+                  const eventId = e.dataTransfer.getData('text/plain');
+                  if (!eventId || !onEventDrop) return;
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const offsetY = e.clientY - rect.top;
+                  
+                  // offsetY to hour & minute
+                  const totalHours = offsetY / HOUR_HEIGHT;
+                  const targetStartHourFloat = START_HOUR + totalHours;
+                  
+                  let newStartH = Math.floor(targetStartHourFloat);
+                  let newStartM = (targetStartHourFloat % 1) < 0.5 ? 0 : 30;
+
+                  onEventDrop(eventId, dateStr, newStartH, newStartM);
+                }}
               >
                 <SlotGrid
                   dateStr={dateStr}
@@ -513,6 +544,13 @@ function EventCard({
       className={`event-card ${importanceClass(ev)}${completedCls}${ppClass}${kindClass}${wide ? ' wide' : ''}`}
       style={{ top, height, borderLeftColor: catColor }}
       data-id={ev.id}
+      draggable={!deleteMode}
+      onDragStart={e => {
+        if (!deleteMode) {
+          e.dataTransfer.setData('text/plain', ev.id);
+          e.dataTransfer.effectAllowed = 'move';
+        }
+      }}
       onClick={e => { e.stopPropagation(); onClick(); }}
     >
       {ppCount > 0 && (

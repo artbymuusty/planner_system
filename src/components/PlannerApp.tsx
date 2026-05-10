@@ -142,6 +142,61 @@ export default function PlannerApp() {
     ? planner.state.events.find(e => e.id === planner.state.pendingDeleteId)
     : null;
 
+  const handleEventDrop = useCallback((id: string, newDate: string, newStartH: number, newStartM: number) => {
+    const event = planner.state.events.find(e => e.id === id);
+    if (!event) return;
+
+    // Calculate original duration in minutes
+    const [origSh, origSm] = event.startTime.split(':').map(Number);
+    const [origEh, origEm] = event.endTime.split(':').map(Number);
+    const durationMinutes = (origEh * 60 + origEm) - (origSh * 60 + origSm);
+
+    // Calculate new end time
+    const newEndTotalMins = (newStartH * 60 + newStartM) + durationMinutes;
+    let newEndH = Math.floor(newEndTotalMins / 60);
+    let newEndM = newEndTotalMins % 60;
+    
+    // Bounds check
+    if (newEndH > 23) {
+      newEndH = 23;
+      newEndM = 59;
+    }
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const newStartTime = `${pad(newStartH)}:${pad(newStartM)}`;
+    const newEndTime = `${pad(newEndH)}:${pad(newEndM)}`;
+
+    // Çakışma kontrolü (aynı günde başka event var mı)
+    const hasConflict = planner.state.events.some(e => {
+      if (e.id === id) return false;
+      if (e.date !== newDate || e.allDay) return false;
+      const [sh, sm] = e.startTime.split(':').map(Number);
+      const [eh, em] = e.endTime.split(':').map(Number);
+      const eStart = sh * 60 + sm;
+      const eEnd = eh * 60 + em;
+      const nStart = newStartH * 60 + newStartM;
+      const nEnd = newEndH * 60 + newEndM;
+
+      return (nStart < eEnd && nEnd > eStart);
+    });
+
+    if (hasConflict) {
+      const el = document.createElement('div');
+      el.className = 'notification warning';
+      el.innerText = 'Bu saatte başka bir etkinlik var! Çakışma olduğu için taşıma iptal edildi.';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+      return;
+    }
+
+    planner.updateEvent({
+      ...event,
+      date: newDate,
+      startTime: newStartTime,
+      endTime: newEndTime
+    });
+  }, [planner]);
+
   // Anchor date is currentWeekStart (it's the date around which day/month views revolve too)
   const anchorDate = planner.state.currentWeekStart;
 
@@ -205,6 +260,7 @@ export default function PlannerApp() {
               onSplit={handleSplitClick}
               onSlotClick={handleSlotClick}
               getBirthdayBanners={getBirthdayBanners}
+              onEventDrop={handleEventDrop}
             />
           </div>
         </div>

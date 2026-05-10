@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart3, Cake, Dumbbell, Droplets, Home, Moon, Pill, Target, Wallet } from 'lucide-react';
+import { BarChart3, Cake, Dumbbell, Droplets, Home, Moon, Pill, Wallet } from 'lucide-react';
 import type { ActiveModule } from '@/types';
 
 interface Props {
@@ -30,13 +30,12 @@ export default function AppSidebar({
         <button className={`sidebar-btn${activeModule === 'water' ? ' active' : ''}`} id="waterBtn" title="Su" onClick={() => onModule('water')}>
           <Droplets />
         </button>
-        <button className={`sidebar-btn${activeModule === 'gym' ? ' active' : ''}`} id="gymBtn" title="Gym" onClick={() => onModule('gym')}>
+        <button className={`sidebar-btn${activeModule === 'gym' ? ' active' : ''}`} id="gymBtn" title="Spor Takibi" onClick={() => onModule('gym')}>
           <Dumbbell />
         </button>
         <button className={`sidebar-btn bday-btn${activeModule === 'birthday' ? ' active' : ''}`} id="birthdayBtn" title="Doğum Günleri" onClick={() => onModule('birthday')}><Cake /></button>
         <button className={`sidebar-btn${activeModule === 'budget' ? ' active' : ''}`} id="budgetBtn" title="Bütçe" onClick={() => onModule('budget')}><Wallet /></button>
         <button className={`sidebar-btn${activeModule === 'sleep' ? ' active' : ''}`} id="sleepBtn" title="Uyku" onClick={() => onModule('sleep')}><Moon /></button>
-        <button className={`sidebar-btn${activeModule === 'goals' ? ' active' : ''}`} id="goalsBtn" title="Hedefler" onClick={() => onModule('goals')}><Target /></button>
         <button className={`sidebar-btn${activeModule === 'statistics' ? ' active' : ''}`} id="statisticsBtn" title="İstatistikler" onClick={() => onModule('statistics')}>
           <BarChart3 />
         </button>

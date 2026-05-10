@@ -18,7 +18,6 @@ const TOUR_STEPS: TourStep[] = [
   { target: '#birthdayBtn', title: '🎂 Doğum Günleri', desc: 'Yakınlarınızın doğum günlerini ekleyin, hediye takibi yapın. Takvimde üst kısımda banner olarak görünür.', pos: 'right' },
   { target: '#budgetBtn', title: '💰 Bütçe & Alışveriş', desc: 'Aylık gelir ve harcamalarınızı takip edin. Market alışveriş listeleri oluşturup takvimde gösterin.', pos: 'right' },
   { target: '#sleepBtn', title: '😴 Uyku Takibi', desc: 'Uyku saatlerinizi kaydedin, detaylı sağlık raporu alın. Yetersiz uykunun etkilerini görün.', pos: 'right' },
-  { target: '#goalsBtn', title: '🎯 Hedef Takibi', desc: 'Kişisel hedefler belirleyin ve ilerlemenizi takip edin. Motivasyon mesajları ile hedefe ulaşın!', pos: 'right' },
   { target: '#statisticsBtn', title: '📊 İstatistikler', desc: 'Tamamlanma ve erteleme analizlerini ayrı panelde görüntüleyebilirsiniz.', pos: 'right' },
 ];
 

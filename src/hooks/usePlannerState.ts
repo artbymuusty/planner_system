@@ -58,6 +58,14 @@ export function usePlannerState() {
     });
   }, [saveAndUpdate]);
 
+  const updateEvent = useCallback((updatedEvent: PlannerEvent) => {
+    setState(prev => {
+      const events = prev.events.map(e => e.id === updatedEvent.id ? updatedEvent : e);
+      saveAndUpdate(events, prev.user);
+      return { ...prev, events };
+    });
+  }, [saveAndUpdate]);
+
   const toggleComplete = useCallback((id: string) => {
     setState(prev => {
       const events = prev.events.map(e =>
@@ -166,6 +174,7 @@ export function usePlannerState() {
     setCurrentDate,
     addEvent,
     addEvents,
+    updateEvent,
     toggleComplete,
     deleteEvent,
     removeEventsByModule,

@@ -191,5 +191,19 @@ export interface ModuleState {
   goals: Goal[];
 }
 
+// Weekly Tracker types
+export interface WeeklyHabit {
+  id: string;
+  name: string;
+  /** Hangi günlerde tamamlandı — key: "YYYY-MM-DD" */
+  completedDays: Record<string, boolean>;
+}
+
+export interface WeeklyTodo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
 export type ActiveModule = 'medicine' | 'water' | 'gym' | 'birthday' | 'budget' | 'sleep' | 'goals' | 'statistics' | null;
 export type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null;
