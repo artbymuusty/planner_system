@@ -32,7 +32,7 @@ import GoalsOverlay from '@/components/modules/GoalsOverlay';
 import SettingsOverlay from '@/components/modules/SettingsOverlay';
 import JournalOverlay from '@/components/modules/JournalOverlay';
 import AssistantWidget from '@/components/AssistantWidget';
-import { useProactiveAssistant, type ProactiveMessage } from '@/hooks/useProactiveAssistant';
+import { useProactiveAssistant, clearProactiveStorage, type ProactiveMessage } from '@/hooks/useProactiveAssistant';
 
 import { seedScenario, emptyModuleState } from '@/lib/seedScenario';
 import { OPENAI_KEY_STORAGE } from '@/lib/openaiClient';
@@ -277,12 +277,14 @@ export default function PlannerApp() {
     const seed = seedScenario();
     planner.replaceAll(seed.events, seed.user);
     modules.save(seed.modules);
+    clearProactiveStorage();
     setActiveModule(null); // Ana sayfaya dön ki kullanıcı sonucu görsün
   }, [planner, modules]);
 
   const handleResetAll = useCallback(() => {
     planner.replaceAll([], null);
     modules.save(emptyModuleState());
+    clearProactiveStorage();
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(OPENAI_KEY_STORAGE);
     }

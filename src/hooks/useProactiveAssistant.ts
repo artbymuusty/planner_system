@@ -29,9 +29,18 @@ export interface ProactiveMessage {
   timestamp: number;
 }
 
-const DAILY_CAP = 5;
+const DAILY_CAP = 10;
 const STORAGE_PREFIX = 'proactive_';
 const COUNT_PREFIX = 'proactive_count_';
+
+export function clearProactiveStorage() {
+  if (typeof window === 'undefined') return;
+  try {
+    Object.keys(window.localStorage)
+      .filter(k => k.startsWith(STORAGE_PREFIX) || k.startsWith(COUNT_PREFIX))
+      .forEach(k => window.localStorage.removeItem(k));
+  } catch { /* ignore */ }
+}
 
 function todayKey(): string {
   return formatDate(new Date());
@@ -49,12 +58,14 @@ function lsSet(key: string, val: string) {
 function shouldFire(
   triggerType: string,
   mode: 'daily' | 'once',
-  uniqueKey?: string
+  uniqueKey?: string,
+  skipCap = false
 ): boolean {
   const today = todayKey();
-  // Daily cap
-  const count = parseInt(lsGet(`${COUNT_PREFIX}${today}`) || '0', 10);
-  if (count >= DAILY_CAP) return false;
+  if (!skipCap) {
+    const count = parseInt(lsGet(`${COUNT_PREFIX}${today}`) || '0', 10);
+    if (count >= DAILY_CAP) return false;
+  }
   const lsKey = mode === 'daily'
     ? `${STORAGE_PREFIX}${triggerType}_${today}`
     : `${STORAGE_PREFIX}${triggerType}_${uniqueKey || ''}`;
@@ -105,9 +116,10 @@ export function useProactiveAssistant(
       triggerType: string,
       mode: 'daily' | 'once',
       builder: () => Promise<string> | string,
-      uniqueKey?: string
+      uniqueKey?: string,
+      skipCap = false
     ) => {
-      if (!shouldFire(triggerType, mode, uniqueKey)) return;
+      if (!shouldFire(triggerType, mode, uniqueKey, skipCap)) return;
       try {
         const text = (await builder())?.trim();
         if (!text) return;
@@ -151,7 +163,7 @@ export function useProactiveAssistant(
               if (res.text) return res.text;
             } catch {}
             return `"${e.name}" görevini 2. kez erteledin 🤔 Sebebi neydi? Belki birlikte ufak bir çözüm bulabiliriz.`;
-          }, e.id);
+          }, e.id, true);
         } else if (newCount >= 3) {
           emit('postpone3', 'once', async () => {
             try {
@@ -167,7 +179,7 @@ export function useProactiveAssistant(
               `"${e.name}" görevini ${newCount}. kez erteledin. Belki büyük geliyor — küçük parçalara bölmeyi düşündün mü?\n\n` +
               `• Görevin ilk 15 dakikalık parçasını yap\n• Sonra hızlı bir mola ver\n• Bir sonraki adımı belirle`
             );
-          }, `${e.id}_${newCount}`);
+          }, `${e.id}_${newCount}`, true);
         }
       });
     }
@@ -227,6 +239,7 @@ export function useProactiveAssistant(
   // 7: Spor — son antrenman günlerinde kayıt yok
   // -------------------------------------------------------------------
   useEffect(() => {
+    if (!modState.gym?.activeProgram) return;
     const log = modState.gym?.exerciseLog || {};
     let skipped = 0;
     for (let i = 1; i <= 10 && skipped < 3; i++) {
