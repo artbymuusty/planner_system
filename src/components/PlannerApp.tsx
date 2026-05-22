@@ -311,13 +311,14 @@ export default function PlannerApp() {
     planner.setCurrentDate(getMonday(parsed));
   }, [planner]);
 
-  const { streak } = useMemo(() => computeStreak(planner.state.events), [planner.state.events]);
-  const waterPercent = useMemo(() => {
-    const today = formatDate(new Date());
-    const consumed = modules.modState.water.log[today]?.total || 0;
-    const goal = modules.modState.water.dailyGoal || 2500;
-    return Math.min(Math.round((consumed / goal) * 100), 100);
-  }, [modules.modState.water]);
+  // Unused state values commented out to prevent ESLint warnings
+  // const { streak } = useMemo(() => computeStreak(planner.state.events), [planner.state.events]);
+  // const waterPercent = useMemo(() => {
+  //   const today = formatDate(new Date());
+  //   const consumed = modules.modState.water.log[today]?.total || 0;
+  //   const goal = modules.modState.water.dailyGoal || 2500;
+  //   return Math.min(Math.round((consumed / goal) * 100), 100);
+  // }, [modules.modState.water]);
 
   return (
     <div className={`app-container${focusMode ? ' focus-mode' : ''}`}>
