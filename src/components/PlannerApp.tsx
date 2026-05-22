@@ -41,7 +41,7 @@ type ActiveModal = 'login' | 'addEvent' | 'delete' | 'postpone' | 'split' | null
 
 declare global {
   interface Window {
-    setActiveModule: (mod: ActiveModule) => void;
+    setActiveModule?: (mod: ActiveModule) => void;
   }
 }
 
@@ -73,7 +73,7 @@ export default function PlannerApp() {
 
   useEffect(() => {
     window.setActiveModule = setActiveModule;
-    return () => { (window as any).setActiveModule = undefined; };
+    return () => { window.setActiveModule = undefined; };
   }, []);
 
   const toggleCategory = useCallback((cat: EventCategory) => {
