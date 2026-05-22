@@ -329,31 +329,34 @@ export default function CalSidebar({
   return (
     <aside className="cal-sidebar">
       {/* Mini Calendar */}
-      <div className="mini-cal-nav">
-        <span className="mini-cal-month">{MONTHS_TR[month]} {year}</span>
-        <div className="mini-cal-nav-actions">
-          <button onClick={onPrev} className="mini-cal-nav-btn" aria-label="Önceki"><ChevronLeft size={16} /></button>
-          <button onClick={onNext} className="mini-cal-nav-btn" aria-label="Sonraki"><ChevronRight size={16} /></button>
+      <div className="mini-cal-container">
+        <div className="mini-cal-nav">
+          <span className="mini-cal-month">{MONTHS_TR[month]} {year}</span>
+          <div className="mini-cal-nav-actions">
+            <button onClick={onPrev} className="mini-cal-nav-btn" aria-label="Önceki"><ChevronLeft size={16} /></button>
+            <button onClick={onNext} className="mini-cal-nav-btn" aria-label="Sonraki"><ChevronRight size={16} /></button>
+          </div>
+        </div>
+        <div className="mini-cal-grid">
+          {DAY_HEADERS.map(h => (<div key={h} className="mini-cal-day-header">{h}</div>))}
+          {prevMonthDays.map((d, i) => (<div key={`prev-${i}`} className="mini-cal-day other-month">{d}</div>))}
+          {currentDays.map(({ day, date, dStr, todayFlag, inWeek, hasEv, routineStatus }) => {
+            let cls = 'mini-cal-day';
+            if (todayFlag) cls += ' today';
+            else if (inWeek) cls += ' current-week';
+            if (hasEv) cls += ' has-event';
+            // Rutin durumuna göre çerçeve rengi
+            if (routineStatus === 'completed') cls += ' routine-done';
+            else if (routineStatus === 'missed') cls += ' routine-missed';
+            else if (routineStatus === 'postponed') cls += ' routine-postponed';
+            return (<button key={dStr} type="button" className={cls} onClick={() => onSelectDate(date)}>{day}</button>);
+          })}
+          {nextDays.map((d, i) => (<div key={`next-${i}`} className="mini-cal-day other-month">{d}</div>))}
         </div>
       </div>
-      <div className="mini-cal-grid">
-        {DAY_HEADERS.map(h => (<div key={h} className="mini-cal-day-header">{h}</div>))}
-        {prevMonthDays.map((d, i) => (<div key={`prev-${i}`} className="mini-cal-day other-month">{d}</div>))}
-        {currentDays.map(({ day, date, dStr, todayFlag, inWeek, hasEv, routineStatus }) => {
-          let cls = 'mini-cal-day';
-          if (todayFlag) cls += ' today';
-          else if (inWeek) cls += ' current-week';
-          if (hasEv) cls += ' has-event';
-          // Rutin durumuna göre çerçeve rengi
-          if (routineStatus === 'completed') cls += ' routine-done';
-          else if (routineStatus === 'missed') cls += ' routine-missed';
-          else if (routineStatus === 'postponed') cls += ' routine-postponed';
-          return (<button key={dStr} type="button" className={cls} onClick={() => onSelectDate(date)}>{day}</button>);
-        })}
-        {nextDays.map((d, i) => (<div key={`next-${i}`} className="mini-cal-day other-month">{d}</div>))}
-      </div>
 
-      <div className="cal-sidebar-sep" />
+      <div className="cal-sidebar-extras">
+        <div className="cal-sidebar-sep" />
 
       {/* Haftalık Rutinler */}
       {mounted && (
@@ -598,6 +601,7 @@ export default function CalSidebar({
           })}
         </div>
       </div>
+      </div> {/* Closes .cal-sidebar-extras */}
     </aside>
   );
 }

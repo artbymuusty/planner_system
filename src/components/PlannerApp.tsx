@@ -5,7 +5,6 @@ import type { ActiveModule, PlannerEvent, EventCategory, Medicine, Expense } fro
 import { usePlannerState } from '@/hooks/usePlannerState';
 import { useModuleState } from '@/hooks/useModuleState';
 import { formatDate, getMonday } from '@/lib/dateUtils';
-import { computeStreak } from '@/lib/statsUtils';
 
 import AppSidebar from '@/components/AppSidebar';
 import TopBar, { type CalendarView } from '@/components/TopBar';
@@ -61,6 +60,13 @@ export default function PlannerApp() {
   const [hiddenCategories, setHiddenCategories] = useState<EventCategory[]>([]);
   const [focusMode, setFocusMode] = useState(false);
   const [proactiveMsgs, setProactiveMsgs] = useState<ProactiveMessage[]>([]);
+
+  // Automatically default calendar view to 'day' on mobile screens
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      setView('day');
+    }
+  }, []);
 
   // Proaktif asistan — uygulama state'ini izleyip uygun anlarda mesaj gönderir
   useProactiveAssistant(

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Database, Eye, EyeOff, Flame, Key, Loader2, RotateCcw, Save, Trash2, Zap } from 'lucide-react';
+import { Database, Eye, EyeOff, Flame, Key, Loader2, RotateCcw, Save, Trash2, Zap, Sun, Moon } from 'lucide-react';
 import { OPENAI_KEY_STORAGE, openaiChat, openaiStatus } from '@/lib/openaiClient';
 
 interface Props {
@@ -49,6 +49,31 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
   const [stored, setStored] = useState<string>('');
   const [draft, setDraft] = useState<string>('');
   const [reveal, setReveal] = useState<boolean>(false);
+  const [isDark, setIsDark] = useState<boolean>(false);
+
+  // Initialize theme from localStorage or system theme
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const theme = window.localStorage.getItem('planner-theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setIsDark(true);
+    } else {
+      setIsDark(false);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('planner-theme', nextDark ? 'dark' : 'light');
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  };
   const [savedTick, setSavedTick] = useState<boolean>(false);
   const [test, setTest] = useState<TestState>({ status: 'idle' });
   const [scenarioToast, setScenarioToast] = useState<Toast>(null);
@@ -160,6 +185,65 @@ export default function SettingsOverlay({ active, onClose, onLoadScenario, onRes
       </div>
 
       <div style={{ padding: '24px 28px 28px', maxWidth: 720 }}>
+
+        {/* === Karanlık Tema Kartı === */}
+        <div className="module-card" style={{ marginBottom: 16 }}>
+          <h3 style={{ borderLeftColor: '#818cf8', display: 'flex', alignItems: 'center', gap: 8 }}>
+            {isDark ? <Moon size={16} /> : <Sun size={16} />} Karanlık Tema
+          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+            <div>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>
+                Arayüzü koyu renk modunda kullan.
+              </p>
+              <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4, margin: 0 }}>
+                Seçiminiz otomatik olarak kaydedilir.
+              </p>
+            </div>
+            
+            {/* Premium Switch Button */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              style={{
+                width: 52,
+                height: 28,
+                borderRadius: 14,
+                background: isDark ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' : '#cbd5e1',
+                border: 'none',
+                position: 'relative',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 4px',
+                boxShadow: isDark ? '0 0 12px rgba(99, 102, 241, 0.35)' : 'none',
+              }}
+              aria-label="Karanlık Temayı Değiştir"
+            >
+              <span
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: '50%',
+                  background: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: isDark ? 'translateX(24px)' : 'translateX(0)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                }}
+              >
+                {isDark ? (
+                  <Moon size={11} style={{ color: '#6366f1' }} />
+                ) : (
+                  <Sun size={11} style={{ color: '#f59e0b' }} />
+                )}
+              </span>
+            </button>
+          </div>
+        </div>
 
         {/* === OpenAI API Key Kartı === */}
         <div className="module-card">
